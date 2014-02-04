@@ -3,6 +3,8 @@
  */
 public class FooMar {
 
-    public String foo = "mar";
-
+    public static void main(String[] args)
+    {
+        System.out.println("Foo in the bar");
+    }
 }
