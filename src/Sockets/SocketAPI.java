@@ -1,6 +1,6 @@
 package Sockets;
 
-import Questionnaires.QuestionnaireReader;
+import Accessors.QuestionnaireReader;
 
 /**
  * Created by NiklasBegley on 10/02/2014.
