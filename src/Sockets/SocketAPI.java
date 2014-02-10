@@ -1,5 +1,7 @@
 package Sockets;
 
+import Questionnaires.QuestionnaireReader;
+
 /**
  * Created by NiklasBegley on 10/02/2014.
  *
@@ -14,17 +16,30 @@ public class SocketAPI {
          *
          *  E.g Getting a list of patients could be something like:
          *
-         *  case "GetPatientList":
+         *  else if input.matches("GetPatientList")
+         *  {
          *      return PatientRepository.getAllPatients();
+         *  }
          */
-        switch (input)
+        if (input.equals("Foo"))
         {
-            case "Foo":
-                return "Bar";
-            case "Close":
-                return "Close";
-            default:
-                return "WTF?";
+            return "Bar";
+        }
+        else if (input.equals("Bar"))
+        {
+            return "Foo";
+        }
+        else if (input.matches("(GetQuestionnaireByName:).*"))
+        {
+            return QuestionnaireReader.getQuestionnaireByName(input.split(": ")[1]);
+        }
+        else if (input.equals("Close"))
+        {
+            return "Close";
+        }
+        else
+        {
+            return "WTF?";
         }
     }
 }
