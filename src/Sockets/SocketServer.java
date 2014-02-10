@@ -4,6 +4,8 @@ import java.io.*;
 
 /**
  * Created by NiklasBegley on 10/02/2014.
+ *
+ * Starts a socket server and creates new threads to handle requests as they come in.
  */
 public class SocketServer
 {
@@ -20,20 +22,14 @@ public class SocketServer
         try
         (
             ServerSocket serverSocket = new ServerSocket(this.port);
-            Socket clientSocket = serverSocket.accept();
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         )
         {
+            boolean listening = true;
 
-            // Initiate conversation with client
-            while (true)
+            while (listening)
             {
-                if (in.readLine() != null)
-                {
-                    out.println("I'm echoing: " + in.readLine());
-                    out.println("foo");
-                }
+                // Starts new socket processes when a new connection comes in
+                new SocketProcess(serverSocket.accept()).start();
             }
         }
         catch (IOException e)
