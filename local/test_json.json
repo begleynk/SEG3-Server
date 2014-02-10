@@ -1,0 +1,74 @@
+{
+    "questionnaire_id": 1,
+    "questionnaire_title": "FooBar",
+    "questionaire_questions": [
+        {
+            "id": 1,
+            "title": "Foointhebar",
+            "type": "Scale",
+            "details": {
+                "scale_meta": {
+                    "upper_bound": 100,
+                    "lower_bound": 0,
+                    "default_value": 3
+                }
+            }
+        },
+        {
+            "id": 2,
+            "title": "FoointheMultipleChoice",
+            "type": "Multiple_Choice",
+            "details": {
+                "multi_choice_meta": {
+                    "choices": [
+                        "Yomomma",
+                        "ChuckNorris",
+                        "Foo"
+
+                    ]
+                }
+            }
+        },
+        {
+            "id": 3,
+            "title": "FoointheBoolean",
+            "type": "Boolean"
+
+        },
+        {
+            "id": 4,
+            "title": "Such foo many bar, amaze",
+            "type": "Text"
+
+        },
+        {
+            "id": 5,
+            "title": "FoointheMultipleChoice",
+            "type": "Radio",
+            "type_details": {
+                "radio_meta": {
+                    "choices": [
+                        "Yomomma",
+                        "ChuckNorris",
+                        "Foo"
+                    ]
+                }
+            }
+        },
+        {
+            "id": 6,
+            "title": "FoointheBoolean",
+            "type": "Boolean",
+            "dependent_questions": {
+                "condition": true,
+                "questions": [
+                    {
+                        "order": 1,
+                        "title": "FoointheBoolean",
+                        "type": "Boolean"
+                    }
+                ]            
+            }
+        }
+    ]
+}
