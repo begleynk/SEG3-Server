@@ -29,6 +29,14 @@ public class SocketAPI {
         {
             return "Foo";
         }
+        else if (input.equals("Credit"))
+        {
+            return "Suisse";
+        }
+        else if (input.equals("Suisse"))
+        {
+            return "Credit";
+        }
         else if (input.matches("(GetQuestionnaireByName:).*"))
         {
             return QuestionnaireReader.getQuestionnaireByName(input.split(": ")[1]);
