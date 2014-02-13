@@ -41,6 +41,18 @@ public class SocketAPI {
         {
             return QuestionnaireReader.getQuestionnaireByName(input.split(": ")[1]);
         }
+        else if (input.matches("(FindPatient:).*"))
+        {
+            return "Method pending";
+        }
+        else if (input.matches("(GetAllQuestionnairesForPatient:).*"))
+        {
+            return "Method pending";
+        }
+        else if (input.matches("(GetQuestionnaireByID:).*"))
+        {
+            return "Method pending";
+        }
         else if (input.equals("Close"))
         {
             return "Close";
