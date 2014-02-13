@@ -1,6 +1,9 @@
 package Sockets;
 
 import Accessors.QuestionnaireReader;
+import Accessors.QuestionnaireRepository;
+import Helpers.JsonHelper;
+import com.google.gson.Gson;
 
 /**
  * Created by NiklasBegley on 10/02/2014.
@@ -51,7 +54,8 @@ public class SocketAPI {
         }
         else if (input.matches("(GetQuestionnaireByID:).*"))
         {
-            return "Method pending";
+            Gson json = JsonHelper.getInstance();
+            return json.toJson(QuestionnaireRepository.getQuestionnaires());
         }
         else if (input.equals("Close"))
         {

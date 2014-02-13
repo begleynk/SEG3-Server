@@ -1,3 +1,4 @@
+import Accessors.QuestionnaireRepository;
 import Helpers.JsonHelper;
 import Objects.Questionnaire;
 import Objects.Questions.Question;
@@ -12,11 +13,17 @@ public class FooMar {
     public static void main(String[] args) {
         System.out.println("Enesay");
 
+        // ****************************************
+        // Creating some questionnaires for testing
         Questionnaire questionnaire = new Questionnaire(1, "Test Questionnaire");
         questionnaire.addQuestion(new Question(1,"Yo mama", 1, true));
 
-        Gson json = JsonHelper.getInstance();
-        System.out.println(json.toJson(questionnaire));
+        Questionnaire questionnaire2 = new Questionnaire(2, "Second Test Questionnaire");
+        questionnaire.addQuestion(new Question(1,"Yo mama", 1, true));
+
+        QuestionnaireRepository.saveQuestionnaire(questionnaire);
+        QuestionnaireRepository.saveQuestionnaire(questionnaire2);
+        // ****************************************
 
         SocketServer server = new SocketServer(4000);
         server.start();
