@@ -1,6 +1,6 @@
-package Objects;
+package ModelObjects;
 
-import Objects.Questions.Question;
+import ModelObjects.Questions.Question;
 
 import java.util.LinkedList;
 

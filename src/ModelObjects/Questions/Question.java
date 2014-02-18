@@ -1,6 +1,4 @@
-package Objects.Questions;
-
-import com.oracle.javafx.jmx.json.JSONDocument;
+package ModelObjects.Questions;
 
 /**
  * Created by NiklasBegley on 13/02/2014.

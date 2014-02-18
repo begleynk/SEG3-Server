@@ -26,23 +26,23 @@ public class SocketAPI {
          */
         if (input.equals("Foo"))
         {
-            return "Bar";
+            return "Bar\n"+ "END";
         }
         else if (input.equals("Bar"))
         {
-            return "Foo";
+            return "Foo\n"+ "END";
         }
         else if (input.equals("Credit"))
         {
-            return "Suisse";
+            return "Suisse\n"+ "END";
         }
         else if (input.equals("Suisse"))
         {
-            return "Credit";
+            return "Credit\n"+ "END";
         }
         else if (input.matches("(GetQuestionnaireByName:).*"))
         {
-            return QuestionnaireReader.getQuestionnaireByName(input.split(": ")[1]);
+            return QuestionnaireReader.getQuestionnaireByName(input.split(": ")[1]) + "END";
         }
         else if (input.matches("(FindPatient:).*"))
         {
@@ -63,7 +63,7 @@ public class SocketAPI {
         }
         else
         {
-            return "WTF?";
+            return "WTF?"+ "END";
         }
     }
 }

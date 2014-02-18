@@ -1,7 +1,7 @@
 package Accessors;
 
 import Helpers.JsonHelper;
-import Objects.Questionnaire;
+import ModelObjects.Questionnaire;
 import com.google.gson.Gson;
 
 import java.io.*;

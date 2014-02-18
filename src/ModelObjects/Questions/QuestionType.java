@@ -1,4 +1,4 @@
-package Objects.Questions;
+package ModelObjects.Questions;
 
 /**
  * Created by NiklasBegley on 13/02/2014.
