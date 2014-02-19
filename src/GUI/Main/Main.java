@@ -14,7 +14,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * Created by Me on 04/02/2014.
+ * Created by James Bellamy on 04/02/2014.
  */
 public class Main extends Application {
 
