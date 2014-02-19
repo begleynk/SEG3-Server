@@ -1,2 +1,2 @@
-SEG3-Server
+SEG-3 Desktop Server
 ===========
