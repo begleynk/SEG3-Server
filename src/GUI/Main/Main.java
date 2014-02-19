@@ -31,7 +31,7 @@ public class Main extends Application {
         //QuestionnaireRepository.saveQuestionnaire(questionnaire2);
         // ****************************************
 
-        new Thread(new SocketServer(4000)).start();
+        new Thread(new SocketServer(4000)).run();
 
         Parent root = FXMLLoader.load(getClass().getResource("main_scene.fxml"));
         stage.setTitle("Welcome");

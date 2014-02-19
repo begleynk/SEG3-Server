@@ -30,6 +30,9 @@ public class SocketServer implements Runnable
             {
                 // Starts new socket processes when a new connection comes in
                 new SocketProcess(serverSocket.accept()).start();
+                System.out.println("Received a new connection.");
+                System.out.println("IP: " + serverSocket.getInetAddress());
+                System.out.println("PORT: " + serverSocket.getLocalPort());
             }
         }
         catch (IOException e)
