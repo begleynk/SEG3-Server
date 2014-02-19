@@ -7,7 +7,7 @@ import java.io.*;
  *
  * Starts a socket server and creates new threads to handle requests as they come in.
  */
-public class SocketServer
+public class SocketServer implements Runnable
 {
 
     private final int port;
@@ -30,6 +30,9 @@ public class SocketServer
             {
                 // Starts new socket processes when a new connection comes in
                 new SocketProcess(serverSocket.accept()).start();
+                System.out.println("Received a new connection.");
+                System.out.println("IP: " + serverSocket.getInetAddress());
+                System.out.println("PORT: " + serverSocket.getLocalPort());
             }
         }
         catch (IOException e)
@@ -39,4 +42,8 @@ public class SocketServer
         }
     }
 
+    @Override
+    public void run() {
+        this.start();
+    }
 }
