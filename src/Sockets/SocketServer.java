@@ -7,7 +7,7 @@ import java.io.*;
  *
  * Starts a socket server and creates new threads to handle requests as they come in.
  */
-public class SocketServer
+public class SocketServer implements Runnable
 {
 
     private final int port;
@@ -39,4 +39,8 @@ public class SocketServer
         }
     }
 
+    @Override
+    public void run() {
+        this.start();
+    }
 }
