@@ -39,6 +39,7 @@ public class SocketServer implements Runnable
         {
             System.out.println("Problem, yo.");
             System.out.println(e.getMessage());
+            System.out.println(e.hashCode());
         }
     }
 
