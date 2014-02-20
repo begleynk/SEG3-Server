@@ -1,6 +1,7 @@
 package GUI.Main;
 
 import Accessors.QuestionnaireRepository;
+import Database.DatabaseInitializer;
 import Helpers.IPHelper;
 import Helpers.JsonHelper;
 import ModelObjects.Questionnaire;
@@ -41,6 +42,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        DatabaseInitializer.initialize();
         launch(args);
     }
 }
