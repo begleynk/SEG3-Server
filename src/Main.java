@@ -1,7 +1,6 @@
-package GUI.Main;
-
 import Accessors.QuestionnaireRepository;
 import Database.DatabaseInitializer;
+import GUI.MainScene.MainScene;
 import Helpers.IPHelper;
 import Helpers.JsonHelper;
 import ModelObjects.Questionnaire;
@@ -35,10 +34,8 @@ public class Main extends Application {
 
         new Thread(new SocketServer(4000)).start();
 
-        Parent root = FXMLLoader.load(getClass().getResource("main_scene.fxml"));
-        stage.setTitle("Welcome");
-        stage.setScene(new Scene(root));
-        stage.show();
+        MainScene scene = new MainScene();
+        scene.show();
     }
 
     public static void main(String[] args) {
