@@ -2,6 +2,7 @@
 
 ### Project Specific ###
 data-storage/questionnaires/
+*.db
 
 ### Mac OS X ###
 *.DS_Store
