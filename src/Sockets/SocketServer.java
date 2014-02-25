@@ -19,11 +19,9 @@ public class SocketServer implements Runnable
 
     public void start()
     {
-        try
-        (
+        try (
             ServerSocket serverSocket = new ServerSocket(this.port);
-        )
-        {
+        ) {
             boolean listening = true;
 
             while (listening)
