@@ -31,7 +31,7 @@ public class Main extends Application {
         questionnaire.addQuestion(new Question(1, "Yo mama", 1, true));
 
         DatabaseAccessor foo = new DatabaseAccessor();
-        foo.insertQuestionnaireRecord(questionnaire);
+        System.out.println(foo.insertQuestionnaireRecord(questionnaire));
 
         launch(args);
     }

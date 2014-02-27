@@ -40,4 +40,9 @@ public class Questionnaire
     {
         this.questions.add(q);
     }
+
+    public void set_id(int id)
+    {
+        this.id = id;
+    }
 }

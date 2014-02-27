@@ -2,10 +2,7 @@ package Accessors;
 
 import ModelObjects.Questionnaire;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.HashMap;
 
 /**
@@ -31,8 +28,6 @@ public class DatabaseAccessor {
         try
         {
             this.connection = DriverManager.getConnection("jdbc:sqlite:data-storage/database.db");
-            this.statement = connection.createStatement();
-            this.statement.setQueryTimeout(30);  // set timeout to 30 sec.
         }
         catch(SQLException e)
         {
@@ -40,18 +35,34 @@ public class DatabaseAccessor {
         }
     }
 
-    public int insertQuestionnaireRecord(Questionnaire questionnaire)
+    public Questionnaire insertQuestionnaireRecord(Questionnaire questionnaire) throws SQLException
     {
+        Statement statement = createStatement();
+        statement.execute("INSERT INTO Questionnaire (Title) VALUES ('" + questionnaire.getTitle() + "');");
+        ResultSet keys = statement.getGeneratedKeys();
+        if(keys.next())
+        {
+            questionnaire.set_id(keys.getInt(1));
+            return questionnaire;
+        }
+        else
+        {
+            throw new SQLException("Error inserting Questionnaire record.");
+        }
+    }
+
+    private Statement createStatement()
+    {
+        Statement statement = null;
         try
         {
-            statement.execute("INSERT INTO Questionnaire (Anything) VALUES ('" + questionnaire.getTitle() + "');");
-            System.out.println("Inserting questionnaire");
-            return 1;
+            statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
         }
         catch (SQLException e)
         {
             e.printStackTrace();
-            return -1;
         }
+        return statement;
     }
 }
