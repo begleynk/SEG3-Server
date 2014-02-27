@@ -1,0 +1,113 @@
+package Database;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class DatabaseInitialise
+{
+    public static void main(String[] args) throws ClassNotFoundException
+    {
+        // load the sqlite-JDBC driver using the current class loader
+        Class.forName("org.sqlite.JDBC");
+
+        Connection connection = null;
+        try
+        {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:SEG.db");
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            System.out.println("Accessing database!");
+
+            Statement stmt = connection.createStatement();
+
+            String sq1 = "CREATE TABLE Patient (" +
+                    "NHS_Number INTEGER PRIMARY KEY NOT NULL," +
+                    "DOB TEXT," +
+                    "First_Name VARCHAR(25)," +
+                    "Second_Name VARCHAR(25)," +
+                    "Surname VARCHAR(25))";
+
+            stmt.executeUpdate(sq1);
+
+            sq1 = "INSERT INTO Patient (NHS_Number,DOB,First_Name,Second_Name,Surname) " +
+                    "VALUES (7123789124, '2012-05-07', 'Ahmet', 'Texas', 'Love' )";
+            stmt.executeUpdate(sq1);
+
+            sq1 = "INSERT INTO Patient (NHS_Number,DOB,First_Name,Second_Name,Surname) " +
+                    "VALUES (9877263141, '2012-12-28', 'James', 'Muhahahaha', 'asdfasdfasd' )";
+            stmt.executeUpdate(sq1);
+
+            sq1 = "CREATE TABLE Questionnaire (" +
+                    "Questionnaire_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    "File_Path TEXT)";
+
+            stmt.executeUpdate(sq1);
+
+            sq1 = "INSERT INTO Questionnaire (File_Path) " +
+                    "VALUES ('some/file.path')";
+            stmt.executeUpdate(sq1);
+
+            sq1 = "CREATE TABLE Patient_Questionnaire (" +
+                    "NHS_Number INTEGER," +
+                    "Questionnaire_ID INTEGER," +
+                    "PRIMARY KEY(NHS_Number, Questionnaire_ID)," +
+                    "FOREIGN KEY(Questionnaire_ID) REFERENCES Questionnaire(Questionnaire_ID)" +
+                    "FOREIGN KEY(NHS_Number) REFERENCES Patient(NHS_Number))";
+
+            stmt.executeUpdate(sq1);
+
+            sq1 = "INSERT INTO Patient_Questionnaire VALUES (9877263141, 1)";
+            stmt.executeUpdate(sq1);
+
+            ResultSet rs = statement.executeQuery("select * from Patient");
+            while(rs.next())
+            {
+                // read the result set
+                System.out.println("NHS Number = " + rs.getLong("NHS_Number"));
+                System.out.println("Date of Birth = " + rs.getString("DOB"));
+                System.out.println("First Name = " + rs.getString("First_Name"));
+            }
+            rs.close();
+
+            ResultSet rs2 = statement.executeQuery("select * from Patient_Questionnaire");
+            while(rs2.next())
+            {
+                // read the result set
+                System.out.println("NHS Number = " + rs2.getLong("NHS_Number"));
+                System.out.println("Q_ID = " + rs2.getLong("Questionnaire_ID"));
+            }
+            rs2.close();
+
+            Thread.sleep(1000);
+
+            stmt.close();
+            connection.commit();
+            connection.close();
+        }
+        catch(SQLException e)
+        {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+    }
+}
