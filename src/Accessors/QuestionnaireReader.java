@@ -4,6 +4,8 @@ import java.io.*;
 
 /**
  * Created by NiklasBegley on 10/02/2014.
+ *
+ * THIS WILL BE REMOVED
  */
 public class QuestionnaireReader {
 

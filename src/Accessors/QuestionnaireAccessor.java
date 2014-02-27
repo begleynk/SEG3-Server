@@ -13,7 +13,7 @@ import java.util.LinkedList;
 /**
  * Created by NiklasBegley on 13/02/2014.
  */
-public class QuestionnaireRepository {
+public class QuestionnaireAccessor {
 
     private static String questionnaireStoragePath = "data-storage/questionnaires/";
     private static Gson json = JsonHelper.getInstance();

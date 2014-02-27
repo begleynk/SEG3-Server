@@ -1,7 +1,7 @@
 package Sockets;
 
+import Accessors.QuestionnaireAccessor;
 import Accessors.QuestionnaireReader;
-import Accessors.QuestionnaireRepository;
 import Helpers.JsonHelper;
 import com.google.gson.Gson;
 
@@ -55,7 +55,7 @@ public class SocketAPI {
         else if (input.matches("(GetQuestionnaireByID:).*"))
         {
             Gson json = JsonHelper.getInstance();
-            return json.toJson(QuestionnaireRepository.getQuestionnaires());
+            return json.toJson(QuestionnaireAccessor.getQuestionnaires());
         }
         else if (input.equals("Close"))
         {

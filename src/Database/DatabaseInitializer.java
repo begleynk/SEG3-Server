@@ -8,7 +8,7 @@ import java.sql.*;
 /**
  * Created by NiklasBegley on 20/02/2014.
  */
-public class DatabaseInitializer extends BaseConnector
+public class DatabaseInitializer
 {
 
     public static boolean initialize()
