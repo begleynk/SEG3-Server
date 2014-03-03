@@ -3,14 +3,21 @@ package GUI.Controller;
 import Accessors.DataLayer;
 import Accessors.DatabaseAccessor;
 import ModelObjects.Patient;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Observable;
 import java.util.ResourceBundle;
 
 /**
@@ -19,6 +26,7 @@ import java.util.ResourceBundle;
 public class AddPatientController implements Initializable {
 
     @FXML private TextField firstName, lastName, dateOfBirth, nhsNumber;
+    @FXML private ListView<Patient> allPatients;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -33,4 +41,32 @@ public class AddPatientController implements Initializable {
         DataLayer.insertPatient(aPatient);
     }
 
+    @FXML
+    public void fetchAllPatientsAction(Event event) {
+        ArrayList<Patient> patients = DataLayer.getAllPatients();
+        ObservableList<Patient> myObservableList = FXCollections.observableList(patients);
+        allPatients.setItems(myObservableList);
+        System.out.println("Fetching...");
+        allPatients.setCellFactory(new Callback<ListView<Patient>, ListCell<Patient>>(){
+
+            @Override
+            public ListCell<Patient> call(ListView<Patient> p) {
+
+                ListCell<Patient> cell = new ListCell<Patient>(){
+
+                    @Override
+                    protected void updateItem(Patient patient, boolean aBool) {
+                        super.updateItem(patient, aBool);
+                        if (patient != null) {
+                            System.out.println(patient.getFirst_name());
+                            setText(patient.getFirst_name() + " " + patient.getSurname());
+                        }
+                    }
+
+                };
+
+                return cell;
+            }
+        });
+    }
 }

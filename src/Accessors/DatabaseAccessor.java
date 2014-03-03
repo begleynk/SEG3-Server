@@ -84,7 +84,7 @@ public class DatabaseAccessor {
         ResultSet result = statement.executeQuery(query);
         while(result.next())
         {
-            Patient patient = new Patient(result.getString(0), result.getString(1), result.getString(2), result.getString(3),result.getDate(4),result.getString(5), "null");
+            Patient patient = new Patient(result.getString(1), result.getString(2), result.getString(3), result.getString(4),result.getDate(5),result.getString(6), "null");
             patients.add(patient);
         }
         return patients;

@@ -27,6 +27,7 @@ public class DataLayer
         }
         catch (SQLException e)
         {
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -41,6 +42,7 @@ public class DataLayer
         }
         catch (SQLException e)
         {
+            e.printStackTrace();
             System.err.println("Error getting all patients.");
         }
         return patients;
