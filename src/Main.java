@@ -40,6 +40,8 @@ public class Main extends Application {
         try {
             Parent mainScreen = FXMLLoader.load(getClass().getResource("/GUI/MainScene/view/mainScene.fxml"));
             Scene scene = new Scene(mainScreen, stage.getWidth(), stage.getHeight());
+            stage.setMinWidth(800);
+            stage.setMinHeight(600);
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

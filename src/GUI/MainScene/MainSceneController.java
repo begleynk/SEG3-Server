@@ -35,7 +35,7 @@ public class MainSceneController implements Initializable {
     public void setView() {
         stackPane.getChildren().clear();
         try {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("/GUI/Pane/test.fxml"));
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/GUI/Patient/addPatient.fxml"));
             AnchorPane.setTopAnchor(pane, 0.0);
             AnchorPane.setBottomAnchor(pane, 0.0);
             AnchorPane.setRightAnchor(pane, 0.0);
