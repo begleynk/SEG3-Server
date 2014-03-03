@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.MainScene.MainSceneController">
+  <children>
+    <Label id="labelD" layoutX="21.0" layoutY="14.0" prefHeight="35.0" prefWidth="147.0" text="MediQ Server">
+      <font>
+        <Font size="20.0" />
+      </font>
+    </Label>
+    <StackPane fx:id="stackPane" prefHeight="344.0" prefWidth="600.0" style="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0" />
+    <ChoiceBox fx:id="viewChooser" prefWidth="217.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="21.0">
+    </ChoiceBox>
+  </children>
+</AnchorPane>

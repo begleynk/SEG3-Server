@@ -41,4 +41,12 @@ public class SocketProcess extends Thread {
         }
     }
 
+    public void endProcess() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
