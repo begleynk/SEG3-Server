@@ -5,7 +5,4 @@ CREATE TABLE IF NOT EXISTS 'Patient_Questionnaire' (
     FOREIGN KEY ('P_NHS_number') REFERENCES 'Patient'('P_NHS_number') ON UPDATE CASCADE,
     FOREIGN KEY ('Q_id') REFERENCES 'Questionnaire'('Q_id') ON UPDATE CASCADE,
     PRIMARY KEY ('P_NHS_number','Q_id')
---  ,
---  KEY 'Q_id' ('Q_id')
---  TODO: WHAT'S THIS FOR?
 );

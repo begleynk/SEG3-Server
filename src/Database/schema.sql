@@ -17,10 +17,11 @@
 --
 
 CREATE TABLE IF NOT EXISTS 'Admin' (
-  'A_username' varchar(20) NOT NULL,
-  'A_pin' int(4) NOT NULL,
-  PRIMARY KEY ('A_username','A_pin')
-)
+  'A_username' varchar(20) PRIMARY KEY NOT NULL,
+  'A_password' varchar (12),
+  'Tag' TEXT CHECK (Tag IN ('Doctor', 'Other')),
+  PRIMARY KEY ('A_username')
+);
 
 -- --------------------------------------------------------
 
@@ -37,7 +38,8 @@ CREATE TABLE IF NOT EXISTS 'Patient' (
 'P_postcode' varchar(8) NOT NULL,
 'P_disability' varchar(30) DEFAULT NULL,
 PRIMARY KEY ('P_NHS_number'),
-UNIQUE KEY 'P_first_name' ('P_first_name','P_middle_name','P_surname','P_date_of_birth'))
+UNIQUE KEY 'P_first_name' ('P_first_name','P_middle_name','P_surname','P_date_of_birth')
+)
 
 -- --------------------------------------------------------
 
@@ -46,45 +48,40 @@ UNIQUE KEY 'P_first_name' ('P_first_name','P_middle_name','P_surname','P_date_of
 --
 
 CREATE TABLE IF NOT EXISTS 'Patient_Questionnaire' (
-  'P_NHS_number' int(10) NOT NULL,
-  'Q_id' int(8) NOT NULL,
-  'Completed' tinyint(1) NOT NULL,
-  PRIMARY KEY ('P_NHS_number','Q_id'),
-  KEY 'Q_id' ('Q_id')
+    'P_NHS_number' int(10) NOT NULL,
+    'Q_id' int(8) NOT NULL,
+    'Completed' tinyint(1) NOT NULL,
+    FOREIGN KEY ('P_NHS_number') REFERENCES 'Patient'('P_NHS_number') ON UPDATE CASCADE,
+    FOREIGN KEY ('Q_id') REFERENCES 'Questionnaire'('Q_id') ON UPDATE CASCADE,
+    PRIMARY KEY ('P_NHS_number','Q_id')
 )
 
 
--- --------------------------------------------------------
-
---
--- Table structure for table 'Question'
---
-
-CREATE TABLE IF NOT EXISTS 'Question' (
-  'Question_id' int(8) NOT NULL,
-  'Answer' varchar(300) DEFAULT NULL,
-  PRIMARY KEY ('Question_id')
-)
-
--- --------------------------------------------------------
+-------------------------------
 
 --
 -- Table structure for table 'Questionnaires'
 --
 
-CREATE TABLE IF NOT EXISTS 'Questionnaires' (
-  'Q_id' int(8) NOT NULL,
-  'Anything' varchar(5) DEFAULT NULL,
-  PRIMARY KEY ('Q_id')
-)
+CREATE TABLE IF NOT EXISTS 'Questionnaire' (
+  'Q_id' INTEGER PRIMARY KEY AUTOINCREMENT,
+  'Title' varchar(5) DEFAULT NULL,
+  'File_Path' TEXT
+);
+
+
+-- --------------------------------------------------------
 
 --
--- Constraints for dumped tables
+-- Table structure for table 'Questionnaire_State'
+--
 --
 
---
--- Constraints for table 'Patient_Questionnaire'
---
-ALTER TABLE 'Patient_Questionnaire'
-  ADD CONSTRAINT 'patient_questionnaire_ibfk_1' FOREIGN KEY ('P_NHS_number') REFERENCES 'Patient' ('P_NHS_number') ON UPDATE CASCADE,
-  ADD CONSTRAINT 'patient_questionnaire_ibfk_2' FOREIGN KEY ('Q_id') REFERENCES 'Questionnaire' ('Q_id') ON UPDATE CASCADE;
+CREATE TABLE IF NOT EXISTS 'Questionnaire_State' (
+    'Q_id' int(8) NOT NULL,
+    'Q_state' TEXT CHECK (Q_state IN ('In Progress', 'Deployed', 'Archived')) NOT NULL,
+    FOREIGN KEY(Q_id) REFERENCES Questionnaire(Q_id),
+    PRIMARY KEY(Q_id)
+);
+
+
