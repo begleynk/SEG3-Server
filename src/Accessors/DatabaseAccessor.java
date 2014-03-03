@@ -80,12 +80,12 @@ public class DatabaseAccessor {
     public Patient insertPatientRecord(Patient patient) throws SQLException
     {
         Statement statement = createStatement();
-        statement.execute("INSERT INTO Patient (P_NHS_number, P_first_name, P_middle_name, P_surname, P_date_of_birth, P_postcode) VALUES ('" +
-                patient.getNhsNumber() + "," +
-                patient.getFirst_name() + ", " +
-                patient.getMiddle_name() + ", " +
-                patient.getSurname() + ", " +
-                patient.getDateOfBirth() + ", " +
+        statement.execute("INSERT INTO Patient(P_NHS_number, P_first_name, P_middle_name, P_surname, P_date_of_birth, P_postcode) VALUES('" +
+                patient.getNhsNumber() + "','" +
+                patient.getFirst_name() + "','" +
+                patient.getMiddle_name() + "','" +
+                patient.getSurname() + "','" +
+                patient.getDateOfBirth() + "','" +
                 patient.getPostcode() + "');");
         return patient;
     }
