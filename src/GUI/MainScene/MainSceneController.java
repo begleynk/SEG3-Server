@@ -3,7 +3,6 @@ package GUI.MainScene;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,14 +16,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Me on 27/02/2014.
+ * Created by James Bellamy on 27/02/2014.
+ *
  */
 public class MainSceneController implements Initializable {
 
-    @FXML
-    private StackPane stackPane;
-    @FXML
-    private ChoiceBox viewChooser;
+    @FXML private StackPane stackPane;
+    @FXML private ChoiceBox<Object> viewChooser;
 
     private final Object[] menuOptions = {"Welcome", new Separator(), "Questionnaires", "Patients", new Separator(), "Settings"};
 
@@ -57,9 +55,5 @@ public class MainSceneController implements Initializable {
                 System.out.println(menuOptions[newNumber.intValue()]);
             }
         });
-    }
-
-    public void handleAction(Event event) {
-        System.out.println("Change Views");
     }
 }

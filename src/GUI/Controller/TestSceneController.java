@@ -1,13 +1,19 @@
 package GUI.Controller;
 
-import javafx.scene.layout.Pane;
+import javafx.fxml.Initializable;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
- * Created by Me on 27/02/2014.
+ * Created by James Bellamy on 27/02/2014.
+ *
  */
-public class TestSceneController extends Pane {
+public class TestSceneController implements Initializable {
 
-    public TestSceneController() {
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
 }
