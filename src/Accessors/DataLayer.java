@@ -17,14 +17,21 @@ import java.util.ArrayList;
 public class DataLayer
 {
 
+    /************************************************************
+     ACCESSOR OBJECTS
+     *************************************************************/
+
+    // Wraps data repository.
     private static QuestionnaireAccessor questionnaireAccessor = new QuestionnaireAccessor();
+
+    // Wraps database.
     private static DatabaseAccessor databaseAccessor = new DatabaseAccessor();
 
     /************************************************************
      PATIENT METHODS
      *************************************************************/
 
-    public static boolean insertPatient(Patient patient)
+    public static boolean addPatient(Patient patient) throws SQLException
     {
         try
         {
@@ -33,12 +40,35 @@ public class DataLayer
         catch (SQLException e)
         {
             e.printStackTrace();
-            return false;
+            System.err.println("Error adding patient " + patient.getNhsNumber());
+            throw e;
         }
         return true;
     }
 
-    public static ArrayList<Patient> getAllPatients()
+    public static boolean removePatient(Patient patient) throws SQLException
+    {
+        try
+        {
+            databaseAccessor.removePatient(patient);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error removing patient " + patient.getNhsNumber());
+            throw e;
+        }
+        return true;
+    }
+
+//    TODO: TO BE IMPLEMENTED
+//    public static Patient getPatientByNSHNUmber(String nhs)
+//    {
+//        return new Patient();
+//    }
+
+
+    public static ArrayList<Patient> getAllPatients() throws SQLException
     {
         ArrayList<Patient> patients = new ArrayList<Patient>();
         try
@@ -49,6 +79,7 @@ public class DataLayer
         {
             e.printStackTrace();
             System.err.println("Error getting all patients.");
+            throw e;
         }
         return patients;
     }
@@ -79,11 +110,53 @@ public class DataLayer
             }
             catch(NoQuestionnaireException e)
             {
-                System.err.println("Could not find questionnaire with id " + questionnaireIDs[i]);
+                System.err.println("FATAL: Could not find questionnaire with id " + questionnaireIDs[i]);
                 throw e;
             }
         }
         return questionnaires;
     }
+
+    public static boolean addQuestionnaire(Questionnaire questionnaire) throws SQLException
+    {
+        Questionnaire savedQuestionnaire = databaseAccessor.insertQuestionnaireRecord(questionnaire);
+        if(questionnaireAccessor.saveQuestionnaire(savedQuestionnaire))
+        {
+            return true;
+        }
+        else
+        {
+            // Roll back database if data repo failed to save the quesionnaire to disk
+            databaseAccessor.removeQuestionnaire(savedQuestionnaire);
+            return false;
+        }
+    }
+
+    public static boolean removeQuestionnaire(Questionnaire questionnaire) throws SQLException
+    {
+        try
+        {
+            databaseAccessor.removeQuestionnaire(questionnaire);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error removing questionnaire " + questionnaire.getId());
+            throw e;
+        }
+        return true;
+    }
+
+//    TODO: TO BE IMPLEMENTED
+//    public static Questionnaire getQuestionnaireByID(int ID) throws SQLException
+//    {
+//
+//    }
+
+    /************************************************************
+     ADMIN METHODS
+     *************************************************************/
+
+//    TODO: TO BE IMPLEMENTED
 
 }

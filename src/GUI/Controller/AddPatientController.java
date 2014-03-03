@@ -1,7 +1,6 @@
 package GUI.Controller;
 
 import Accessors.DataLayer;
-import Accessors.DatabaseAccessor;
 import ModelObjects.Patient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,7 +16,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Observable;
 import java.util.ResourceBundle;
 
 /**
@@ -38,12 +36,23 @@ public class AddPatientController implements Initializable {
         Date aDate = new Date();
         System.out.println(dateOfBirth.getText());
         Patient aPatient = new Patient(nhsNumber.getText(), firstName.getText(), "Foo Bar", lastName.getText(), aDate, "SE16 2TL", "null");
-        DataLayer.insertPatient(aPatient);
+        try {
+            DataLayer.addPatient(aPatient);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // TODO: This error needs to be handled in the GUI
+        }
     }
 
     @FXML
     public void fetchAllPatientsAction(Event event) {
-        ArrayList<Patient> patients = DataLayer.getAllPatients();
+        ArrayList<Patient> patients = null;
+        try {
+            patients = DataLayer.getAllPatients();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // TODO: This error needs to be handled in the GUI
+        }
         ObservableList<Patient> myObservableList = FXCollections.observableList(patients);
         allPatients.setItems(myObservableList);
         System.out.println("Fetching...");
