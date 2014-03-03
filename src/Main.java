@@ -1,4 +1,6 @@
 import Database.DatabaseInitializer;
+import Helpers.DataStorageHelper;
+import Helpers.OSHelper;
 import ModelObjects.Questionnaire;
 import ModelObjects.Questions.Question;
 import Sockets.SocketServer;
@@ -21,17 +23,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // ****************************************
-        // Creating some questionnaires for testing
-        Questionnaire questionnaire = new Questionnaire(1, "Test Questionnaire");
-        questionnaire.addQuestion(new Question(1, "Yo mama", 1, true));
 
-        Questionnaire questionnaire2 = new Questionnaire(2, "Second Test Questionnaire");
-        questionnaire2.addQuestion(new Question(1,"Yo mama", 1, true));
-
-        //QuestionnaireRepository.saveQuestionnaire(questionnaire);
-        //QuestionnaireRepository.saveQuestionnaire(questionnaire2);
-        // ****************************************
+        // Create app directory structure.
+        intializeAppDirectories();
 
         this.socketServer = new SocketServer(socketPort);
         this.socketThread = new Thread(this.socketServer);
@@ -57,7 +51,13 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        DatabaseInitializer.initialize();
         launch(args);
     }
+
+    private static void intializeAppDirectories()
+    {
+        DataStorageHelper.createDirectory();
+        DatabaseInitializer.initialize();
+    }
+
 }

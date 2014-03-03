@@ -1,4 +1,6 @@
 package Database;
+import Helpers.OSHelper;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,7 +29,8 @@ public class DatabaseInitializer
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:data-storage/database.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + OSHelper.getStoragePath() + "/database.db");
+
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 

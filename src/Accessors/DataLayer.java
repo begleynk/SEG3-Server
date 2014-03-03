@@ -1,5 +1,6 @@
 package Accessors;
 
+import Exceptions.NoQuestionnaireException;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
 import ModelObjects.Questions.Question;
@@ -18,6 +19,10 @@ public class DataLayer
 
     private static QuestionnaireAccessor questionnaireAccessor = new QuestionnaireAccessor();
     private static DatabaseAccessor databaseAccessor = new DatabaseAccessor();
+
+    /************************************************************
+     PATIENT METHODS
+     *************************************************************/
 
     public static boolean insertPatient(Patient patient)
     {
@@ -47,4 +52,38 @@ public class DataLayer
         }
         return patients;
     }
+
+    /************************************************************
+     QUESTIONNAIRE METHODS
+     *************************************************************/
+
+    public static ArrayList<Questionnaire> getAllQuestionnaires() throws SQLException, NoQuestionnaireException
+    {
+        int[] questionnaireIDs;
+        ArrayList<Questionnaire> questionnaires = new ArrayList<Questionnaire>();
+
+        try
+        {
+            questionnaireIDs = databaseAccessor.getAllQuestionnaires();
+        }
+        catch (SQLException e)
+        {
+            throw e;
+        }
+
+        for(int i = 0; i < questionnaireIDs.length; i++)
+        {
+            try
+            {
+                questionnaires.add(questionnaireAccessor.getQuestionnaireById(questionnaireIDs[i]));
+            }
+            catch(NoQuestionnaireException e)
+            {
+                System.err.println("Could not find questionnaire with id " + questionnaireIDs[i]);
+                throw e;
+            }
+        }
+        return questionnaires;
+    }
+
 }

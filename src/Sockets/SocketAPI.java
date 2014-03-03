@@ -54,8 +54,9 @@ public class SocketAPI {
         }
         else if (input.matches("(GetQuestionnaireByID:).*"))
         {
-            Gson json = JsonHelper.getInstance();
-            return json.toJson(QuestionnaireAccessor.getQuestionnaires());
+            return "Method pending";
+//            Gson json = JsonHelper.getInstance();
+//            return json.toJson(QuestionnaireAccessor.getQuestionnaires());
         }
         else if (input.equals("Close"))
         {

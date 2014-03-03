@@ -1,6 +1,8 @@
 package Accessors;
 
+import Exceptions.NoQuestionnaireException;
 import Helpers.JsonHelper;
+import Helpers.OSHelper;
 import ModelObjects.Questionnaire;
 import com.google.gson.Gson;
 
@@ -15,10 +17,11 @@ import java.util.LinkedList;
  */
 public class QuestionnaireAccessor {
 
-    private static String questionnaireStoragePath = "data-storage/questionnaires/";
+    private static String questionnaireStoragePath = OSHelper.getStoragePath() + "/questionnaires/";
     private static Gson json = JsonHelper.getInstance();
 
-    public static LinkedList<Questionnaire> getQuestionnaires()
+
+    public LinkedList<Questionnaire> getQuestionnaires()
     {
         LinkedList<Questionnaire> questionnaires = new LinkedList<Questionnaire>();
 
@@ -46,7 +49,7 @@ public class QuestionnaireAccessor {
         return questionnaires;
     }
 
-    public static Questionnaire getQuestionnaireById(int questionnaireId)
+    public Questionnaire getQuestionnaireById(int questionnaireId) throws NoQuestionnaireException
     {
         Path path = Paths.get(questionnaireStoragePath + questionnaireId);
         Questionnaire questionnaire;
@@ -68,11 +71,11 @@ public class QuestionnaireAccessor {
         }
         else
         {
-            return null;
+            throw new NoQuestionnaireException();
         }
     }
 
-    public static boolean saveQuestionnaire(Questionnaire questionnaire)
+    public boolean saveQuestionnaire(Questionnaire questionnaire)
     {
         // Saves the questionnaire or overwrites an existing one with the same id and name
         Path path = Paths.get(questionnaireStoragePath + questionnaire.getId());
@@ -101,7 +104,7 @@ public class QuestionnaireAccessor {
         return true;
     }
 
-    public static boolean resetRepository(int confirmationCode)
+    public boolean resetRepository(int confirmationCode)
     {
         // USE WITH CAUTION!
         if (confirmationCode == 911)

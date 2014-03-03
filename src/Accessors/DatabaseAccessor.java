@@ -1,5 +1,7 @@
 package Accessors;
 
+import Exceptions.NoQuestionnaireException;
+import Helpers.OSHelper;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
 
@@ -12,7 +14,6 @@ import java.util.ArrayList;
 public class DatabaseAccessor {
 
     private Connection connection;
-    private Statement statement;
 
 
     public DatabaseAccessor()
@@ -28,7 +29,7 @@ public class DatabaseAccessor {
         }
         try
         {
-            this.connection = DriverManager.getConnection("jdbc:sqlite:data-storage/database.db");
+            this.connection = DriverManager.getConnection("jdbc:sqlite:" + OSHelper.getStoragePath() + "/database.db");
         }
         catch(SQLException e)
         {
@@ -39,6 +40,23 @@ public class DatabaseAccessor {
     /************************************************************
             QUESTIONNAIRE METHODS
     *************************************************************/
+
+    public int[] getAllQuestionnaires() throws SQLException
+    {
+        Statement statement = createStatement();
+        String query = "SELECT * FROM Questionnaire;";
+        ResultSet result = statement.executeQuery(query);
+
+        int[] idList = new int[result.getFetchSize()];
+        int i = 0;
+
+        while(result.next())
+        {
+            idList[i] = result.getInt("Q_id");
+            i++;
+        }
+        return idList;
+    }
 
     public Questionnaire insertQuestionnaireRecord(Questionnaire questionnaire) throws SQLException
     {
