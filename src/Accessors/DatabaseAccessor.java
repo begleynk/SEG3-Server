@@ -2,10 +2,8 @@ package Accessors;
 
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
-import ModelObjects.Questions.Question;
 
 import java.sql.*;
-import java.util.HashMap;
 
 /**
  * Created by NiklasBegley on 27/02/2014.
@@ -80,13 +78,14 @@ public class DatabaseAccessor {
     public Patient insertPatientRecord(Patient patient) throws SQLException
     {
         Statement statement = createStatement();
-        statement.execute("INSERT INTO Patient(P_NHS_number, P_first_name, P_middle_name, P_surname, P_date_of_birth, P_postcode) VALUES('" +
+        String query = "INSERT INTO Patient(P_NHS_number, P_first_name, P_middle_name, P_surname, P_date_of_birth, P_postcode) VALUES('" +
                 patient.getNhsNumber() + "','" +
                 patient.getFirst_name() + "','" +
                 patient.getMiddle_name() + "','" +
                 patient.getSurname() + "','" +
                 patient.getDateOfBirth() + "','" +
-                patient.getPostcode() + "');");
+                patient.getPostcode() + "');";
+        statement.execute(query);
         return patient;
     }
 
