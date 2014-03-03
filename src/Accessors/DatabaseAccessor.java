@@ -4,6 +4,7 @@ import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * Created by NiklasBegley on 27/02/2014.
@@ -74,6 +75,20 @@ public class DatabaseAccessor {
     /************************************************************
      PATIENT METHODS
      *************************************************************/
+
+    public ArrayList<Patient> getAllPatients() throws SQLException
+    {
+        ArrayList<Patient> patients = new ArrayList<Patient>();
+        Statement statement = createStatement();
+        String query = "SELECT * FROM Patient";
+        ResultSet result = statement.executeQuery(query);
+        while(result.next())
+        {
+            Patient patient = new Patient(result.getString(0), result.getString(1), result.getString(2), result.getString(3),result.getDate(4),result.getString(5), "null");
+            patients.add(patient);
+        }
+        return patients;
+    }
 
     public Patient insertPatientRecord(Patient patient) throws SQLException
     {

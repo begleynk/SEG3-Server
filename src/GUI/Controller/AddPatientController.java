@@ -1,5 +1,6 @@
 package GUI.Controller;
 
+import Accessors.DataLayer;
 import Accessors.DatabaseAccessor;
 import ModelObjects.Patient;
 import javafx.event.Event;
@@ -29,12 +30,7 @@ public class AddPatientController implements Initializable {
         Date aDate = new Date();
         System.out.println(dateOfBirth.getText());
         Patient aPatient = new Patient(nhsNumber.getText(), firstName.getText(), "Foo Bar", lastName.getText(), aDate, "SE16 2TL", "null");
-        DatabaseAccessor accessor = new DatabaseAccessor();
-        try {
-            accessor.insertPatientRecord(aPatient);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        DataLayer.insertPatient(aPatient);
     }
 
 }
