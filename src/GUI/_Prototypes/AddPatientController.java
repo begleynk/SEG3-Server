@@ -1,4 +1,4 @@
-package GUI.Controller;
+package GUI._Prototypes;
 
 import Accessors.DataLayer;
 import ModelObjects.Patient;
