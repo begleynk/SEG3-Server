@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Separator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
@@ -24,25 +23,28 @@ public class MainSceneController implements Initializable {
     @FXML private StackPane stackPane;
     @FXML private ChoiceBox<Object> viewChooser;
 
-    private final Object[] menuOptions = {"Welcome", new Separator(), "Questionnaires", "Patients", new Separator(), "Settings"};
+    private final Object[] menuOptions = {"Welcome", "Questionnaires", "Patients",  "Settings"};
+    private final String[] viewPaths = {"/GUI/Pane/test.fxml", null, "/GUI/Patient/patientControls.fxml", null};
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.setView();
+        this.setView(0);
         this.setupMenu();
     }
 
-    public void setView() {
-        stackPane.getChildren().clear();
-        try {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("/GUI/Patient/addPatient.fxml"));
-            AnchorPane.setTopAnchor(pane, 0.0);
-            AnchorPane.setBottomAnchor(pane, 0.0);
-            AnchorPane.setRightAnchor(pane, 0.0);
-            AnchorPane.setLeftAnchor(pane, 0.0);
-            stackPane.getChildren().add(0, pane);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void setView(int viewIndex) {
+        if (viewPaths[viewIndex] != null) {
+            stackPane.getChildren().clear();
+            try {
+                AnchorPane pane = FXMLLoader.load(getClass().getResource(viewPaths[viewIndex]));
+                AnchorPane.setTopAnchor(pane, 0.0);
+                AnchorPane.setBottomAnchor(pane, 0.0);
+                AnchorPane.setRightAnchor(pane, 0.0);
+                AnchorPane.setLeftAnchor(pane, 0.0);
+                stackPane.getChildren().add(0, pane);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -53,6 +55,7 @@ public class MainSceneController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
                 System.out.println(menuOptions[newNumber.intValue()]);
+                setView(newNumber.intValue());
             }
         });
     }

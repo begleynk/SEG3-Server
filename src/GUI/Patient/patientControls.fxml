@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.Patient.PatientContolsController">
+  <children>
+    <SplitPane dividerPositions="0.3394648829431438" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="200.0">
+          <children>
+            <ListView fx:id="patientListView" prefHeight="316.0000999999975" prefWidth="200.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="51.0" />
+            <TextField id="patientSearchBar" fx:id="patientSearchField" prefWidth="172.0" promptText="Search" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+            <ToolBar prefWidth="199.9998779296875" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+              <items>
+                <Button id="addNewPatientButton" mnemonicParsing="false" onAction="#addNewPatientAction" prefWidth="172.0" text="Add New" />
+              </items>
+            </ToolBar>
+          </children>
+        </AnchorPane>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="424.0">
+          <children>
+            <TextField id="firstName" layoutX="109.0" layoutY="68.0" prefWidth="200.0" />
+            <Label layoutX="10.0" layoutY="71.0" text="First Name:" />
+            <Label layoutX="10.0" layoutY="134.0" text="Last Name:" />
+            <TextField id="lastName" layoutX="109.0" layoutY="131.0" prefWidth="200.0" />
+            <Label layoutX="10.0" layoutY="168.0" text="Date of Birth:" />
+            <Label layoutX="10.0" layoutY="38.0" text="NHS Number:" />
+            <TextField id="nhsNumber" layoutX="109.0" layoutY="35.0" prefWidth="200.0" />
+            <Button layoutX="214.0" layoutY="240.0" mnemonicParsing="false" onAction="#addNewPatientAction" text="Add Patient" />
+            <Label layoutX="10.0" layoutY="102.0" text="Middle Name:" />
+            <TextField id="lastName" layoutX="109.0" layoutY="99.0" prefWidth="200.0" />
+            <Label layoutX="10.0" layoutY="199.0" text="Postcode:" />
+            <TextField id="dateOfBirth" layoutX="109.0" layoutY="196.0" prefWidth="200.0" />
+            <TextField id="lastName" layoutX="109.0" layoutY="162.0" prefWidth="41.0" promptText="dd" />
+            <TextField id="lastName" layoutX="159.0" layoutY="162.0" prefWidth="41.0" promptText="mm" />
+            <TextField id="lastName" layoutX="209.0" layoutY="162.0" prefWidth="100.0" promptText="yyyy" />
+            <ToolBar fx:id="rightPaneToolBar" prefWidth="392.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+          </children>
+        </AnchorPane>
+      </items>
+    </SplitPane>
+  </children>
+</AnchorPane>

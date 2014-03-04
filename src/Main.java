@@ -1,8 +1,5 @@
 import Database.DatabaseInitializer;
 import Helpers.DataStorageHelper;
-import Helpers.OSHelper;
-import ModelObjects.Questionnaire;
-import ModelObjects.Questions.Question;
 import Sockets.SocketServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +14,7 @@ import java.io.IOException;
  */
 public class Main extends Application {
 
-    private int socketPort = 4001;
+    private int socketPort = 4000;
     private SocketServer socketServer;
     private Thread socketThread;
 
