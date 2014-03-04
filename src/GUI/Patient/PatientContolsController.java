@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
  */
 public class PatientContolsController implements Initializable {
 
+    // textfield and listview from GUI
     @FXML private TextField patientSearchField;
     @FXML private ListView patientListView;
 
