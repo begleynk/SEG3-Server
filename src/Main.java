@@ -29,7 +29,7 @@ public class Main extends Application {
         this.socketThread.start();
 
         try {
-            Parent mainScreen = FXMLLoader.load(getClass().getResource("/GUI/MainScene/view/mainScene.fxml"));
+            Parent mainScreen = FXMLLoader.load(getClass().getResource("/GUI/MainScene/mainScene.fxml"));
             Scene scene = new Scene(mainScreen, stage.getWidth(), stage.getHeight());
             stage.setMinWidth(800);
             stage.setMinHeight(600);
