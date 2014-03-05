@@ -42,4 +42,7 @@ public class QuestionnaireTabDraftController implements Initializable {
     public void addNewQuestionnaireAction(Event event) {
         System.out.println("Add New Questionnaire");
     }
+    public void searchInputChangedAction(Event event) {
+
+    }
 }
