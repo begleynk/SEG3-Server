@@ -1,8 +1,6 @@
 package GUI.Questionnaire.Archive;
 
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,15 +10,11 @@ import java.util.ResourceBundle;
  *
  * work in progress
  */
-public class QuestionnaireTabArchiveController implements Initializable{
-    // File Paths to tab content views
-    @FXML private AnchorPane anchorPaneArchived;
-
-    private String[] views = {"/GUI/QuestionnaireTabArchiveController"};
+public class QuestionnaireTabArchiveController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setupTabViews();
+
     }
 
 }

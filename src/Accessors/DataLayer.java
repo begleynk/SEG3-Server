@@ -3,7 +3,6 @@ package Accessors;
 import Exceptions.NoQuestionnaireException;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
-import ModelObjects.Questions.Question;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

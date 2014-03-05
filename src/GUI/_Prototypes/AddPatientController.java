@@ -15,7 +15,6 @@ import javafx.util.Callback;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 /**
@@ -33,9 +32,7 @@ public class AddPatientController implements Initializable {
 
     @FXML
     public void addPatientAction(Event event) {
-        Date aDate = new Date();
-        System.out.println(dateOfBirth.getText());
-        Patient aPatient = new Patient(nhsNumber.getText(), firstName.getText(), "Foo Bar", lastName.getText(), aDate, "SE16 2TL", "null");
+        Patient aPatient = new Patient(nhsNumber.getText(), firstName.getText(), "Foo Bar", lastName.getText(), dateOfBirth.getText(), "SE16 2TL", "null");
         try {
             DataLayer.addPatient(aPatient);
         } catch (SQLException e) {

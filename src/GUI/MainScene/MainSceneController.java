@@ -30,6 +30,7 @@ public class MainSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.setView(0);
         this.setupMenu();
+        this.viewChooser.getSelectionModel().select(0);
     }
 
     public void setView(int viewIndex) {
@@ -50,11 +51,9 @@ public class MainSceneController implements Initializable {
 
     public void setupMenu() {
         viewChooser.setItems(FXCollections.observableArrayList(menuOptions));
-        viewChooser.getSelectionModel().select(0);
         viewChooser.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
-                System.out.println(menuOptions[newNumber.intValue()]);
                 setView(newNumber.intValue());
             }
         });

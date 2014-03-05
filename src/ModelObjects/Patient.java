@@ -1,7 +1,5 @@
 package ModelObjects;
 
-import java.util.Date;
-
 /**
  * Created by NiklasBegley on 27/02/2014.
  */
@@ -11,11 +9,11 @@ public class Patient
     private String first_name;
     private String middle_name;
     private String surname;
-    private Date dateOfBirth;
+    private String dateOfBirth;
     private String postcode;
     private String disability;
 
-    public Patient(String nhsNumber, String first_name, String middle_name, String surname, Date dateOfBirth, String postcode, String disability)
+    public Patient(String nhsNumber, String first_name, String middle_name, String surname, String dateOfBirth, String postcode, String disability)
     {
         this.nhsNumber = nhsNumber;
         this.first_name = first_name;
@@ -67,12 +65,12 @@ public class Patient
         this.surname = surname;
     }
 
-    public Date getDateOfBirth()
+    public String getDateOfBirth()
     {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth)
+    public void setDateOfBirth(String dateOfBirth)
     {
         this.dateOfBirth = dateOfBirth;
     }
