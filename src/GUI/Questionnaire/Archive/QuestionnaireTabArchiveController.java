@@ -14,11 +14,7 @@ public class QuestionnaireTabArchiveController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-<<<<<<< Updated upstream
 
-=======
-       // setupTabViews();
->>>>>>> Stashed changes
     }
 
 }
