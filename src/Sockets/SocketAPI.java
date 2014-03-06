@@ -1,9 +1,13 @@
 package Sockets;
 
+import Accessors.DataLayer;
 import Accessors.QuestionnaireAccessor;
 import Accessors.QuestionnaireReader;
 import Helpers.JsonHelper;
+import ModelObjects.Patient;
 import com.google.gson.Gson;
+
+import java.sql.SQLException;
 
 /**
  * Created by NiklasBegley on 10/02/2014.
@@ -46,7 +50,24 @@ public class SocketAPI {
         }
         else if (input.matches("(FindPatient:).*"))
         {
-            return "Method pending";
+            /****************************************
+                FIND PATIENT BY NHS NUMBER
+            *****************************************/
+            Patient patient;
+            try
+            {
+                patient = DataLayer.getPatientByNSHNUmber(input.split(": ")[1]);
+            }
+            catch (SQLException e)
+            {
+                return "{'error_code': 1337 }END";
+            }
+            if (patient == null)
+            {
+                return "{ 'error_code': 666 }END";
+            }
+            Gson json = JsonHelper.getInstance();
+            return json.toJson(patient) + "END";
         }
         else if (input.matches("(GetAllQuestionnairesForPatient:).*"))
         {

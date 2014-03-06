@@ -60,11 +60,21 @@ public class DataLayer
         return true;
     }
 
-//    TODO: TO BE IMPLEMENTED
-//    public static Patient getPatientByNSHNUmber(String nhs)
-//    {
-//        return new Patient();
-//    }
+    public static Patient getPatientByNSHNUmber(String nhs) throws SQLException
+    {
+        Patient patient;
+        try
+        {
+            patient = databaseAccessor.getPatientByNHSNumber(nhs);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error finding patient with NHS number" + nhs);
+            throw e;
+        }
+        return patient;
+    }
 
 
     public static ArrayList<Patient> getAllPatients() throws SQLException
