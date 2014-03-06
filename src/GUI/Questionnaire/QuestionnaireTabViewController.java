@@ -19,7 +19,8 @@ public class QuestionnaireTabViewController implements Initializable {
     private Tab[] tabs = {draftsTab, deployedTab, archivingTab};
 
     // File Paths to tab content views
-    private String[] views = {"/GUI/Questionnaire/Draft/questionnaireTabDraft.fxml",
+    private String[] views = {
+            "/GUI/Questionnaire/Draft/questionnaireTabDraft.fxml",
             "/GUI/Questionnaire/Deployed/questionnaireTabDeployed.fxml",
             "/GUI/Questionnaire/Archive/questionnaireTabArchive.fxml"};
 

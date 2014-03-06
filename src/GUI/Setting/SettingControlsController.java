@@ -1,4 +1,4 @@
-package GUI.Questionnaire.Draft;
+package GUI.Setting;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Faizan on 05/03/14.
  */
-public class QuestionnaireTabDraftController implements Initializable {
+public class SettingControlsController implements Initializable {
 
     // textfield and listview from GUI
     @FXML private TextField questionSearchField;
@@ -26,19 +26,7 @@ public class QuestionnaireTabDraftController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        for (int i = 0; i < 4; i++) {
-            rightPaneToolBar.getItems().add(new Button("ToolBarButton " + i));
-        }
-        Region spring = new Region();
-        HBox.setHgrow(spring, Priority.ALWAYS);
-        rightPaneToolBar.getItems().add(spring);
-        rightPaneToolBar.getItems().add(new Button("Right ToolBarButton"));
-    }
-
-    public void addNewQuestionnaireAction(Event event) {
-        System.out.println("Add New Questionnaire");
-    }
-    public void searchInputChangedAction(Event event) {
 
     }
+
 }

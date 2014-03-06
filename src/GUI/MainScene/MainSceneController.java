@@ -24,7 +24,7 @@ public class MainSceneController implements Initializable {
     @FXML private ChoiceBox<Object> viewChooser;
 
     private final Object[] menuOptions = {"Welcome", "Questionnaires", "Patients",  "Settings"};
-    private final String[] viewPaths = {null, "/GUI/Questionnaire/questionnaireControls.fxml", "/GUI/Patient/patientControls.fxml", null};
+    private final String[] viewPaths = {"/GUI/Welcome/welcome.fxml", "/GUI/Questionnaire/questionnaireControls.fxml", "/GUI/Patient/patientControls.fxml", "/GUI/Setting/settingControls.fxml"};
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
