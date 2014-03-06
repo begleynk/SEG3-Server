@@ -32,7 +32,7 @@ public class AddPatientController implements Initializable {
 
     @FXML
     public void addPatientAction(Event event) {
-        Patient aPatient = new Patient(nhsNumber.getText(), firstName.getText(), "Foo Bar", lastName.getText(), dateOfBirth.getText(), "SE16 2TL", "null");
+        Patient aPatient = new Patient(nhsNumber.getText(), firstName.getText(), "FOO FOO",lastName.getText(), dateOfBirth.getText(), "SE16 2TL", "null");
         try {
             DataLayer.addPatient(aPatient);
         } catch (SQLException e) {

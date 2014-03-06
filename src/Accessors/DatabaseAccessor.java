@@ -107,6 +107,24 @@ public class DatabaseAccessor {
         return patients;
     }
 
+    public Patient getPatientByNHSNumber(String nhsNumber) throws SQLException
+    {
+        Statement statement = createStatement();
+        String query = "SELECT * FROM Patient WHERE P_NHS_Number = '" + nhsNumber + "';";
+
+        ResultSet result = statement.executeQuery(query);
+
+        if (result.next())
+        {
+            Patient patient = new Patient(result.getString(1), result.getString(2), result.getString(3), result.getString(4),result.getString(5),result.getString(6), "null");
+            return patient;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public Patient insertPatientRecord(Patient patient) throws SQLException
     {
         Statement statement = createStatement();

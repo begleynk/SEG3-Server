@@ -34,22 +34,23 @@ public class DatabaseInitializer
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-            System.out.println("Creating admin table...");
+            //System.out.println("Creating admin table...");
             statement.execute(getQueryFromFile("create_table_admin"));
-            System.out.println("Creating patient table...");
+            //System.out.println("Creating patient table...");
             statement.execute(getQueryFromFile("create_table_patient"));
-            System.out.println("Creating questionnaire table...");
+            //System.out.println("Creating questionnaire table...");
             statement.execute(getQueryFromFile("create_table_questionnaire"));
-            System.out.println("Creating patient_questionnaire table...");
+            //System.out.println("Creating patient_questionnaire table...");
             statement.execute(getQueryFromFile("create_table_patient_questionnaire"));
-            System.out.println("Creating disability table...");
+            //System.out.println("Creating disability table...");
             statement.execute(getQueryFromFile("create_table_disability"));
-            System.out.println("Creating patient_disability table...");
+            //System.out.println("Creating patient_disability table...");
             statement.execute(getQueryFromFile("create_table_patient_disability"));
-            System.out.println("Creating patient_log table...");
+            //System.out.println("Creating patient_log table...");
             statement.execute(getQueryFromFile("create_table_patient_log"));
-            System.out.println("Creating questionnaire_log table...");
+            //System.out.println("Creating questionnaire_log table...");
             statement.execute(getQueryFromFile("create_table_questionnaire_log"));
+            System.out.println("All tables are created");
 
         }
         catch(SQLException e)
