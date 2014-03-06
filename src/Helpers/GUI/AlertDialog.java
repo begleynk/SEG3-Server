@@ -1,4 +1,4 @@
-package Helpers.Controls;
+package Helpers.GUI;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
