@@ -225,18 +225,18 @@ public class PatientControlsController implements Initializable {
             }
         }
         if (allFieldsFilled) {
-            // Date Format : YYYY-MM-DD
             String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
-            Patient newPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
+            Patient updatedPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
                     middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText(), null);
-            try {
-                DataLayer.addPatient(newPatient);
-                fetchAllPatients();
-                clearWorkspace();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                // TODO: This error needs to be handled in the GUI
-            }
+//            try {
+//                // TODO: Need DataLayer method to update a patient
+//                //DataLayer.updatePatient(updatedPatient);
+//                fetchAllPatients();
+//                clearWorkspace();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//                // TODO: This error needs to be handled in the GUI
+//            }
         }
     }
 
