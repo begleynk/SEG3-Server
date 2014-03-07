@@ -228,15 +228,14 @@ public class PatientControlsController implements Initializable {
             String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
             Patient updatedPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
                     middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText(), null);
-//            try {
-//                // TODO: Need DataLayer method to update a patient
-//                //DataLayer.updatePatient(updatedPatient);
-//                fetchAllPatients();
-//                clearWorkspace();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//                // TODO: This error needs to be handled in the GUI
-//            }
+            try {
+                DataLayer.updatePatient(updatedPatient);
+                fetchAllPatients();
+                clearWorkspace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // TODO: This error needs to be handled in the GUI
+            }
         }
     }
 

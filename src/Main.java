@@ -1,5 +1,7 @@
+import Accessors.DatabaseAccessor;
 import Database.DatabaseInitializer;
 import Helpers.DataStorageHelper;
+import ModelObjects.Patient;
 import Sockets.SocketServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +25,10 @@ public class Main extends Application {
 
         // Create app directory structure.
         intializeAppDirectories();
+
+        Patient patient = new Patient("1212121212", "test", "test", "test", "1111-22-33", "AA11 1AA", "test");
+        DatabaseAccessor databaseAccessor = new DatabaseAccessor();
+        databaseAccessor.updatePatientRecord(patient);
 
         this.socketServer = new SocketServer(socketPort);
         this.socketThread = new Thread(this.socketServer);

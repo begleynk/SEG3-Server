@@ -45,6 +45,21 @@ public class DataLayer
         return true;
     }
 
+    public static Patient updatePatient(Patient patient) throws SQLException
+    {
+        try
+        {
+            databaseAccessor.updatePatientRecord(patient);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error updating patient " + patient.getNhsNumber());
+            throw e;
+        }
+        return patient;
+    }
+
     public static boolean removePatient(Patient patient) throws SQLException
     {
         try

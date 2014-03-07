@@ -125,6 +125,19 @@ public class DatabaseAccessor {
         }
     }
 
+    public boolean updatePatientRecord(Patient patient) throws SQLException
+    {
+        Statement statement = createStatement();
+        String query = "UPDATE Patient SET " +
+                "P_first_name = '" + patient.getFirst_name() + "', " +
+                "P_middle_name = '" + patient.getMiddle_name() + "', " +
+                "P_surname = '" + patient.getSurname() + "', " +
+                "P_date_of_birth = '" + patient.getDateOfBirth() + "', " +
+                "P_postcode = '" + patient.getPostcode() + "' " +
+                "WHERE P_NHS_number = '" + patient.getNhsNumber() + "';";
+        return statement.execute(query);
+    }
+
     public Patient insertPatientRecord(Patient patient) throws SQLException
     {
         Statement statement = createStatement();
