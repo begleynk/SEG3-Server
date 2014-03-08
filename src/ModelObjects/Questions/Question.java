@@ -1,20 +1,18 @@
 package ModelObjects.Questions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Created by NiklasBegley on 13/02/2014.
  */
-public class Question {
+public abstract class Question {
 
-    private int id;
-    private String title;
-    private boolean required;
-    private int type;
+    protected long id;
+    protected String title;
+    protected String description;
+    protected boolean required;
+    protected HashMap<String, List<Question>> dependentQuestions;
 
-    public Question(int id, String title, int type, boolean required)
-    {
-        this.id = id;
-        this.title = title;
-        this.type = type;
-        this.required = required;
-    }
 }
