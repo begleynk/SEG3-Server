@@ -23,6 +23,10 @@ public class QuestionnaireAccessor {
 
     public LinkedList<Questionnaire> getQuestionnaires()
     {
+        /*
+            NOT IN USE ANY MORE
+         */
+
         LinkedList<Questionnaire> questionnaires = new LinkedList<Questionnaire>();
 
         File root = new File(questionnaireStoragePath);
@@ -75,6 +79,20 @@ public class QuestionnaireAccessor {
         }
     }
 
+    public boolean questionnaireExists(Questionnaire questionnaire)
+    {
+        Path path = Paths.get(questionnaireStoragePath + questionnaire.getId());
+
+        if (Files.notExists(path))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public boolean saveQuestionnaire(Questionnaire questionnaire)
     {
         // Saves the questionnaire or overwrites an existing one with the same id and name
@@ -90,7 +108,7 @@ public class QuestionnaireAccessor {
 
         try
         {
-            //write converted json data to a file named "CountryGSON.json"
+            //write converted json data to a file named "questionnaire.json"
             FileWriter writer = new FileWriter(path.toString() + "/questionnaire.json");
             writer.write(raw);
             writer.close();
@@ -99,6 +117,32 @@ public class QuestionnaireAccessor {
         {
             e.printStackTrace();
             return false;
+        }
+
+        return true;
+    }
+
+    public boolean removeQuestionnaire(Questionnaire questionnaire) throws NoQuestionnaireException
+    {
+        Path path = Paths.get(questionnaireStoragePath + questionnaire.getId());
+        File dir = new File(path.toString());
+
+        if (Files.exists(path))
+        {
+            System.out.println("Now deleting " + dir.getPath());
+            if (!dir.delete() && dir.isDirectory())
+            {
+                // Delete all questionnaires and answers
+                for(File file : dir.listFiles())
+                {
+                    file.delete();
+                }
+                dir.delete();
+            }
+        }
+        else
+        {
+            throw new NoQuestionnaireException();
         }
 
         return true;

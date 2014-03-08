@@ -3,6 +3,8 @@ package Accessors;
 import Exceptions.NoQuestionnaireException;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
+import ModelObjects.QuestionnairePointer;
+import ModelObjects.Questions.Question;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -112,55 +114,72 @@ public class DataLayer
      QUESTIONNAIRE METHODS
      *************************************************************/
 
-    public static ArrayList<Questionnaire> getAllQuestionnaires() throws SQLException, NoQuestionnaireException
+    public static QuestionnairePointer[] getQuestionnairePointers() throws SQLException, NoQuestionnaireException
     {
-        int[] questionnaireIDs;
-        ArrayList<Questionnaire> questionnaires = new ArrayList<Questionnaire>();
-
+        QuestionnairePointer[] questionnaireIDs;
         try
         {
-            questionnaireIDs = databaseAccessor.getAllQuestionnaires();
+            return databaseAccessor.getAllQuestionnaires();
         }
         catch (SQLException e)
         {
             throw e;
         }
+    }
 
-        for(int i = 0; i < questionnaireIDs.length; i++)
+
+    public static Questionnaire getQuestionnaireWithPointer(QuestionnairePointer pointer) throws NoQuestionnaireException
+    {
+        try
         {
-            try
-            {
-                questionnaires.add(questionnaireAccessor.getQuestionnaireById(questionnaireIDs[i]));
-            }
-            catch(NoQuestionnaireException e)
-            {
-                System.err.println("FATAL: Could not find questionnaire with id " + questionnaireIDs[i]);
-                throw e;
-            }
+            Questionnaire questionnaire = questionnaireAccessor.getQuestionnaireById(pointer.getId());
+            questionnaire.setState(pointer.getState());
+            return questionnaire;
         }
-        return questionnaires;
+        catch (NoQuestionnaireException e)
+        {
+            e.printStackTrace();
+            System.err.println("FATAL: Error finding questionnaire " + pointer.getId() + ". Your database may be corrupt. Wat. Contact support.");
+            throw e;
+        }
+    }
+
+    public static Questionnaire updateQuestionnare(Questionnaire questionnaire) throws NoQuestionnaireException
+    {
+        if(questionnaireAccessor.questionnaireExists(questionnaire))
+        {
+            questionnaireAccessor.saveQuestionnaire(questionnaire);
+        }
+        else
+        {
+            System.err.println("Tried to update questionnaire that didn't exist.");
+            throw new NoQuestionnaireException();
+        }
+        return questionnaire;
     }
 
     public static boolean addQuestionnaire(Questionnaire questionnaire) throws SQLException
     {
         Questionnaire savedQuestionnaire = databaseAccessor.insertQuestionnaireRecord(questionnaire);
+        savedQuestionnaire.setState("Draft");
         if(questionnaireAccessor.saveQuestionnaire(savedQuestionnaire))
         {
             return true;
         }
         else
         {
-            // Roll back database if data repo failed to save the quesionnaire to disk
+            // Roll back database if data repo failed to save the questionnaire to disk
             databaseAccessor.removeQuestionnaire(savedQuestionnaire);
             return false;
         }
     }
 
-    public static boolean removeQuestionnaire(Questionnaire questionnaire) throws SQLException
+    public static boolean removeQuestionnaire(Questionnaire questionnaire) throws SQLException, NoQuestionnaireException
     {
         try
         {
             databaseAccessor.removeQuestionnaire(questionnaire);
+            questionnaireAccessor.removeQuestionnaire(questionnaire);
         }
         catch (SQLException e)
         {
@@ -171,11 +190,48 @@ public class DataLayer
         return true;
     }
 
-//    TODO: TO BE IMPLEMENTED
-//    public static Questionnaire getQuestionnaireByID(int ID) throws SQLException
-//    {
-//
-//    }
+    public static Questionnaire setQuestionnaireStateToDepolyed(Questionnaire questionnaire) throws SQLException, NoQuestionnaireException
+    {
+        try
+        {
+            databaseAccessor.setQuestionnaireState(questionnaire, "Deployed");
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
+        catch (NoQuestionnaireException e)
+        {
+            e.printStackTrace();
+            System.err.println("Tried to deploy unsaved questionnaire.");
+            throw e;
+        }
+        questionnaire.setState("Deployed");
+        return questionnaire;
+    }
+
+    public static Questionnaire setQuestionnaireStateToArchived(Questionnaire questionnaire) throws SQLException, NoQuestionnaireException
+    {
+        try
+        {
+            databaseAccessor.setQuestionnaireState(questionnaire, "Archived");
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
+        catch (NoQuestionnaireException e)
+        {
+            e.printStackTrace();
+            System.err.println("Tried to archive unsaved questionnaire.");
+            throw e;
+        }
+        questionnaire.setState("Archived");
+        return questionnaire;
+    }
+
 
     /************************************************************
      ADMIN METHODS
