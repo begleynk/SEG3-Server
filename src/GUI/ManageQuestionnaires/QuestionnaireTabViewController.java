@@ -1,4 +1,4 @@
-package GUI.Questionnaire;
+package GUI.ManageQuestionnaires;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,9 +20,9 @@ public class QuestionnaireTabViewController implements Initializable {
 
     // File Paths to tab content views
     private String[] views = {
-            "/GUI/Questionnaire/Draft/questionnaireTabDraft.fxml",
-            "/GUI/Questionnaire/Deployed/questionnaireTabDeployed.fxml",
-            "/GUI/Questionnaire/Archive/questionnaireTabArchive.fxml"};
+            "/GUI/ManageQuestionnaires/Draft/questionnaireTabDraft.fxml",
+            "/GUI/ManageQuestionnaires/Deployed/questionnaireTabDeployed.fxml",
+            "/GUI/ManageQuestionnaires/Archive/questionnaireTabArchive.fxml"};
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

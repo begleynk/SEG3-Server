@@ -23,8 +23,22 @@ public class MainSceneController implements Initializable {
     @FXML private StackPane stackPane;
     @FXML private ChoiceBox<Object> viewChooser;
 
-    private final Object[] menuOptions = {"Welcome", "Questionnaires", "Patients",  "Settings"};
-    private final String[] viewPaths = {"/GUI/Welcome/welcome.fxml", "/GUI/Questionnaire/questionnaireControls.fxml", "/GUI/Patient/patientControls.fxml", "/GUI/Setting/settingControls.fxml"};
+    private final Object[] menuOptions = {
+            "Welcome",
+            "Manage Patients",
+            "Manage Questionnaires",
+            "Assign Questionnaires",
+            "Connect Tablets",
+            "Change Logs"
+    };
+    private final String[] viewPaths = {
+            "/GUI/Welcome/welcome.fxml",
+            "/GUI/ManagePatients/patientControls.fxml",
+            "/GUI/ManageQuestionnaires/questionnaireControls.fxml",
+            null,
+            "/GUI/ConnectTablets/settingControls.fxml",
+            null
+    };
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
