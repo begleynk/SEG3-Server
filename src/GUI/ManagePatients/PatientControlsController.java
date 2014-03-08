@@ -1,4 +1,4 @@
-package GUI.Patient;
+package GUI.ManagePatients;
 
 import Accessors.DataLayer;
 import Helpers.GUI.AlertDialog;
