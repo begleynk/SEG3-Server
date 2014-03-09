@@ -5,7 +5,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
 /**
- * Created by Me on 06/03/2014.
+ * Created by James Bellamy on 06/03/2014.
+ *
  */
 public class FlexibleToolbarSpace extends Region {
 

@@ -5,9 +5,10 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 
 /**
- * Created by NiklasBegley on 10/02/2014.
+ * Created by Niklas Begley on 10/02/2014.
  *
  * Starts a socket server and creates new threads to handle requests as they come in.
+ *
  */
 public class SocketServer implements Runnable {
 

@@ -3,7 +3,8 @@ package Helpers;
 import java.io.File;
 
 /**
- * Created by NiklasBegley on 03/03/2014.
+ * Created by Niklas Begley on 03/03/2014.
+ *
  */
 public class DataStorageHelper
 {

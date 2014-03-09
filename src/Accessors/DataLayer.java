@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by NiklasBegley on 03/03/2014.
+ * Created by Niklas Begley on 03/03/2014.
  *
  * This is the main communication layer between the data and the interfaces/public APIs.
  * Server GUIs and Socket APIs should only be calling methods from this class.

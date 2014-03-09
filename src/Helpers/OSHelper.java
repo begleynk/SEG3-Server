@@ -1,7 +1,8 @@
 package Helpers;
 
 /**
- * Created by NiklasBegley on 03/03/2014.
+ * Created by Niklas Begley on 03/03/2014.
+ *
  */
 public class OSHelper
 {

@@ -3,9 +3,10 @@ import java.net.*;
 import java.io.*;
 
 /**
- * Created by NiklasBegley on 10/02/2014.
+ * Created by Niklas Begley on 10/02/2014.
  *
  * Each connection coming into the server is given a separate SocketProcess thread which handles the requests.
+ *
  */
 public class SocketProcess extends Thread {
 

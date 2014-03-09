@@ -1,7 +1,8 @@
 package ModelObjects;
 
 /**
- * Created by NiklasBegley on 27/02/2014.
+ * Created by Niklas Begley on 27/02/2014.
+ *
  */
 public class Patient
 {

@@ -1,7 +1,6 @@
 package Sockets;
 
 import Accessors.DataLayer;
-import Accessors.QuestionnaireAccessor;
 import Accessors.QuestionnaireReader;
 import Helpers.JsonHelper;
 import ModelObjects.Patient;
@@ -10,9 +9,10 @@ import com.google.gson.Gson;
 import java.sql.SQLException;
 
 /**
- * Created by NiklasBegley on 10/02/2014.
+ * Created by Niklas Begley on 10/02/2014.
  *
  * A static class that will define the API endpoints for the sockets
+ *
  */
 public class SocketAPI {
 

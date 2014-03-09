@@ -13,7 +13,8 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 
 /**
- * Created by NiklasBegley on 13/02/2014.
+ * Created by Niklas Begley on 13/02/2014.
+ *
  */
 public class QuestionnaireAccessor {
 

@@ -3,7 +3,7 @@ package Helpers;
 import com.google.gson.*;
 
 /**
- * Created by NiklasBegley on 13/02/2014.
+ * Created by Niklas Begley on 13/02/2014.
  *
  * A singleton JSON helper class.
  *

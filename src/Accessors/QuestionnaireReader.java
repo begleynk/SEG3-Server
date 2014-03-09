@@ -3,7 +3,7 @@ package Accessors;
 import java.io.*;
 
 /**
- * Created by NiklasBegley on 10/02/2014.
+ * Created by Niklas Begley on 10/02/2014.
  *
  * THIS WILL BE REMOVED
  */

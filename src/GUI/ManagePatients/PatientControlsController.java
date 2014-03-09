@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
- * Created by Me on 04/03/2014.
+ * Created by James Bellamy on 04/03/2014.
+ *
  */
 public class PatientControlsController implements Initializable {
 

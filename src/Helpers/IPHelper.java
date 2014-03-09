@@ -4,7 +4,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Created by NiklasBegley on 19/02/2014.
+ * Created by Niklas Begley on 19/02/2014.
+ *
  */
 public class IPHelper {
 

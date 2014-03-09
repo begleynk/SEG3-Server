@@ -8,7 +8,8 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * Created by NiklasBegley on 27/02/2014.
+ * Created by Niklas Begley on 27/02/2014.
+ *
  */
 public class DatabaseAccessor {
 

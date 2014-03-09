@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.sql.*;
 
 /**
- * Created by NiklasBegley on 20/02/2014.
+ * Created by Niklas Begley on 20/02/2014.
+ *
  */
 public class DatabaseInitializer
 {

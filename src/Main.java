@@ -11,6 +11,7 @@ import java.io.IOException;
 
 /**
  * Created by James Bellamy on 04/02/2014.
+ *
  */
 public class Main extends Application {
 
@@ -18,11 +19,20 @@ public class Main extends Application {
     private SocketServer socketServer;
     private Thread socketThread;
 
+    private String appTitle = "MediQ Server";
+
     @Override
     public void start(Stage stage) throws Exception {
 
         // Create app directory structure.
         intializeAppDirectories();
+
+//        // FOR TESTING:
+//        Questionnaire questionnaire = new Questionnaire(0, "test");
+//        questionnaire.loadDummy();
+//        Patient patient = DataLayer.getAllPatients().get(0);
+//        AnswerSet answerSet = new AnswerSet(questionnaire, patient);
+//        System.out.println(answerSet.toString());
 
         this.socketServer = new SocketServer(socketPort);
         this.socketThread = new Thread(this.socketServer);
@@ -37,7 +47,7 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        stage.setTitle("MediQ Server");
+        stage.setTitle(appTitle);
         stage.show();
     }
 
