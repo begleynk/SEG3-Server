@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
@@ -25,19 +26,31 @@ public class MainSceneController implements Initializable {
 
     private final Object[] menuOptions = {
             "Welcome",
-            "Manage Patients",
-            "Manage Questionnaires",
-            "Assign Questionnaires",
+            new Separator(),
+            "Patients",
+            new Separator(),
+            "Questionnaire Builder",
+            "Questionnaire Archive",
+            new Separator(),
+            "Distribute Questionnaires",
+            new Separator(),
             "Connect Tablets",
+            new Separator(),
             "Change Logs"
     };
     private final String[] viewPaths = {
             "/GUI/Welcome/welcome.fxml",
+            null, // Separator
             "/GUI/ManagePatients/patientControls.fxml",
-            "/GUI/ManageQuestionnaires/questionnaireControls.fxml",
-            null,
+            null, // Separator
+            "/GUI/ManageQuestionnaires/questionnaireBuilder.fxml",
+            "",
+            null, // Separator
+            "",
+            null, // Separator
             "/GUI/ConnectTablets/settingControls.fxml",
-            null
+            null, // Separator
+            "",
     };
 
     @Override
@@ -48,10 +61,11 @@ public class MainSceneController implements Initializable {
     }
 
     public void setView(int viewIndex) {
-        if (viewPaths[viewIndex] != null) {
+        String viewPath = viewPaths[viewIndex];
+        if (viewPath != null && viewPath.length() > 0) {
             stackPane.getChildren().clear();
             try {
-                AnchorPane pane = FXMLLoader.load(getClass().getResource(viewPaths[viewIndex]));
+                AnchorPane pane = FXMLLoader.load(getClass().getResource(viewPath));
                 AnchorPane.setTopAnchor(pane, 0.0);
                 AnchorPane.setBottomAnchor(pane, 0.0);
                 AnchorPane.setRightAnchor(pane, 0.0);

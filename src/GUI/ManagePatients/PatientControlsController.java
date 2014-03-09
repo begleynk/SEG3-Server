@@ -67,7 +67,7 @@ public class PatientControlsController implements Initializable {
         this.deselectPatientButton = new Button("Deselect Patient");
 
         this.matchedPatients = new ArrayList<Patient>();
-        this.flexibleSpace = new FlexibleToolbarSpace();
+        flexibleSpace = new FlexibleToolbarSpace();
 
         this.patientSearchField.setText("");
 
@@ -218,7 +218,7 @@ public class PatientControlsController implements Initializable {
     public void saveEditedPatient() {
         boolean allFieldsFilled = true;
         for (TextField aField : requiredFields) {
-            if (aField.getText().toString().isEmpty()) {
+            if (aField.getText().isEmpty()) {
                 allFieldsFilled = false;
                 new AlertDialog((Stage)root.getScene().getWindow(), "You cannot leave any required fields empty",
                         AlertDialog.ICON_INFO).showAndWait();
@@ -256,7 +256,7 @@ public class PatientControlsController implements Initializable {
     public void saveNewPatient() {
         boolean allFieldsFilled = true;
         for (TextField aField : requiredFields) {
-            if (aField.getText().toString().isEmpty()) {
+            if (aField.getText().isEmpty()) {
                 allFieldsFilled = false;
                 new AlertDialog((Stage)root.getScene().getWindow(), "Please fill in all of the required fields",
                         AlertDialog.ICON_INFO).showAndWait();

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="547.0" prefWidth="725.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.ManageQuestionnaires.QuestionnaireBuilderController">
+  <children>
+    <SplitPane dividerPositions="0.28077455048409405" focusTraversable="true" prefHeight="454.0" prefWidth="692.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="200.0">
+          <children>
+            <ListView id="questionListView" fx:id="questionnaireListView" prefHeight="316.0000999999975" prefWidth="200.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="51.0" />
+            <TextField id="questionSearchField" fx:id="questionnaireSearchField" prefWidth="172.0" promptText="Search" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+            <ToolBar prefWidth="199.9998779296875" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+              <items>
+                <Button id="addNewQuestionnaireButton" mnemonicParsing="false" onAction="#setupViewForBuildingNewQuestionnaireAction" prefWidth="172.0" text="Add New" />
+              </items>
+            </ToolBar>
+          </children>
+        </AnchorPane>
+        <SplitPane dividerPositions="0.6574585635359116" focusTraversable="true" orientation="VERTICAL" prefHeight="398.0" prefWidth="392.0">
+          <items>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="222.00009999999747" prefWidth="482.0">
+              <children>
+                <TreeView prefHeight="188.0" prefWidth="480.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+                <ToolBar prefWidth="482.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="0.0">
+                  <items>
+                    <Button mnemonicParsing="false" text="Add Question" />
+                    <ChoiceBox prefWidth="134.0">
+                      <items>
+                        <FXCollections fx:factory="observableArrayList">
+                          <String fx:value="Item 1" />
+                          <String fx:value="Item 2" />
+                          <String fx:value="Item 3" />
+                        </FXCollections>
+                      </items>
+                    </ChoiceBox>
+                  </items>
+                </ToolBar>
+                <Button fx:id="deployButton" mnemonicParsing="false" text="Deploy" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                <Label text="Title:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="17.0" />
+                <TextField fx:id="questionnaireTitleField" prefWidth="330.0" promptText="Questionnaire Title" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="97.0" AnchorPane.topAnchor="14.0" />
+              </children>
+            </AnchorPane>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+              <children>
+                <StackPane id="questionStack" prefHeight="222.0" prefWidth="482.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+              </children>
+            </AnchorPane>
+          </items>
+        </SplitPane>
+      </items>
+    </SplitPane>
+  </children>
+</AnchorPane>
