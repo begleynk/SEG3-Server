@@ -1,8 +1,11 @@
 package Accessors;
 
+import Exceptions.NoQuestionnaireException;
 import Helpers.OSHelper;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
+import ModelObjects.QuestionnairePointer;
+import ModelObjects.Questions.Question;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -41,27 +44,27 @@ public class DatabaseAccessor {
             QUESTIONNAIRE METHODS
     *************************************************************/
 
-    public int[] getAllQuestionnaires() throws SQLException
+    public QuestionnairePointer[] getAllQuestionnaires() throws SQLException
     {
         Statement statement = createStatement();
         String query = "SELECT * FROM Questionnaire;";
         ResultSet result = statement.executeQuery(query);
 
-        int[] idList = new int[result.getFetchSize()];
+        QuestionnairePointer[] pointerList = new QuestionnairePointer[result.getFetchSize()];
         int i = 0;
 
         while(result.next())
         {
-            idList[i] = result.getInt("Q_id");
+            pointerList[i] = new QuestionnairePointer(result.getInt(1), result.getString(2), result.getString(3));
             i++;
         }
-        return idList;
+        return pointerList;
     }
 
     public Questionnaire insertQuestionnaireRecord(Questionnaire questionnaire) throws SQLException
     {
         Statement statement = createStatement();
-        statement.execute("INSERT INTO Questionnaire (Title) VALUES ('" + questionnaire.getTitle() + "');");
+        statement.execute("INSERT INTO Questionnaire (Q_title, Q_state) VALUES ('" + questionnaire.getTitle() + "', 'draft');");
         ResultSet keys = statement.getGeneratedKeys();
         if(keys.next())
         {
@@ -85,8 +88,32 @@ public class DatabaseAccessor {
             return false;
         }
         Statement statement = createStatement();
-        statement.execute("DELETE FROM Questionnaire WHERE Q_id = " + questionnaire.getId() + ";");
+        statement.execute("DELETE FROM Questionnaire WHERE Q_id= " + questionnaire.getId() + ";");
         return true;
+    }
+
+    public String getQuestionnaireState(Questionnaire questionnaire) throws SQLException, NoQuestionnaireException
+    {
+        Statement statement = createStatement();
+        String query = "SELECT Q_state FROM Questionnaire WHERE Q_id=" + questionnaire.getId() + ";";
+        ResultSet result = statement.executeQuery(query);
+
+        if(result.next())
+        {
+            return result.getString(1);
+        }
+        else
+        {
+            throw new NoQuestionnaireException();
+        }
+    }
+
+    public boolean setQuestionnaireState(Questionnaire questionnaire, String state) throws SQLException, NoQuestionnaireException
+    {
+        Statement statement = createStatement();
+        String query = "UPDATE Questionnaire SET Q_state='" + state + "' WHERE Q_id=" + questionnaire.getId() + ";";
+        ResultSet result = statement.executeQuery(query);
+        return result.rowUpdated();
     }
 
 
@@ -136,7 +163,8 @@ public class DatabaseAccessor {
                 "P_date_of_birth = '" + patient.getDateOfBirth() + "', " +
                 "P_postcode = '" + patient.getPostcode() + "' " +
                 "WHERE P_NHS_number = '" + patient.getNhsNumber() + "';";
-        return statement.execute(query);
+        ResultSet result =  statement.executeQuery(query);
+        return result.rowUpdated();
     }
 
     public Patient insertPatientRecord(Patient patient) throws SQLException

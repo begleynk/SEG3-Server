@@ -15,6 +15,7 @@ public class Questionnaire
     private int id;
     private String title;
     private LinkedList<Question> questions;
+    private String state;
 
     public Questionnaire(int id, String title)
     {
@@ -32,6 +33,16 @@ public class Questionnaire
     public String getTitle()
     {
         return this.title;
+    }
+
+    public String getState()
+    {
+        return this.state;
+    }
+
+    public void setState(String state)
+    {
+        this.state = state;
     }
 
     public LinkedList<Question> getQuestions()
