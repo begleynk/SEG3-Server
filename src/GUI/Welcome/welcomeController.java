@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Faizan on 05/03/14.
+ * Created by Faizan Joya on 05/03/14.
  */
 public class welcomeController implements Initializable {
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="268.0" prefWidth="558.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.ManageQuestionnaires.QuestionTemplates.Range.RangeController">
+  <children>
+    <Label layoutX="14.0" layoutY="18.0" text="Question Title:">
+      <font>
+        <Font size="16.0" />
+      </font>
+    </Label>
+    <TextField layoutX="125.0" layoutY="19.0" prefWidth="385.0" />
+    <Button layoutX="447.0" layoutY="124.0" mnemonicParsing="false" prefWidth="97.0" text="Clear" />
+    <Button layoutX="447.0" layoutY="186.0" mnemonicParsing="false" text="Delete question" />
+    <Button layoutX="447.0" layoutY="156.0" mnemonicParsing="false" prefWidth="97.0" text="Save question" />
+    <Label layoutX="47.0" layoutY="53.0" text="Lower Bound">
+      <font>
+        <Font size="13.0" fx:id="x1" />
+      </font>
+    </Label>
+    <Label font="$x1" layoutX="46.0" layoutY="78.0" text="Upper Bound" />
+    <Label font="$x1" layoutX="163.0" layoutY="54.0" text="Message:" />
+    <Label font="$x1" layoutX="163.0" layoutY="79.0" text="Message:" />
+    <TextField layoutX="218.0" layoutY="79.0" prefWidth="292.0" />
+    <TextField layoutX="218.0" layoutY="54.0" prefWidth="292.0" />
+    <TextField layoutX="125.0" layoutY="51.0" prefWidth="23.0" />
+    <TextField layoutX="125.0" layoutY="77.0" prefWidth="23.0" />
+  </children>
+</AnchorPane>
