@@ -50,4 +50,18 @@ public class SocketProcess extends Thread {
         }
     }
 
+    public void closeConnection() throws IOException
+    {
+        try
+        {
+            this.socket.close();
+        }
+        catch (IOException e)
+        {
+            System.err.println("Error closing connection");
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 }
