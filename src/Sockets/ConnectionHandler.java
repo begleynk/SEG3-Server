@@ -37,6 +37,39 @@ public class ConnectionHandler
         }
     }
 
+    public static boolean closeConnection(SocketProcess process) throws IOException
+    {
+        boolean closed = false;
+
+        if(!connections.isEmpty())
+        {
+            for(SocketProcess proc: connections)
+            {
+                if(process.hashCode() == proc.hashCode())
+                {
+                    try
+                    {
+                        process.closeConnection();
+                        connections.remove(proc);
+                        closed = true;
+                    }
+                    catch (IOException e)
+                    {
+                        System.err.println("Error closing connection");
+                        e.printStackTrace();
+                        throw e;
+                    }
+                }
+            }
+            if(closed)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public static void closeAllConnections() throws IOException
     {
         for(SocketProcess process: connections)
