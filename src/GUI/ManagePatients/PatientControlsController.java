@@ -70,8 +70,6 @@ public class PatientControlsController implements Initializable {
 
         flexibleSpace = new FlexibleToolbarSpace();
 
-        this.patientSearchField.setText("");
-
         this.dataInputFields = new TextField[]{nhsNumberField, firstNameField, middleNameField, lastNameField, dayDOBField,
                 monthDOBField, yearDOBField, postcodeField};
         this.requiredFields = new TextField[]{nhsNumberField, firstNameField, lastNameField, dayDOBField,
@@ -169,8 +167,7 @@ public class PatientControlsController implements Initializable {
 
     public ObservableList<Patient> fuzzySearchPatientsUsingSearchTerm(String searchTerm) {
         matchedPatients.clear();
-        searchTerm = searchTerm.trim();
-        searchTerm = searchTerm.toLowerCase();
+        searchTerm = searchTerm.trim().toLowerCase();
         for (Patient aPatient : allPatients) {
             if (aPatient.getNhsNumber().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getFirst_name().toLowerCase().startsWith(searchTerm) ||
