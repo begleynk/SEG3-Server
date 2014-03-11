@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS 'Tablet' (
+  'T_id' varchar(20) PRIMARY KEY NOT NULL,
+);
