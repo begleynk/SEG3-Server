@@ -1,5 +1,6 @@
 import Database.DatabaseInitializer;
 import Helpers.DataStorageHelper;
+import Sockets.ConnectionHandler;
 import Sockets.SocketServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -58,7 +59,7 @@ public class Main extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        this.socketServer.endProcesses();
+        ConnectionHandler.closeAllConnections();
     }
 
     public static void main(String[] args) {

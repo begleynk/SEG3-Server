@@ -13,13 +13,11 @@ import java.util.ArrayList;
 public class SocketServer implements Runnable {
 
     private final int port;
-    private ArrayList<SocketProcess> socketProcesses;
     private ServerSocket serverSocket;
     private boolean listening;
 
     public SocketServer(int port) {
         this.port = port;
-        this.socketProcesses = new ArrayList<SocketProcess>();
     }
 
     public void start() {
@@ -30,11 +28,7 @@ public class SocketServer implements Runnable {
             while (listening) {
                 // Starts new socket processes when a new connection comes in
                 SocketProcess aProcess = new SocketProcess(serverSocket.accept());
-                aProcess.start();
-                socketProcesses.add(aProcess);
-                System.out.println("Received a new connection.");
-                System.out.println("IP: " + serverSocket.getInetAddress());
-                System.out.println("PORT: " + serverSocket.getLocalPort());
+                ConnectionHandler.addConnection(aProcess);
             }
         } catch (IOException e) {
             System.out.println("Problem, yo.");
@@ -46,19 +40,5 @@ public class SocketServer implements Runnable {
     @Override
     public void run() {
         this.start();
-    }
-
-    public void endProcesses() {
-        for(SocketProcess aProcess : socketProcesses) {
-            aProcess.endProcess();
-        }
-        socketProcesses.clear();
-        try {
-            if (serverSocket != null) {
-                serverSocket.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

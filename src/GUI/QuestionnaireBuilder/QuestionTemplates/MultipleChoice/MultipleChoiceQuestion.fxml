@@ -15,17 +15,11 @@
       </font>
     </Label>
     <TextField layoutX="125.0" layoutY="18.0" prefWidth="385.0" />
-    <Button layoutX="447.0" layoutY="172.0" mnemonicParsing="false" prefWidth="97.0" text="Clear" />
-    <Button layoutX="447.0" layoutY="234.0" mnemonicParsing="false" text="Delete question" />
-    <Button layoutX="447.0" layoutY="204.0" mnemonicParsing="false" prefWidth="97.0" text="Save question" />
-    <Label layoutX="14.0" layoutY="40.0" text="Number of Choices:">
-      <font>
-        <Font size="14.0" />
-      </font>
-    </Label>
-    <TextField layoutX="140.0" layoutY="40.0" prefWidth="25.0" />
-    <Button layoutX="447.0" layoutY="59.0" mnemonicParsing="false" prefWidth="97.0" text="Generate" />
-    <Button layoutX="447.0" layoutY="90.0" mnemonicParsing="false" prefWidth="97.0" text="Add choice" />
-    <AnchorPane layoutX="0.0" layoutY="59.0" prefHeight="217.0" prefWidth="385.0" />
+    <Button layoutX="447.0" layoutY="143.0" mnemonicParsing="false" prefWidth="97.0" text="Clear" />
+    <Button layoutX="447.0" layoutY="205.0" mnemonicParsing="false" text="Delete question" />
+    <Button layoutX="447.0" layoutY="175.0" mnemonicParsing="false" prefWidth="97.0" text="Save question" />
+    <Button layoutX="447.0" layoutY="234.0" mnemonicParsing="false" prefWidth="97.0" text="Add choice" />
+    <TextField layoutX="14.0" layoutY="234.0" prefWidth="353.0" />
+    <ListView layoutX="0.0" layoutY="43.0" prefHeight="182.0" prefWidth="431.0" />
   </children>
 </AnchorPane>
