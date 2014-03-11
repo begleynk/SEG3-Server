@@ -1,5 +1,7 @@
+import Accessors.DataLayer;
 import Database.DatabaseInitializer;
 import Helpers.DataStorageHelper;
+import ModelObjects.Questionnaire;
 import Sockets.ConnectionHandler;
 import Sockets.SocketServer;
 import javafx.application.Application;
@@ -25,10 +27,10 @@ public class Main extends Application {
         intializeAppDirectories();
 
         // FOR TESTING:
-        //DataLayer.addQuestionnaire(new Questionnaire(10, "Test 1", 2));
-        //DataLayer.addQuestionnaire(new Questionnaire(11, "Test 2", 2));
-        //DataLayer.addQuestionnaire(new Questionnaire(12, "Test 3", 2));
-        //DataLayer.addQuestionnaire(new Questionnaire(13, "Test 4", 2));
+        DataLayer.addQuestionnaire(new Questionnaire(10, "Test 1", 2));
+        DataLayer.addQuestionnaire(new Questionnaire(11, "Test 2", 2));
+        DataLayer.addQuestionnaire(new Questionnaire(12, "Test 3", 2));
+        DataLayer.addQuestionnaire(new Questionnaire(13, "Test 4", 2));
 
         // FOR TESTING:
 //        Questionnaire questionnaire = new Questionnaire(0, "test");

@@ -128,10 +128,10 @@ public class DataLayer
 
     public static QuestionnairePointer[] getQuestionnairePointersForState(int state) throws SQLException, NoQuestionnaireException
     {
-        QuestionnairePointer[] questionnaireIDs;
         try
         {
-            return databaseAccessor.getAllQuestionnairesForState(state);
+            return databaseAccessor.getAllQuestionnaires();
+            //return databaseAccessor.getAllQuestionnairesForState(state);
         }
         catch (SQLException e)
         {
@@ -172,7 +172,7 @@ public class DataLayer
     public static boolean addQuestionnaire(Questionnaire questionnaire) throws SQLException
     {
         Questionnaire savedQuestionnaire = databaseAccessor.insertQuestionnaireRecord(questionnaire);
-        savedQuestionnaire.setState("Draft");
+        //savedQuestionnaire.setState("Draft");
         if(questionnaireAccessor.saveQuestionnaire(savedQuestionnaire))
         {
             return true;

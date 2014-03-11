@@ -43,10 +43,6 @@ public class DatabaseInitializer
             statement.execute(getQueryFromFile("create_table_questionnaire"));
             //System.out.println("Creating patient_questionnaire table...");
             statement.execute(getQueryFromFile("create_table_patient_questionnaire"));
-            //System.out.println("Creating disability table...");
-            statement.execute(getQueryFromFile("create_table_disability"));
-            //System.out.println("Creating patient_disability table...");
-            statement.execute(getQueryFromFile("create_table_patient_disability"));
             //System.out.println("Creating patient_log table...");
             statement.execute(getQueryFromFile("create_table_patient_log"));
             //System.out.println("Creating questionnaire_log table...");

@@ -57,6 +57,7 @@ public class QuestionnaireArchiveController implements Initializable {
     public void fetchDeployedQuestionnaires() {
         try {
             this.deployedQuestionnaires.setAll(DataLayer.getQuestionnairePointers());
+            System.out.println(this.deployedQuestionnaires);
             updateListViews();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,6 +76,7 @@ public class QuestionnaireArchiveController implements Initializable {
     }
 
     public void updateArchivedListView() {
-
+        this.archivedListView.getSelectionModel().clearSelection();
+        this.deployedListView.setItems(archivedQuestionnaires);
     }
 }

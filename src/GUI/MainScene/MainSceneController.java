@@ -44,7 +44,7 @@ public class MainSceneController implements Initializable {
             "/GUI/ManagePatients/patientControls.fxml",
             null, // Separator
             "/GUI/QuestionnaireBuilder/questionnaireBuilder.fxml",
-            "",
+            "/GUI/QuestionnaireArchive/questionnaireArchive.fxml",
             null, // Separator
             "",
             null, // Separator

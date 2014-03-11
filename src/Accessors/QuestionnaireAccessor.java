@@ -21,6 +21,13 @@ public class QuestionnaireAccessor {
     private static String questionnaireStoragePath = OSHelper.getStoragePath() + "/questionnaires/";
     private static Gson json = JsonHelper.getInstance();
 
+    public QuestionnaireAccessor() {
+        Path path = Paths.get(questionnaireStoragePath);
+        if (Files.notExists(path)) {
+            File directory = new File(path.toString());
+            directory.mkdir();
+        }
+    }
 
     public LinkedList<Questionnaire> getQuestionnaires()
     {

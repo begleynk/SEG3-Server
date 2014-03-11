@@ -81,7 +81,10 @@ public class DatabaseAccessor {
     public Questionnaire insertQuestionnaireRecord(Questionnaire questionnaire) throws SQLException
     {
         Statement statement = createStatement();
-        statement.execute("INSERT INTO Questionnaire (Q_title, Q_state) VALUES ('" + questionnaire.getTitle() + "', 'draft');");
+        //statement.execute("INSERT INTO Questionnaire (Q_title, Q_state) VALUES ('" + questionnaire.getTitle() + "', 'draft');");
+        statement.execute("INSERT INTO Questionnaire (Q_title, Q_state) VALUES ('"+
+                questionnaire.getTitle() +"', '"+
+                questionnaire.getState() +"')");
         ResultSet keys = statement.getGeneratedKeys();
         if(keys.next())
         {
