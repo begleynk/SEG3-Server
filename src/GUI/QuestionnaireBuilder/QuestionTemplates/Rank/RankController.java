@@ -1,4 +1,4 @@
-package GUI.ManageQuestionnaires.QuestionTemplates.MultipleChoice;
+package GUI.QuestionnaireBuilder.QuestionTemplates.Rank;
 
 import javafx.fxml.Initializable;
 
@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
  * Created by Faizan Joya on 09/03/14.
  * SEG3-Server
  */
-public class MultipleChoiceController implements Initializable {
+public class RankController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

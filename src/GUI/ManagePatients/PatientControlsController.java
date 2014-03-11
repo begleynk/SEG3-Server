@@ -6,8 +6,9 @@ import Helpers.GUI.FlexibleToolbarSpace;
 import ModelObjects.Patient;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,7 +20,6 @@ import javafx.util.Callback;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -32,7 +32,7 @@ public class PatientControlsController implements Initializable {
 
     // Left Pane Controls
     @FXML private TextField patientSearchField;
-    @FXML private ListView patientListView;
+    @FXML private ListView<Patient> patientListView;
 
     // Form Input Controls
     @FXML private TextField nhsNumberField;
@@ -53,8 +53,10 @@ public class PatientControlsController implements Initializable {
             saveChangesButton, deselectPatientButton, deletePatientButton;
 
     // Left Pane Data
-    private ArrayList<Patient> allPatients;
-    private ArrayList<Patient> matchedPatients;
+    private final ObservableList<Patient> allPatients
+            = FXCollections.observableArrayList();
+    private final ObservableList<Patient> matchedPatients
+            = FXCollections.observableArrayList();
 
 
     @Override
@@ -66,7 +68,6 @@ public class PatientControlsController implements Initializable {
         this.deletePatientButton = new Button("Delete Patient");
         this.deselectPatientButton = new Button("Deselect Patient");
 
-        this.matchedPatients = new ArrayList<Patient>();
         flexibleSpace = new FlexibleToolbarSpace();
 
         this.patientSearchField.setText("");
@@ -77,7 +78,6 @@ public class PatientControlsController implements Initializable {
                 monthDOBField, yearDOBField};
 
         setInputFieldsEnabled(false);
-        fetchAllPatients();
 
         this.saveNewButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -119,7 +119,7 @@ public class PatientControlsController implements Initializable {
         patientListView.setCellFactory(new Callback<ListView<Patient>, ListCell<Patient>>() {
             @Override
             public ListCell<Patient> call(ListView<Patient> p) {
-                ListCell<Patient> cell = new ListCell<Patient>() {
+                return new ListCell<Patient>() {
                     @Override
                     protected void updateItem(Patient patient, boolean aBool) {
                         super.updateItem(patient, aBool);
@@ -129,7 +129,6 @@ public class PatientControlsController implements Initializable {
                     }
 
                 };
-                return cell;
             }
         });
         patientListView.getSelectionModel().selectedItemProperty().addListener(
@@ -138,6 +137,8 @@ public class PatientControlsController implements Initializable {
                     existingPatientSelected(new_val);
                 }
         });
+
+        fetchAllPatients();
     }
 
     // Main View Transitions
@@ -159,14 +160,14 @@ public class PatientControlsController implements Initializable {
 
     public void fetchAllPatients() {
         try {
-            this.allPatients = DataLayer.getAllPatients();
-            searchInputChangedAction(null);
+            this.allPatients.setAll(DataLayer.getAllPatients());
+            searchInputChangedAction();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList<Patient> fuzzySearchPatientsUsingSearchTerm(String searchTerm) {
+    public ObservableList<Patient> fuzzySearchPatientsUsingSearchTerm(String searchTerm) {
         matchedPatients.clear();
         searchTerm = searchTerm.trim();
         searchTerm = searchTerm.toLowerCase();
@@ -183,16 +184,13 @@ public class PatientControlsController implements Initializable {
         return matchedPatients;
     }
 
-    public void searchInputChangedAction(Event event) {
-        String searchTerm = null;
-        if (patientSearchField != null) {
-            searchTerm = patientSearchField.getText().toString();
-        }
+    public void searchInputChangedAction() {
+        String searchTerm = patientSearchField.getText();
         patientListView.getSelectionModel().clearSelection();
-        if (searchTerm.isEmpty() || searchTerm == null) {
-            patientListView.getItems().setAll(allPatients);
+        if (searchTerm == null || searchTerm.equals("") ) {
+            patientListView.setItems(allPatients);
         } else {
-            patientListView.getItems().setAll(fuzzySearchPatientsUsingSearchTerm(searchTerm));
+            patientListView.setItems(fuzzySearchPatientsUsingSearchTerm(searchTerm));
         }
     }
 
@@ -241,7 +239,7 @@ public class PatientControlsController implements Initializable {
     }
 
     public void deleteExistingPatient() {
-        Patient selectedPatient = (Patient) patientListView.getSelectionModel().getSelectedItem();
+        Patient selectedPatient = patientListView.getSelectionModel().getSelectedItem();
         try {
             DataLayer.removePatient(selectedPatient);
         } catch (SQLException e) {

@@ -4,7 +4,6 @@ import Exceptions.NoQuestionnaireException;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
-import ModelObjects.Questions.Question;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -127,6 +126,18 @@ public class DataLayer
         }
     }
 
+    public static QuestionnairePointer[] getQuestionnairePointersForState(int state) throws SQLException, NoQuestionnaireException
+    {
+        QuestionnairePointer[] questionnaireIDs;
+        try
+        {
+            return databaseAccessor.getAllQuestionnairesForState(state);
+        }
+        catch (SQLException e)
+        {
+            throw e;
+        }
+    }
 
     public static Questionnaire getQuestionnaireWithPointer(QuestionnairePointer pointer) throws NoQuestionnaireException
     {

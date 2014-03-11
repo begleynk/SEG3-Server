@@ -1,4 +1,4 @@
-package GUI.ManageQuestionnaires.QuestionTemplates.FreeText;
+package GUI.QuestionnaireBuilder.QuestionTemplates.Range;
 
 import javafx.fxml.Initializable;
 
@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
  * Created by Faizan Joya on 09/03/14.
  * SEG3-Server
  */
-public class FreeTextController implements Initializable {
+public class RangeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

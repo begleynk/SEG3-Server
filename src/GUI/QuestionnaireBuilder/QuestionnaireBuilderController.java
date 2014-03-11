@@ -1,4 +1,4 @@
-package GUI.ManageQuestionnaires;
+package GUI.QuestionnaireBuilder;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;

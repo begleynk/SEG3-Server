@@ -17,12 +17,21 @@ public class Questionnaire
     private LinkedList<Question> questions;
     private String state;
 
+    private String[] states = {"Draft", "Deployed", "Archived"};
+
     public Questionnaire(int id, String title)
     {
         this.id = id;
         this.title = title;
-
-        this.questions = new LinkedList<Question>();
+        this.questions = new LinkedList<>();
+        this.state = states[0];
+    }
+    public Questionnaire(int id, String title, int state)
+    {
+        this.id = id;
+        this.title = title;
+        this.questions = new LinkedList<>();
+        this.state = states[state];
     }
 
     public int getId()

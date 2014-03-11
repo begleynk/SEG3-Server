@@ -5,7 +5,6 @@ import Helpers.OSHelper;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
-import ModelObjects.Questions.Question;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ public class DatabaseAccessor {
 
     private Connection connection;
 
+    private String[] states = {"Draft", "Deployed", "Archived"};
 
     public DatabaseAccessor()
     {
@@ -48,6 +48,23 @@ public class DatabaseAccessor {
     {
         Statement statement = createStatement();
         String query = "SELECT * FROM Questionnaire;";
+        ResultSet result = statement.executeQuery(query);
+
+        QuestionnairePointer[] pointerList = new QuestionnairePointer[result.getFetchSize()];
+        int i = 0;
+
+        while(result.next())
+        {
+            pointerList[i] = new QuestionnairePointer(result.getInt(1), result.getString(2), result.getString(3));
+            i++;
+        }
+        return pointerList;
+    }
+
+    public QuestionnairePointer[] getAllQuestionnairesForState(int state) throws SQLException
+    {
+        Statement statement = createStatement();
+        String query = "SELECT * FROM Questionnaire WHERE state = '"+ states[state] +"';";
         ResultSet result = statement.executeQuery(query);
 
         QuestionnairePointer[] pointerList = new QuestionnairePointer[result.getFetchSize()];

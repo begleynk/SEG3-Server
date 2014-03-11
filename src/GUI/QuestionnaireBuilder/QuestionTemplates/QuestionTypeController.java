@@ -1,4 +1,4 @@
-package GUI.ManageQuestionnaires.QuestionTemplates;
+package GUI.QuestionnaireBuilder.QuestionTemplates;
 
 /**
  * Created by Faizan Joya on 09/03/14.

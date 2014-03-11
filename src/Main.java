@@ -15,11 +15,7 @@ import java.io.IOException;
  */
 public class Main extends Application {
 
-    private int socketPort = 4000;
     private SocketServer socketServer;
-    private Thread socketThread;
-
-    private String appTitle = "MediQ Server";
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -27,16 +23,23 @@ public class Main extends Application {
         // Create app directory structure.
         intializeAppDirectories();
 
-//        // FOR TESTING:
+        // FOR TESTING:
+        //DataLayer.addQuestionnaire(new Questionnaire(10, "Test 1", 2));
+        //DataLayer.addQuestionnaire(new Questionnaire(11, "Test 2", 2));
+        //DataLayer.addQuestionnaire(new Questionnaire(12, "Test 3", 2));
+        //DataLayer.addQuestionnaire(new Questionnaire(13, "Test 4", 2));
+
+        // FOR TESTING:
 //        Questionnaire questionnaire = new Questionnaire(0, "test");
 //        questionnaire.loadDummy();
 //        Patient patient = DataLayer.getAllPatients().get(0);
 //        AnswerSet answerSet = new AnswerSet(questionnaire, patient);
 //        System.out.println(answerSet.toString());
 
+        int socketPort = 4000;
         this.socketServer = new SocketServer(socketPort);
-        this.socketThread = new Thread(this.socketServer);
-        this.socketThread.start();
+        Thread socketThread = new Thread(this.socketServer);
+        socketThread.start();
 
         try {
             Parent mainScreen = FXMLLoader.load(getClass().getResource("/GUI/MainScene/mainScene.fxml"));
@@ -47,6 +50,7 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        String appTitle = "MediQ Server";
         stage.setTitle(appTitle);
         stage.show();
     }

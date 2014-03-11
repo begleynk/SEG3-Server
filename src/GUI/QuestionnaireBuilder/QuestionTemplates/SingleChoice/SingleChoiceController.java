@@ -1,4 +1,4 @@
-package GUI.ManageQuestionnaires.QuestionTemplates.SingleChoice;
+package GUI.QuestionnaireBuilder.QuestionTemplates.SingleChoice;
 
 import javafx.fxml.Initializable;
 import java.net.URL;
