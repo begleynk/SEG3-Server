@@ -8,6 +8,20 @@
   <children>
     <Accordion prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <expandedPane>
+        <TitledPane fx:id="x2" animated="false" text="Add Tablet">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <children>
+                <Label layoutX="72.0" layoutY="57.0" text="IP Address:" />
+                <Label layoutX="88.0" layoutY="79.0" text="Port:" />
+                <Label id="ipaddress" layoutX="140.0" layoutY="60.0" text="-" />
+                <Label id="port" layoutX="140.0" layoutY="82.0" text="-" />
+              </children>
+            </AnchorPane>
+          </content>
+        </TitledPane>
+      </expandedPane>
+      <panes>
         <TitledPane fx:id="x1" animated="false" text="Linked Tablets">
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -18,14 +32,7 @@
             </AnchorPane>
           </content>
         </TitledPane>
-      </expandedPane>
-      <panes>
-        <fx:reference source="x1" />
-        <TitledPane animated="false" text="Add Tablet">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-          </content>
-        </TitledPane>
+        <fx:reference source="x2" />
         <TitledPane animated="false" expanded="false" styleClass="first-titled-pane" text="Administrator Settings">
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">

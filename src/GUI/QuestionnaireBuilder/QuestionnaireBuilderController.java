@@ -9,18 +9,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
  * Created by James Bellamy on 04/03/2014.
- *
+ * Collaboration with Faizan Joya 11/03/2014
  */
 public class QuestionnaireBuilderController implements Initializable {
 
@@ -34,6 +38,30 @@ public class QuestionnaireBuilderController implements Initializable {
     @FXML private TextField questionnaireTitleField;
     @FXML private Button deployButton;
 
+    //===
+    @FXML private StackPane questionStack;
+    @FXML private ChoiceBox<Object> questionChooser;
+
+    // question types in choicebox i.e. dropdown to choose type of question
+    private final Object[] menuOptions = {
+            "Free Text",
+            "Multiple Choice",
+            "Single Choice",
+            "Range",
+            "Rank",
+    };
+
+    // url corresponding to choisebox question selection
+    private final String[] questionviewPaths = {
+            "/GUI/QuestionnaireBuilder/QuestionTemplates/FreeText/FreeTextQuestion.fxml",
+            "/GUI/QuestionnaireBuilder/QuestionTemplates/MultipleChoice/MultipleChoiceQuestion.fxml",
+            "/GUI/QuestionnaireBuilder/QuestionTemplates/SingleChoice/SingleChoiceQuestion.fxml",
+            "/GUI/QuestionnaireBuilder/QuestionTemplates/Range/RangeQuestion.fxml",
+            "/GUI/QuestionnaireBuilder/QuestionTemplates/Rank/RankQuestion.fxml",
+    };
+
+    //===
+
     private ObservableList<QuestionnairePointer> allPointers
             = FXCollections.observableArrayList();
     private ObservableList<QuestionnairePointer> matchedQuestionnairePointers
@@ -41,6 +69,11 @@ public class QuestionnaireBuilderController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        //set view
+        this.setView(0);
+        this.setupMenu();
+        this.questionChooser.getSelectionModel().select(0);
 
         this.questionnairePointerListView.setCellFactory(new Callback<ListView<QuestionnairePointer>, ListCell<QuestionnairePointer>>() {
             @Override
@@ -104,4 +137,31 @@ public class QuestionnaireBuilderController implements Initializable {
         //this.editingView.setVisible(true);
     }
 
+
+    public void setView(int viewIndex) {
+        String viewPath = questionviewPaths[viewIndex];
+        if (viewPath != null && viewPath.length() > 0) {
+            questionStack.getChildren().clear();
+            try {
+                AnchorPane pane = FXMLLoader.load(getClass().getResource(viewPath));
+                AnchorPane.setTopAnchor(pane, 0.0);
+                AnchorPane.setBottomAnchor(pane, 0.0);
+                AnchorPane.setRightAnchor(pane, 0.0);
+                AnchorPane.setLeftAnchor(pane, 0.0);
+                questionStack.getChildren().add(0, pane);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setupMenu() {
+        questionChooser.setItems(FXCollections.observableArrayList(menuOptions));
+        questionChooser.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
+                setView(newNumber.intValue());
+            }
+        });
+    }
 }
