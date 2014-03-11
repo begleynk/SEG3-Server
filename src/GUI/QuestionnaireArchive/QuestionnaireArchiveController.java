@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.util.Callback;
 
 import java.net.URL;
@@ -43,7 +44,6 @@ public class QuestionnaireArchiveController implements Initializable {
                             setText(pointer.getTitle());
                         }
                     }
-
                 };
             }
         };
@@ -51,32 +51,70 @@ public class QuestionnaireArchiveController implements Initializable {
         this.deployedListView.setCellFactory(callback);
         this.archivedListView.setCellFactory(callback);
 
-        fetchDeployedQuestionnaires();
+        this.deployedListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        this.archivedListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        fetchAll();
     }
+
+    public void fetchAll() {
+        fetchDeployedQuestionnaires();
+        fetchArchivedQuestionnaires();
+    }
+
+    // Fetching Data from Database
 
     public void fetchDeployedQuestionnaires() {
         try {
-            this.deployedQuestionnaires.setAll(DataLayer.getQuestionnairePointers());
-            System.out.println(this.deployedQuestionnaires);
-            updateListViews();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (NoQuestionnaireException e) {
+            this.deployedQuestionnaires.setAll(DataLayer.getQuestionnairePointersForState(1));
+            updateDeployedListView();
+        } catch (SQLException | NoQuestionnaireException e) {
             e.printStackTrace();
         }
     }
 
-    public void updateListViews() {
-        updateDeployedListView();
+    public void fetchArchivedQuestionnaires() {
+        try {
+            this.archivedQuestionnaires.setAll(DataLayer.getQuestionnairePointersForState(2));
+            updateArchivedListView();
+        } catch (SQLException | NoQuestionnaireException e) {
+            e.printStackTrace();
+        }
     }
 
+    // Updating UI when new Data has been fetched
+
     public void updateDeployedListView() {
-        this.deployedListView.getSelectionModel().clearSelection();
         this.deployedListView.setItems(deployedQuestionnaires);
     }
 
     public void updateArchivedListView() {
-        this.archivedListView.getSelectionModel().clearSelection();
-        this.deployedListView.setItems(archivedQuestionnaires);
+        this.archivedListView.setItems(archivedQuestionnaires);
+    }
+
+    // Switching Button Actions
+
+    public void redeployQuestionnairesAction() {
+        ObservableList<QuestionnairePointer> selectedItems = this.archivedListView.getSelectionModel().getSelectedItems();
+        for (QuestionnairePointer pointer : selectedItems) {
+            try {
+                DataLayer.setQuestionnairePointerStateToDepolyed(pointer);
+            } catch (SQLException | NoQuestionnaireException e) {
+                e.printStackTrace();
+            }
+        }
+        fetchAll();
+    }
+
+    public void archiveQuestionnairesAction() {
+        ObservableList<QuestionnairePointer> selectedItems = this.deployedListView.getSelectionModel().getSelectedItems();
+        for (QuestionnairePointer pointer : selectedItems) {
+            try {
+                DataLayer.setQuestionnairePointerStateToArchived(pointer);
+            } catch (SQLException | NoQuestionnaireException e) {
+                e.printStackTrace();
+            }
+        }
+        fetchAll();
     }
 }

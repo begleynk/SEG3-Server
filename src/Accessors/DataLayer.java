@@ -28,6 +28,12 @@ public class DataLayer
     private static DatabaseAccessor databaseAccessor = new DatabaseAccessor();
 
     /************************************************************
+     QUESTIONNAIRE STATE ARRAY
+     *************************************************************/
+
+    private static String[] states = {"Draft", "Deployed", "Archived"};
+
+    /************************************************************
      PATIENT METHODS
      *************************************************************/
 
@@ -95,7 +101,7 @@ public class DataLayer
 
     public static ArrayList<Patient> getAllPatients() throws SQLException
     {
-        ArrayList<Patient> patients = new ArrayList<Patient>();
+        ArrayList<Patient> patients;
         try
         {
             patients = databaseAccessor.getAllPatients();
@@ -113,9 +119,8 @@ public class DataLayer
      QUESTIONNAIRE METHODS
      *************************************************************/
 
-    public static QuestionnairePointer[] getQuestionnairePointers() throws SQLException, NoQuestionnaireException
+    public static ArrayList<QuestionnairePointer> getQuestionnairePointers() throws SQLException, NoQuestionnaireException
     {
-        QuestionnairePointer[] questionnaireIDs;
         try
         {
             return databaseAccessor.getAllQuestionnaires();
@@ -126,12 +131,11 @@ public class DataLayer
         }
     }
 
-    public static QuestionnairePointer[] getQuestionnairePointersForState(int state) throws SQLException, NoQuestionnaireException
+    public static ArrayList<QuestionnairePointer> getQuestionnairePointersForState(int state) throws SQLException, NoQuestionnaireException
     {
         try
         {
-            return databaseAccessor.getAllQuestionnaires();
-            //return databaseAccessor.getAllQuestionnairesForState(state);
+            return databaseAccessor.getAllQuestionnairesForState(state);
         }
         catch (SQLException e)
         {
@@ -172,8 +176,7 @@ public class DataLayer
     public static boolean addQuestionnaire(Questionnaire questionnaire) throws SQLException
     {
         Questionnaire savedQuestionnaire = databaseAccessor.insertQuestionnaireRecord(questionnaire);
-        //savedQuestionnaire.setState("Draft");
-        if(questionnaireAccessor.saveQuestionnaire(savedQuestionnaire))
+        if (questionnaireAccessor.saveQuestionnaire(savedQuestionnaire))
         {
             return true;
         }
@@ -205,7 +208,8 @@ public class DataLayer
     {
         try
         {
-            databaseAccessor.setQuestionnaireState(questionnaire, "Deployed");
+            // 1 = Deployed
+            databaseAccessor.setQuestionnaireState(questionnaire, states[1]);
         }
         catch (SQLException e)
         {
@@ -218,7 +222,7 @@ public class DataLayer
             System.err.println("Tried to deploy unsaved questionnaire.");
             throw e;
         }
-        questionnaire.setState("Deployed");
+        questionnaire.setState(states[1]);
         return questionnaire;
     }
 
@@ -226,7 +230,8 @@ public class DataLayer
     {
         try
         {
-            databaseAccessor.setQuestionnaireState(questionnaire, "Archived");
+            // 2 = Archived
+            databaseAccessor.setQuestionnaireState(questionnaire, states[2]);
         }
         catch (SQLException e)
         {
@@ -239,10 +244,53 @@ public class DataLayer
             System.err.println("Tried to archive unsaved questionnaire.");
             throw e;
         }
-        questionnaire.setState("Archived");
+        questionnaire.setState(states[2]);
         return questionnaire;
     }
 
+    public static QuestionnairePointer setQuestionnairePointerStateToDepolyed(QuestionnairePointer pointer) throws  SQLException, NoQuestionnaireException
+    {
+        try
+        {
+            // 1 = Deployed
+            databaseAccessor.setQuestionnairePointerState(pointer, states[1]);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
+        catch (NoQuestionnaireException e)
+        {
+            e.printStackTrace();
+            System.err.println("Tried to deploy unsaved questionnaire.");
+            throw e;
+        }
+        pointer.setState(states[1]);
+        return pointer;
+    }
+
+    public static QuestionnairePointer setQuestionnairePointerStateToArchived(QuestionnairePointer pointer) throws  SQLException, NoQuestionnaireException
+    {
+        try
+        {
+            // 2 = Archived
+            databaseAccessor.setQuestionnairePointerState(pointer, states[2]);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
+        catch (NoQuestionnaireException e)
+        {
+            e.printStackTrace();
+            System.err.println("Tried to deploy unsaved questionnaire.");
+            throw e;
+        }
+        pointer.setState(states[2]);
+        return pointer;
+    }
 
     /************************************************************
      ADMIN METHODS

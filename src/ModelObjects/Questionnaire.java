@@ -14,25 +14,24 @@ public class Questionnaire
 {
     private int id;
     private String title;
-    private LinkedList<Question> questions;
     private String state;
+    private LinkedList<Question> questions;
 
-    private String[] states = {"Draft", "Deployed", "Archived"};
+    private static String[] states = {"Draft", "Deployed", "Archived"};
 
-    public Questionnaire(int id, String title)
+    public Questionnaire(String title)
     {
-        this.id = id;
         this.title = title;
-        this.questions = new LinkedList<>();
         this.state = states[0];
     }
-    public Questionnaire(int id, String title, int state)
+
+    public Questionnaire(String title, int state)
     {
-        this.id = id;
         this.title = title;
-        this.questions = new LinkedList<>();
         this.state = states[state];
     }
+
+    // Getters
 
     public int getId()
     {
@@ -49,19 +48,32 @@ public class Questionnaire
         return this.state;
     }
 
+    // Setters
+
+    public void set_id(int id)
+    {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    };
+
     public void setState(String state)
     {
         this.state = state;
     }
+
+    // JSON Data
 
     public LinkedList<Question> getQuestions()
     {
         return this.questions;
     }
 
-    public void addQuestion(Question q)
+    public void addQuestion(Question question)
     {
-        this.questions.add(q);
+        this.questions.add(question);
     }
 
     /**
@@ -78,7 +90,7 @@ public class Questionnaire
         a.add("terrible");
 
         //add different questions
-        questions.add(new TextQuestion("1", "Tell me how you are", "Use keywords or describe how you feel in a sentance", false));
+        questions.add(new TextQuestion("1", "Tell me how you are", "Use keywords or describe how you feel in a sentence", false));
 
         //add also dependent questions
         YesNoQuestion y = new YesNoQuestion("2", "Are you good?", "Yes or No", true);
@@ -104,8 +116,8 @@ public class Questionnaire
         questions.add(new RankQuestion("13", "Test", "", true, a));
     }
 
-    public void set_id(int id)
-    {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "ID: " + getId() + "  Title: " + getTitle() + "  State: " + getState();
     }
 }

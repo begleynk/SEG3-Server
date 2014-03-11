@@ -1,15 +1,16 @@
 package ModelObjects;
 
-import ModelObjects.Questions.Question;
-
 /**
- * Created by NiklasBegley on 08/03/2014.
+ * Created by Niklas Begley on 08/03/2014.
+ *
  */
 public class QuestionnairePointer {
 
     private int id;
     private String title;
     private String state;
+
+    private static String[] states = {"Draft", "Deployed", "Archived"};
 
     public QuestionnairePointer(int id, String title, String state)
     {
@@ -29,9 +30,12 @@ public class QuestionnairePointer {
         return title;
     }
 
-
     public String getState()
     {
         return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

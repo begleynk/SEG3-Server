@@ -44,44 +44,43 @@ public class DatabaseAccessor {
             QUESTIONNAIRE METHODS
     *************************************************************/
 
-    public QuestionnairePointer[] getAllQuestionnaires() throws SQLException
+    public ArrayList<QuestionnairePointer> getAllQuestionnaires() throws SQLException
     {
         Statement statement = createStatement();
         String query = "SELECT * FROM Questionnaire;";
         ResultSet result = statement.executeQuery(query);
 
-        QuestionnairePointer[] pointerList = new QuestionnairePointer[result.getFetchSize()];
-        int i = 0;
+        ArrayList<QuestionnairePointer> pointerList = new ArrayList<>();
 
         while(result.next())
         {
-            pointerList[i] = new QuestionnairePointer(result.getInt(1), result.getString(2), result.getString(3));
-            i++;
+            QuestionnairePointer questionnairePointer = new QuestionnairePointer(result.getInt(1), result.getString(2), result.getString(3));
+            pointerList.add(questionnairePointer);
         }
+
         return pointerList;
     }
 
-    public QuestionnairePointer[] getAllQuestionnairesForState(int state) throws SQLException
+    public ArrayList<QuestionnairePointer> getAllQuestionnairesForState(int state) throws SQLException
     {
         Statement statement = createStatement();
-        String query = "SELECT * FROM Questionnaire WHERE state = '"+ states[state] +"';";
+        String query = "SELECT * FROM Questionnaire WHERE Q_state = '" + states[state] +"';";
         ResultSet result = statement.executeQuery(query);
 
-        QuestionnairePointer[] pointerList = new QuestionnairePointer[result.getFetchSize()];
-        int i = 0;
+        ArrayList<QuestionnairePointer> pointerList = new ArrayList<>();
 
         while(result.next())
         {
-            pointerList[i] = new QuestionnairePointer(result.getInt(1), result.getString(2), result.getString(3));
-            i++;
+            QuestionnairePointer questionnairePointer = new QuestionnairePointer(result.getInt(1), result.getString(2), result.getString(3));
+            pointerList.add(questionnairePointer);
         }
+
         return pointerList;
     }
 
     public Questionnaire insertQuestionnaireRecord(Questionnaire questionnaire) throws SQLException
     {
         Statement statement = createStatement();
-        //statement.execute("INSERT INTO Questionnaire (Q_title, Q_state) VALUES ('" + questionnaire.getTitle() + "', 'draft');");
         statement.execute("INSERT INTO Questionnaire (Q_title, Q_state) VALUES ('"+
                 questionnaire.getTitle() +"', '"+
                 questionnaire.getState() +"')");
@@ -131,9 +130,17 @@ public class DatabaseAccessor {
     public boolean setQuestionnaireState(Questionnaire questionnaire, String state) throws SQLException, NoQuestionnaireException
     {
         Statement statement = createStatement();
-        String query = "UPDATE Questionnaire SET Q_state='" + state + "' WHERE Q_id=" + questionnaire.getId() + ";";
-        ResultSet result = statement.executeQuery(query);
-        return result.rowUpdated();
+        String query = "UPDATE Questionnaire SET Q_state = '" + state + "' WHERE Q_id = " + questionnaire.getId() + ";";
+        int result = statement.executeUpdate(query);
+        return (result > 0);
+    }
+
+    public boolean setQuestionnairePointerState(QuestionnairePointer pointer, String state) throws SQLException, NoQuestionnaireException
+    {
+        Statement statement = createStatement();
+        String query = "UPDATE Questionnaire SET Q_state = '" + state + "' WHERE Q_id = " + pointer.getId() + ";";
+        int result = statement.executeUpdate(query);
+        return (result > 0);
     }
 
 
