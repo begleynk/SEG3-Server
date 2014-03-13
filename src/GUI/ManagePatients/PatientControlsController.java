@@ -293,4 +293,9 @@ public class PatientControlsController implements Initializable {
             aField.setDisable(!enabled);
         }
     }
+
+    public void patientListViewSelectNone() {
+        this.patientListView.getSelectionModel().clearSelection();
+        this.patientSearchField.requestFocus();
+    }
 }

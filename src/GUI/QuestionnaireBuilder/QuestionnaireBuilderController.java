@@ -30,6 +30,7 @@ public class QuestionnaireBuilderController implements Initializable {
 
     @FXML private Parent root;
 
+    @FXML private StackPane stackPane;
     @FXML private SplitPane editingView;
 
     @FXML private TextField questionnaireSearchField;
@@ -38,7 +39,6 @@ public class QuestionnaireBuilderController implements Initializable {
     @FXML private TextField questionnaireTitleField;
     @FXML private Button deployButton;
 
-    //===
     @FXML private StackPane questionStack;
     @FXML private ChoiceBox<Object> questionChooser;
 
@@ -59,8 +59,6 @@ public class QuestionnaireBuilderController implements Initializable {
             "/GUI/QuestionnaireBuilder/QuestionTemplates/Range/RangeQuestion.fxml",
             "/GUI/QuestionnaireBuilder/QuestionTemplates/Rank/RankQuestion.fxml",
     };
-
-    //===
 
     private ObservableList<QuestionnairePointer> allPointers
             = FXCollections.observableArrayList();
@@ -90,14 +88,15 @@ public class QuestionnaireBuilderController implements Initializable {
             }
         });
         questionnairePointerListView.getSelectionModel().selectedItemProperty().addListener(
-            new ChangeListener<QuestionnairePointer>() {
-                @Override
-                public void changed(ObservableValue<? extends QuestionnairePointer> observableValue, QuestionnairePointer old_pointer, QuestionnairePointer new_pointer) {
-                    System.out.println(new_pointer);
+                new ChangeListener<QuestionnairePointer>() {
+                    @Override
+                    public void changed(ObservableValue<? extends QuestionnairePointer> observableValue, QuestionnairePointer old_pointer, QuestionnairePointer new_pointer) {
+                        setEditingViewVisible((new_pointer != null));
+                    }
                 }
-        });
-
-        //this.editingView.setVisible(false);
+        );
+        
+        setEditingViewVisible(false);
 
         fetchDeployedQuestionnaires();
     }
@@ -134,9 +133,8 @@ public class QuestionnaireBuilderController implements Initializable {
     }
 
     public void setupViewForBuildingNewQuestionnaireAction(Event event) {
-        //this.editingView.setVisible(true);
+        setEditingViewVisible(true);
     }
-
 
     public void setView(int viewIndex) {
         String viewPath = questionviewPaths[viewIndex];
@@ -163,5 +161,18 @@ public class QuestionnaireBuilderController implements Initializable {
                 setView(newNumber.intValue());
             }
         });
+    }
+
+    public void setEditingViewVisible(boolean visible) {
+        if (visible) {
+            this.stackPane.getChildren().add(this.editingView);
+        } else {
+            this.stackPane.getChildren().remove(this.editingView);
+        }
+    }
+
+    public void questionnaireListViewSelectNone() {
+        this.questionnairePointerListView.getSelectionModel().clearSelection();
+        this.questionnaireSearchField.requestFocus();
     }
 }
