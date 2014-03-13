@@ -9,17 +9,17 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="268.0" prefWidth="558.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.QuestionnaireBuilder.QuestionTemplates.MultipleChoice.MultipleChoiceController">
   <children>
-    <Label layoutX="14.0" layoutY="18.0" text="Question Title:">
+    <Label layoutX="14.0" layoutY="14.0" text="Question Title:">
       <font>
-        <Font size="16.0" />
+        <Font size="14.0" />
       </font>
     </Label>
-    <TextField layoutX="125.0" layoutY="18.0" prefWidth="385.0" />
-    <Button layoutX="447.0" layoutY="143.0" mnemonicParsing="false" prefWidth="97.0" text="Clear" />
-    <Button layoutX="447.0" layoutY="205.0" mnemonicParsing="false" text="Delete question" />
-    <Button layoutX="447.0" layoutY="175.0" mnemonicParsing="false" prefWidth="97.0" text="Save question" />
-    <Button layoutX="447.0" layoutY="234.0" mnemonicParsing="false" prefWidth="97.0" text="Add choice" />
-    <TextField layoutX="14.0" layoutY="234.0" prefWidth="353.0" />
-    <ListView layoutX="0.0" layoutY="43.0" prefHeight="182.0" prefWidth="431.0" />
+    <TextField fx:id="questionTitle" layoutX="111.0" layoutY="13.0" prefWidth="385.0" />
+    <Button fx:id="clear" layoutX="447.0" layoutY="143.0" mnemonicParsing="false" prefWidth="97.0" text="Clear" />
+    <Button fx:id="delete" layoutX="447.0" layoutY="205.0" mnemonicParsing="false" text="Delete question" />
+    <Button fx:id="save" layoutX="447.0" layoutY="175.0" mnemonicParsing="false" prefWidth="97.0" text="Save question" />
+    <Button fx:id="addChoice" layoutX="447.0" layoutY="234.0" mnemonicParsing="false" prefWidth="97.0" text="Add choice" />
+    <TextField fx:id="choiceText" layoutX="14.0" layoutY="233.0" prefWidth="353.0" />
+    <ListView id="multipleChoiceChoices" fx:id="multipleChoiceListView" layoutX="0.0" layoutY="43.0" prefHeight="182.0" prefWidth="431.0" />
   </children>
 </AnchorPane>

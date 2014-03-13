@@ -7,4 +7,5 @@ package GUI.QuestionnaireBuilder.QuestionTemplates;
  * work in progress
  */
 public class QuestionTypeController {
+
 }
