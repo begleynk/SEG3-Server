@@ -42,7 +42,7 @@ public class QuestionnaireBuilderController implements Initializable {
     @FXML private StackPane questionStack;
     @FXML private ChoiceBox<Object> questionChooser;
 
-    // question types in choicebox i.e. dropdown to choose type of question
+    // question types in choice box i.e. dropdown to choose type of question
     private final Object[] menuOptions = {
             "Free Text",
             "Multiple Choice",
@@ -51,7 +51,7 @@ public class QuestionnaireBuilderController implements Initializable {
             "Rank",
     };
 
-    // url corresponding to choisebox question selection
+    // url corresponding to choice box question selection
     private final String[] questionviewPaths = {
             "/GUI/QuestionnaireBuilder/QuestionTemplates/FreeText/FreeTextQuestion.fxml",
             "/GUI/QuestionnaireBuilder/QuestionTemplates/MultipleChoice/MultipleChoiceQuestion.fxml",
