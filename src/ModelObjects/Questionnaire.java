@@ -15,7 +15,7 @@ public class Questionnaire
     private int id;
     private String title;
     private String state;
-    private LinkedList<Question> questions;
+    private LinkedList<Question> questions = new LinkedList<>();
 
     private static String[] states = {"Draft", "Deployed", "Archived"};
 
@@ -118,6 +118,14 @@ public class Questionnaire
 
     @Override
     public String toString() {
-        return "ID: " + getId() + "  Title: " + getTitle() + "  State: " + getState();
+        String string =
+                "Id: " + getId() +
+                "  Title: " + getTitle() +
+                "  State: " + getState() +
+                "\nQuestions:\n";
+        for (Question question : questions) {
+            string += question.toString() + "\n";
+        }
+        return string;
     }
 }

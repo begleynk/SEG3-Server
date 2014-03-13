@@ -121,4 +121,12 @@ public abstract class Question {
     {
         return this.id;
     }
+
+    @Override
+    public String toString() {
+        return "Id: " + this.id +
+                "  Title: " + this.title +
+                "  Description: " + this.description +
+                "  isRequired: " + ((this.required) ? "YES" : "NO");
+    }
 }
