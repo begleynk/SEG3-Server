@@ -10,7 +10,15 @@
       <items>
         <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="200.0">
           <children>
-            <ListView fx:id="patientListView" prefHeight="316.0000999999975" prefWidth="200.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="51.0" />
+            <ListView fx:id="patientListView" prefHeight="316.0000999999975" prefWidth="200.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="51.0">
+              <contextMenu>
+                <ContextMenu>
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#patientListViewSelectNone" text="Select None" />
+                  </items>
+                </ContextMenu>
+              </contextMenu>
+            </ListView>
             <TextField id="patientSearchBar" fx:id="patientSearchField" onKeyReleased="#searchInputChangedAction" prefWidth="172.0" promptText="Search" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
             <ToolBar prefWidth="199.9998779296875" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
               <items>

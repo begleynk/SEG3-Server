@@ -1,4 +1,4 @@
-package GUI.QuestionnaireBuilder.QuestionTemplates.FreeText;
+package GUI.QuestionnaireBuilder.QuestionTemplates.YesNoChoice;
 
 import GUI.QuestionnaireBuilder.QuestionTemplates.QuestionTypeController;
 import ModelObjects.Questions.Question;
@@ -12,17 +12,17 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Faizan Joya on 09/03/14.
+ * Created by James Bellamy on 13/03/2014.
  *
  */
-public class FreeTextController extends QuestionTypeController implements Initializable {
+public class YesNoChoiceController extends QuestionTypeController implements Initializable {
 
     @FXML private TextField titleField;
     @FXML private TextArea descriptionField;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        questionTypeIdentifier = "Free Text Question: ";
+        questionTypeIdentifier = "Yes or No Question: ";
     }
 
     @Override

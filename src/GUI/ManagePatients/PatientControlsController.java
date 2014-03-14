@@ -48,7 +48,7 @@ public class PatientControlsController implements Initializable {
 
     // Right Pane Toolbar Controls
     @FXML private ToolBar rightPaneToolBar;
-    private static Region flexibleSpace;
+    private static Region flexibleSpace = new FlexibleToolbarSpace();
     private Button saveNewButton, clearFieldsButton, cancelNewPatientButton,
             saveChangesButton, deselectPatientButton, deletePatientButton;
 
@@ -67,8 +67,6 @@ public class PatientControlsController implements Initializable {
         this.cancelNewPatientButton = new Button("Cancel");
         this.deletePatientButton = new Button("Delete Patient");
         this.deselectPatientButton = new Button("Deselect Patient");
-
-        flexibleSpace = new FlexibleToolbarSpace();
 
         this.dataInputFields = new TextField[]{nhsNumberField, firstNameField, middleNameField, lastNameField, dayDOBField,
                 monthDOBField, yearDOBField, postcodeField};
@@ -292,5 +290,10 @@ public class PatientControlsController implements Initializable {
         for (TextField aField : dataInputFields) {
             aField.setDisable(!enabled);
         }
+    }
+
+    public void patientListViewSelectNone() {
+        this.patientListView.getSelectionModel().clearSelection();
+        this.patientSearchField.requestFocus();
     }
 }
