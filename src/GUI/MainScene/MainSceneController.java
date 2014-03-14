@@ -43,8 +43,7 @@ public class MainSceneController implements Initializable {
             "/GUI/Welcome/welcome.fxml",
             null, // Separator
             "/GUI/ManagePatients/patientControls.fxml",
-            // "/GUI/CreateCustomGroups/customGroups.fxml", // Creating Groups GUI
-            null,
+            "/GUI/CreateCustomGroups/customGroups.fxml",
             null, // Separator
             "/GUI/QuestionnaireBuilder/questionnaireBuilder.fxml",
             "/GUI/QuestionnaireArchive/questionnaireArchive.fxml",
