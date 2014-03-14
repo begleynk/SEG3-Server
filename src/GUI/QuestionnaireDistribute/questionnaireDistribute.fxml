@@ -11,27 +11,34 @@
       <items>
         <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="200.0">
           <children>
-            <ListView id="questionListView" fx:id="questionnaireListView" layoutX="0.0" prefHeight="431.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="83.0" />
-            <Label layoutX="14.0" layoutY="14.0" text="Questionnaire Title:" />
-            <TextField id="searchSingleQuestionnaire" fx:id="searchQuestionnaire" layoutX="12.0" layoutY="44.0" prefWidth="154.0" promptText="Search" />
+            <ListView id="questionListView" fx:id="questionnairePointerListView" prefHeight="431.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
+              <contextMenu>
+                <ContextMenu>
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#deselectQuestionnaire" text="Select None" />
+                  </items>
+                </ContextMenu>
+              </contextMenu>
+            </ListView>
+            <Label layoutX="14.0" layoutY="14.0" text="Select a Questionnaire:" />
+            <TextField id="searchSingleQuestionnaire" fx:id="searchQuestionnaireField" onKeyReleased="#questionnaireSearchInputChangedAction" prefWidth="174.0" promptText="Questionnaire Search" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="44.0" />
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="545.0000999999975" prefWidth="517.0000999999975">
           <children>
-            <Button id="deployButton" fx:id="Assign" mnemonicParsing="false" text="Assign" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
-            <Label text="Patient:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="47.0" />
-            <Button fx:id="selectAllPatients" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="All Patients" />
-            <ListView prefHeight="462.0" prefWidth="517.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0" />
-            <TextField id="searchSinglePatient" fx:id="searchPatient" layoutX="62.0" layoutY="44.0" prefWidth="200.0" promptText="Patient NHS or name" />
-            <ChoiceBox fx:id="customGroups" layoutX="323.0" layoutY="14.0">
-              <items>
-                <FXCollections fx:factory="observableArrayList">
-                  <String fx:value="Item 1" />
-                  <String fx:value="Item 2" />
-                  <String fx:value="Item 3" />
-                </FXCollections>
-              </items>
-            </ChoiceBox>
+            <Button id="deployButton" mnemonicParsing="false" onAction="#assignAction" prefHeight="48.0" prefWidth="99.0" text="Assign" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="17.0" />
+            <Label text="Select Patient to be assigned the Questionnaire Selected:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="17.0" />
+            <Button id="selectAllPatients" mnemonicParsing="false" onAction="#selectAllPatients" text="Select All" AnchorPane.rightAnchor="214.0" AnchorPane.topAnchor="44.0" />
+            <ListView fx:id="patientListView" prefHeight="462.0" prefWidth="517.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
+              <contextMenu>
+                <ContextMenu>
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#deselectPatients" text="Select None" />
+                  </items>
+                </ContextMenu>
+              </contextMenu>
+            </ListView>
+            <TextField id="searchSinglePatient" fx:id="searchPatientField" prefWidth="200.0" promptText="Patient Search" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="303.0" AnchorPane.topAnchor="44.0" />
           </children>
         </AnchorPane>
       </items>

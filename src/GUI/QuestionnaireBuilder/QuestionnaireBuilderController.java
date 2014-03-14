@@ -101,7 +101,7 @@ public class QuestionnaireBuilderController implements Initializable {
             "/GUI/QuestionnaireBuilder/QuestionTemplates/Rank/RankQuestion.fxml",
     };
 
-    private ObservableList<QuestionnairePointer> allPointers
+    private ObservableList<QuestionnairePointer> allQuestionnairePointers
             = FXCollections.observableArrayList();
     private ObservableList<QuestionnairePointer> matchedQuestionnairePointers
             = FXCollections.observableArrayList();
@@ -204,15 +204,15 @@ public class QuestionnaireBuilderController implements Initializable {
         setQuestionEditingViewVisible(false);
 
         // Fetch the data for the left menu
-        fetchDeployedQuestionnaires();
+        fetchDraftQuestionnaires();
     }
 
     // Left Menu Methods
 
     // Fetching Menu data [QuestionnairePointer(s)]
-    public void fetchDeployedQuestionnaires() {
+    public void fetchDraftQuestionnaires() {
         try {
-            this.allPointers.setAll(DataLayer.getQuestionnairePointersForState(0));
+            this.allQuestionnairePointers.setAll(DataLayer.getQuestionnairePointersForState(0));
             searchInputChangedAction();
         } catch (SQLException | NoQuestionnaireException e) {
             e.printStackTrace();
@@ -223,7 +223,7 @@ public class QuestionnaireBuilderController implements Initializable {
         String searchTerm = questionnaireSearchField.getText();
         questionnairePointerListView.getSelectionModel().clearSelection();
         if (searchTerm == null || searchTerm.equals("") ) {
-            questionnairePointerListView.setItems(allPointers);
+            questionnairePointerListView.setItems(allQuestionnairePointers);
         } else {
             questionnairePointerListView.setItems(fuzzySearchQuestionnairePointerUsingSearchTerm(searchTerm));
         }
@@ -232,7 +232,7 @@ public class QuestionnaireBuilderController implements Initializable {
     public ObservableList<QuestionnairePointer> fuzzySearchQuestionnairePointerUsingSearchTerm(String searchTerm) {
         matchedQuestionnairePointers.clear();
         searchTerm = searchTerm.trim().toLowerCase();
-        for (QuestionnairePointer pointer : allPointers) {
+        for (QuestionnairePointer pointer : allQuestionnairePointers) {
             if (pointer.getTitle().toLowerCase().startsWith(searchTerm) ||
                     pointer.getTitle().toLowerCase().contains(searchTerm)) {
                 matchedQuestionnairePointers.add(pointer);
