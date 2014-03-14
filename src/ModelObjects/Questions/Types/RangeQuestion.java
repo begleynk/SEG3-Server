@@ -29,4 +29,20 @@ public class RangeQuestion extends Question {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
     }
+
+    public int getLowerBound () {
+        return lowerBound;
+    }
+
+    public int getUpperBound() {
+        return upperBound;
+    }
+
+    @Override
+    public String toString() {
+        String string = super.toString();
+        string += "  LowerBound: " + getLowerBound();
+        string += "  UpperBound: " + getUpperBound();
+        return string;
+    }
 }

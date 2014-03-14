@@ -19,4 +19,9 @@ public class TextQuestion extends Question {
     public TextQuestion(String id, String title, String description, boolean required) {
         super(id, title, description, required);
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

@@ -28,4 +28,14 @@ public class RankQuestion extends Question {
         super(id, title, description, required);
         this.answerOptions = answerOptions;
     }
+
+    @Override
+    public String toString() {
+        String string = super.toString();
+        string += "  choices: ";
+        for (String choice : answerOptions) {
+            string += choice + ", ";
+        }
+        return string;
+    }
 }

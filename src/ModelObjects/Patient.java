@@ -12,9 +12,8 @@ public class Patient
     private String surname;
     private String dateOfBirth;
     private String postcode;
-    private String disability;
 
-    public Patient(String nhsNumber, String first_name, String middle_name, String surname, String dateOfBirth, String postcode, String disability)
+    public Patient(String nhsNumber, String first_name, String middle_name, String surname, String dateOfBirth, String postcode)
     {
         this.nhsNumber = nhsNumber;
         this.first_name = first_name;
@@ -22,7 +21,6 @@ public class Patient
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
         this.postcode = postcode;
-        this.disability = disability;
     }
 
 
@@ -86,13 +84,13 @@ public class Patient
         this.postcode = postcode;
     }
 
-    public String getDisability()
-    {
-        return disability;
-    }
-
-    public void setDisability(String disability)
-    {
-        this.disability = disability;
+    @Override
+    public String toString() {
+        return "NHSNumber: " + getNhsNumber() +
+                "  FirstName: " + getFirst_name() +
+                "  MiddleName: " + getMiddle_name() +
+                "  LastName: " + getSurname() +
+                "  DateOfBirth: " + getDateOfBirth() +
+                "  Postcode: " + getPostcode();
     }
 }

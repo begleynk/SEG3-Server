@@ -24,4 +24,9 @@ public class SingleAnswer extends Answer {
         }
         return true;
     }
+
+    @Override
+    protected void setStringAnswer() {
+        answerContent = answer.toString();
+    }
 }

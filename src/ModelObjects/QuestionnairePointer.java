@@ -38,4 +38,11 @@ public class QuestionnairePointer {
     public void setState(String state) {
         this.state = state;
     }
+
+    @Override
+    public String toString() {
+        return "Id: " + getId() +
+                "  Title: " + getTitle() +
+                "  State: " + getState();
+    }
 }

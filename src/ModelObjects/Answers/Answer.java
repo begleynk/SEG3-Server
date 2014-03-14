@@ -89,6 +89,8 @@ public abstract class Answer {
 
     protected abstract boolean isAnswered();
 
+    protected abstract void setStringAnswer();
+
     @Override
     public String toString() {
         String string =

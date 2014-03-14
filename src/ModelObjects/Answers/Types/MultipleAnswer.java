@@ -26,4 +26,12 @@ public class MultipleAnswer extends Answer {
         }
         return true;
     }
+
+    @Override
+    protected void setStringAnswer() {
+        answerContent = answers.get(0).toString();
+        for (int n = 1; n < answers.size(); n++) {
+            answerContent += "," + answers.get(n).toString();
+        }
+    }
 }
