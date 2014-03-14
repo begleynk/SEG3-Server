@@ -57,7 +57,7 @@ public class QuestionnaireBuilderController implements Initializable {
     // Questionnaire specific controls
     @FXML private TextField questionnaireTitleField;
     @FXML private Button deployButton;
-    @FXML private TreeView<Question> questionTreeView;
+    @FXML private TreeView<String> questionTreeView;
 
     // Control for creating a question
     @FXML private ChoiceBox<Object> questionTypeChooser;
@@ -198,6 +198,9 @@ public class QuestionnaireBuilderController implements Initializable {
         });
         this.questionTypeChooser.getSelectionModel().select(0);
 
+        this.questionTreeView.setShowRoot(false);
+
+
         // When the questionnaire view is first started nothing is being edited so do not show editing controls
         setQuestionnaireEditingViewVisible(false);
         // Same goes for the question editing view
@@ -254,6 +257,7 @@ public class QuestionnaireBuilderController implements Initializable {
         questionnaireTitleField.setText("");
         isExistingQuestionnaire = false;
         deployButton.setDisable(true);
+        populateTree();
     }
 
     public void setupViewForEditingExistingQuestionnaire() {
@@ -266,6 +270,7 @@ public class QuestionnaireBuilderController implements Initializable {
             setQuestionnaireEditingViewVisible(true);
             isExistingQuestionnaire = true;
             deployButton.setDisable(!(draftQuestionnaire.getTitle().length() > 0));
+            populateTree();
         } catch (NoQuestionnaireException e) {
             e.printStackTrace();
         }
@@ -302,6 +307,18 @@ public class QuestionnaireBuilderController implements Initializable {
         }
     }
 
+    // Question Tree View Methods
+
+    public void populateTree() {
+        TreeItem<String> rootItem = new TreeItem<> ("Questions");
+        rootItem.setExpanded(true);
+        questionTreeView.setRoot(rootItem);
+        for (Question question : this.draftQuestionnaire.getQuestions()) {
+            TreeItem<String> leaf = new TreeItem<>(question.getTitle());
+            questionTreeView.getRoot().getChildren().add(leaf);
+        }
+    }
+
     // Question ToolBar Actions
 
     public void saveConstructedQuestion() {
@@ -309,6 +326,7 @@ public class QuestionnaireBuilderController implements Initializable {
         if (question != null) {
             draftQuestionnaire.addQuestion(question);
             System.out.println(draftQuestionnaire.toString());
+            populateTree();
         }
     }
 

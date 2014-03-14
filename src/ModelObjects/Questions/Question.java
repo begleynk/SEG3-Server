@@ -122,6 +122,14 @@ public abstract class Question {
         return this.id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     @Override
     public String toString() {
         return "Id: " + this.id +

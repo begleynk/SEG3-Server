@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -39,7 +40,12 @@ public class SingleChoiceController extends QuestionTypeController implements In
     }
 
     public void removeSelectedChoices() {
-        choicesListView.getItems().removeAll(choicesListView.getSelectionModel().getSelectedItems());
+        ArrayList<Integer> selected = new ArrayList<>(choicesListView.getSelectionModel().getSelectedIndices());
+        Collections.reverse(selected);
+        System.out.println(selected);
+        for (Integer integer : selected) {
+            choicesListView.getItems().remove(integer.intValue());
+        }
     }
 
     public void removeAllChoices() {
