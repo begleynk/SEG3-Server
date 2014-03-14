@@ -28,6 +28,7 @@ public class MainSceneController implements Initializable {
             "Welcome",
             new Separator(),
             "Patients",
+            "Create Groups",
             new Separator(),
             "Questionnaire Builder",
             "Questionnaire Archive",
@@ -42,15 +43,17 @@ public class MainSceneController implements Initializable {
             "/GUI/Welcome/welcome.fxml",
             null, // Separator
             "/GUI/ManagePatients/patientControls.fxml",
+            // "/GUI/CreateCustomGroups/customGroups.fxml", // Creating Groups GUI
+            null,
             null, // Separator
             "/GUI/QuestionnaireBuilder/questionnaireBuilder.fxml",
             "/GUI/QuestionnaireArchive/questionnaireArchive.fxml",
             null, // Separator
-            "",
+            "/GUI/QuestionnaireDistribute/questionnaireDistribute.fxml",
             null, // Separator
             "/GUI/ConnectTablets/settingControls.fxml",
             null, // Separator
-            "",
+            null, // Creating Change Logs
     };
 
     @Override
