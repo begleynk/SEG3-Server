@@ -187,6 +187,7 @@ public class QuestionnaireDistributeController implements Initializable {
         if (selectedQuestionnairePointer != null && selectedPatients.size() > 0) {
             // TODO: Assign Action in DataLayer
             System.out.println(selectedQuestionnairePointer.toString());
+            System.out.println("Has been Assigned to:");
             for (Patient patient : selectedPatients) {
                 System.out.println(patient.toString());
             }

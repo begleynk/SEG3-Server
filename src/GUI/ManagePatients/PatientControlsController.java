@@ -221,7 +221,7 @@ public class PatientControlsController implements Initializable {
         if (allFieldsFilled) {
             String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
             Patient updatedPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
-                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText(), null);
+                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText());
             try {
                 DataLayer.updatePatient(updatedPatient);
                 fetchAllPatients();
@@ -260,7 +260,7 @@ public class PatientControlsController implements Initializable {
             // Date Format : YYYY-MM-DD
             String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
             Patient newPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
-                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText(), null);
+                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText());
             try {
                 DataLayer.addPatient(newPatient);
                 fetchAllPatients();
