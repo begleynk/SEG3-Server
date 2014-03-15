@@ -180,7 +180,7 @@ public class DatabaseAccessor {
         }
     }
 
-    public boolean updatePatientRecord(Patient patient) throws SQLException
+    public int updatePatientRecord(Patient patient) throws SQLException
     {
         Statement statement = createStatement();
         String query = "UPDATE Patient SET " +
@@ -190,8 +190,7 @@ public class DatabaseAccessor {
                 "P_date_of_birth = '" + patient.getDateOfBirth() + "', " +
                 "P_postcode = '" + patient.getPostcode() + "' " +
                 "WHERE P_NHS_number = '" + patient.getNhsNumber() + "';";
-        ResultSet result =  statement.executeQuery(query);
-        return result.rowUpdated();
+        return statement.executeUpdate(query);
     }
 
     public Patient insertPatientRecord(Patient patient) throws SQLException
@@ -229,6 +228,19 @@ public class DatabaseAccessor {
         statement.execute("INSERT INTO Patient_Questionnaire (P_NHS_number, Q_id, Completed) VALUES ('" +
                 patient.getNhsNumber() + "," +
                 questionnaire.getId() + ", 0');");
+        return true;
+    }
+
+    public boolean linkPatientAndQuestionnairePointer(Patient patient, QuestionnairePointer questionnaire) throws SQLException
+    {
+        if(questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))
+        {
+            return false;
+        }
+        Statement statement = createStatement();
+        statement.execute("INSERT INTO Patient_Questionnaire (P_NHS_number, Q_id, Completed) VALUES ('" +
+                patient.getNhsNumber() + "','" +
+                questionnaire.getId() + "', '0');");
         return true;
     }
 

@@ -200,7 +200,6 @@ public class QuestionnaireBuilderController implements Initializable {
 
         this.questionTreeView.setShowRoot(false);
 
-
         // When the questionnaire view is first started nothing is being edited so do not show editing controls
         setQuestionnaireEditingViewVisible(false);
         // Same goes for the question editing view

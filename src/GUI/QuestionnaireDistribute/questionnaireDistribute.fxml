@@ -38,7 +38,7 @@
                 </ContextMenu>
               </contextMenu>
             </ListView>
-            <TextField id="searchSinglePatient" fx:id="searchPatientField" prefWidth="200.0" promptText="Patient Search" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="303.0" AnchorPane.topAnchor="44.0" />
+            <TextField id="searchSinglePatient" fx:id="searchPatientField" onKeyReleased="#patientSearchInputChangedAction" prefWidth="200.0" promptText="Patient Search" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="303.0" AnchorPane.topAnchor="44.0" />
           </children>
         </AnchorPane>
       </items>

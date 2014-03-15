@@ -293,6 +293,19 @@ public class DataLayer
     }
 
     /************************************************************
+     QUESTIONNAIRE_PATIENT METHODS
+     *************************************************************/
+
+    public static boolean linkPatientAndQuestionnaire(ArrayList<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
+    {
+        boolean allInsertsSuccessful = true;
+        for (Patient patient : patients) {
+            allInsertsSuccessful = databaseAccessor.linkPatientAndQuestionnairePointer(patient, questionnaire);
+        }
+        return allInsertsSuccessful;
+    }
+
+    /************************************************************
      ADMIN METHODS
      *************************************************************/
 

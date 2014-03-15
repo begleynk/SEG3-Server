@@ -185,14 +185,19 @@ public class QuestionnaireDistributeController implements Initializable {
     public void assignAction() {
         getPatientSelection();
         if (selectedQuestionnairePointer != null && selectedPatients.size() > 0) {
-            // TODO: Assign Action in DataLayer
-            System.out.println(selectedQuestionnairePointer.toString());
-            System.out.println("Has been Assigned to:");
-            for (Patient patient : selectedPatients) {
-                System.out.println(patient.toString());
+            try {
+                if (DataLayer.linkPatientAndQuestionnaire(selectedPatients, selectedQuestionnairePointer)) {
+                    System.out.println(selectedQuestionnairePointer.toString());
+                    System.out.println("Has been Assigned to:");
+                    for (Patient patient : selectedPatients) {
+                        System.out.println(patient.toString());
+                    }
+                    questionnairePointerListView.getSelectionModel().clearSelection();
+                    patientListView.getSelectionModel().clearSelection();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            questionnairePointerListView.getSelectionModel().clearSelection();
-            patientListView.getSelectionModel().clearSelection();
         }
     }
 }
