@@ -8,6 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
- * Created by ahmetersahin on 11/03/2014.
+ * Created by James Bellamny on 11/03/2014.
  */
 public class QuestionnaireDistributeController implements Initializable {
 
@@ -30,7 +31,6 @@ public class QuestionnaireDistributeController implements Initializable {
     // Patient Controls
     @FXML private TextField searchPatientField;
     @FXML private ListView<Patient> patientListView;
-    @FXML private ChoiceBox customGroupsChooser;
 
     private QuestionnairePointer selectedQuestionnairePointer;
     private ArrayList<Patient> selectedPatients;
@@ -175,6 +175,17 @@ public class QuestionnaireDistributeController implements Initializable {
     public void selectAllPatients() {
         patientListView.getSelectionModel().selectAll();
     }
+
+
+    /*@FXML public void handleMouseClick (MouseEvent arg0){
+
+            System.out.println("clicked on" + patientListView.getSelectionModel().getSelectedItem());
+            if (selectedQuestionnairePointer != null) {
+                patientListView.getSelectionModel().clearSelection();
+            }
+    }
+    **/
+
 
     public void deselectPatients() {
         patientListView.getSelectionModel().clearSelection();

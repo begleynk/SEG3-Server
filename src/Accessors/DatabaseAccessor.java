@@ -244,6 +244,15 @@ public class DatabaseAccessor {
         return true;
     }
 
+    /************************************************************
+     PATIENT LOG METHODS
+     *************************************************************/
+
+    /************************************************************
+     QUESTIONNAIRE LOG METHODS
+     *************************************************************/
+
+
     /*
     CREATE TABLE IF NOT EXISTS 'Patient_Questionnaire' (
     'P_NHS_number' int(10) NOT NULL,
