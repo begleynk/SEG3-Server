@@ -1,6 +1,8 @@
 package Sockets;
 import java.net.*;
 import java.io.*;
+import java.sql.Time;
+import java.util.Date;
 
 /**
  * Created by Niklas Begley on 10/02/2014.
@@ -11,10 +13,22 @@ import java.io.*;
 public class SocketProcess extends Thread {
 
     private Socket socket;
+    private Date startTime;
 
     public SocketProcess(Socket socket)
     {
         this.socket = socket;
+        this.startTime = new Date();
+    }
+
+    public Date getStartTime()
+    {
+        return startTime;
+    }
+
+    public Socket getSocket()
+    {
+        return socket;
     }
 
     public void run()
@@ -35,6 +49,10 @@ public class SocketProcess extends Thread {
                     break;
             }
             socket.close();
+        }
+        catch (SocketException e)
+        {
+            System.out.println("Closed socket " + socket.getInetAddress());
         }
         catch (IOException e)
         {
