@@ -262,6 +262,36 @@ public class DatabaseAccessor {
         return patientLogs;
     }
 
+    public void populatePatientLogsUpdate() throws SQLException
+    {
+        Statement statement = createStatement();
+        String query = "CREATE TRIGGER update_Patient_Log AFTER UPDATE ON Patient\n" +
+                "BEGIN\n" +
+                "  INSERT INTO Patient_Log  (P_NHS_number_OLD, P_NHS_number_NEW, P_first_name_OLD, P_first_name_NEW,\n" +
+                "                            P_middle_name_OLD, P_middle_name_NEW, P_surname_OLD, P_surname_NEW,\n" +
+                "                            P_date_of_birth_OLD, P_date_of_birth_NEW, P_postcode_OLD, P_postcode_NEW, SQL_action, Time_enter)\n" +
+                "          values (old.P_NHS_number,new.P_NHS_number,old.P_first_name,new.P_first_name,old.P_middle_name,\n" +
+                "                  new.P_middle_name,old.P_surname, new.P_surname,old.P_date_of_birth, new.P_date_of_birth\n" +
+                "                  old.P_postcode, new.P_postcode, 'UPDATE', DATETIME('NOW') );\n" +
+                "END";
+        ResultSet result = statement.executeQuery(query);
+
+    }
+
+    public void populatePatientLogsInsert() throws SQLException
+    {
+        Statement statement = createStatement();
+        String query = "CREATE TRIGGER insert_Patient_Log AFTER INSERT ON Patient\n" +
+                "BEGIN\n" +
+                "  INSERT INTO Patient_Log  (P_NHS_number_NEW, P_first_name_NEW,\n" +
+                "                            P_middle_name_NEW, P_surname_NEW,\n" +
+                "                            P_date_of_birth_NEW, P_postcode_NEW, SQL_action, Time_enter)\n" +
+                "          values (new.P_NHS_number,new.P_first_name,\n" +
+                "                  new.P_middle_name,new.P_surname, new.P_date_of_birth\n" +
+                "                  new.P_postcode, 'INSERT', DATETIME('NOW') );\n" +
+                "END";
+    }
+
 
     /************************************************************
      QUESTIONNAIRE LOG METHODS

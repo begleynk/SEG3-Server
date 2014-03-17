@@ -1,9 +1,7 @@
 package Accessors;
 
 import Exceptions.NoQuestionnaireException;
-import ModelObjects.Patient;
-import ModelObjects.Questionnaire;
-import ModelObjects.QuestionnairePointer;
+import ModelObjects.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -308,6 +306,20 @@ public class DataLayer
     /************************************************************
      PATIENT_LOG METHODS
      *************************************************************/
+
+    public static ArrayList<PatientLog> getAllPatientLogs() throws SQLException
+    {
+        return databaseAccessor.getAllPatientLogs();
+    }
+
+    /************************************************************
+     QUESTIONNAIRE_LOG METHODS
+     *************************************************************/
+
+    public static ArrayList<QuestionnaireLog> getAllQuestionnaireLogs() throws SQLException
+    {
+        return databaseAccessor.getAllQuestionnaireLogs();
+    }
 
     /************************************************************
      ADMIN METHODS
