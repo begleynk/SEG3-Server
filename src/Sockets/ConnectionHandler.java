@@ -22,19 +22,8 @@ public class ConnectionHandler
         connections.add(process);
         process.start();
 
-        System.out.println("Received a new connection.");
-        System.out.println("NAME: " + process.getName());
-        System.out.println("ID: " + process.getId());
-
-        for(SocketProcess foo: connections)
-        {
-            System.out.println("***** NEW CONNECTION *****");
-            System.out.println(foo.getId());
-            System.out.println(foo.getState());
-            System.out.println(foo.getName());
-            System.out.println(foo.isAlive());
-            System.out.println(foo.hashCode());
-        }
+        System.out.println("** Received a new connection. **");
+        System.out.println("IP: " + process.getSocket().getInetAddress());
     }
 
     public static boolean closeConnection(SocketProcess process) throws IOException
@@ -52,6 +41,7 @@ public class ConnectionHandler
                         process.closeConnection();
                         connections.remove(proc);
                         closed = true;
+                        break;
                     }
                     catch (IOException e)
                     {

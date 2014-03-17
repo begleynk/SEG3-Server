@@ -1,7 +1,10 @@
 package GUI.ConnectTablets;
 
+import ModelObjects.Patient;
 import Sockets.ConnectionHandler;
 import Sockets.SocketProcess;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -26,20 +30,26 @@ import java.util.ResourceBundle;
 public class SettingControlsController implements Initializable
 {
 
-    @FXML private ListView tabletList;
-    @FXML private Button disconnectAll;
-    @FXML private Hyperlink refresh;
+    @FXML private ListView<SocketProcess> tabletList;
+
+    @FXML private Label connectionData1;
+    @FXML private Label connectionData2;
+    @FXML private Label connectionData3;
+    @FXML private Label connectionData4;
+    @FXML private Label connectionData5;
+
+    @FXML private AnchorPane detailsPane;
+    @FXML private Label noTabletSelectedLabel;
 
     private final ObservableList<SocketProcess> allConnections = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-        this.disconnectAll = new Button("Disconnect All");
-
         allConnections.setAll(ConnectionHandler.getConnections());
 
         this.tabletList.setItems(allConnections);
+        setRightPaneVisible(false);
 
         tabletList.setCellFactory(new Callback<ListView<SocketProcess>, ListCell<SocketProcess>>()
         {
@@ -62,11 +72,16 @@ public class SettingControlsController implements Initializable
                 };
             }
         });
+
+        tabletList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SocketProcess>() {
+            public void changed(ObservableValue<? extends SocketProcess> ov, SocketProcess old_val, SocketProcess new_val) {
+                showConnectionDetails(new_val);
+            }
+        });
     }
 
     public void disconnectAllTablets()
     {
-        System.out.println("Disconnecting tablets.");
         try
         {
             ConnectionHandler.closeAllConnections();
@@ -77,12 +92,53 @@ public class SettingControlsController implements Initializable
         }
         refreshTabletList();
     }
+    
+    public void disconnectTablet()
+    {
+        SocketProcess connection = tabletList.getSelectionModel().getSelectedItem();
+        try
+        {
+            ConnectionHandler.closeConnection(connection);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        refreshTabletList();
+    }
 
     public void refreshTabletList()
     {
-        System.out.println(ConnectionHandler.getConnections().size());
-        this.tabletList.getItems().clear();
+        if(!tabletList.getItems().isEmpty())
+        {
+            tabletList.getItems().clear();
+        }
         this.allConnections.setAll(ConnectionHandler.getConnections());
         this.tabletList.setItems(allConnections);
+        setRightPaneVisible(false);
+    }
+
+    public void showConnectionDetails(SocketProcess connection)
+    {
+        if(connection != null)
+        {
+            setRightPaneVisible(true);
+            Socket socket = connection.getSocket();
+            connectionData1.setText("" + socket.getInetAddress());
+            connectionData2.setText(connection.getStartTime().toString());
+            connectionData3.setText("" + socket.getPort());
+            connectionData4.setText(connection.getName());
+            connectionData5.setText("" + connection.getId());
+        }
+        else
+        {
+            setRightPaneVisible(false);
+        }
+    }
+
+    public void setRightPaneVisible(boolean visible)
+    {
+        detailsPane.setVisible(visible);
+        noTabletSelectedLabel.setVisible(!visible);
     }
 }
