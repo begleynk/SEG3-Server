@@ -312,6 +312,43 @@ public class DataLayer
         return databaseAccessor.getAllPatientLogs();
     }
 
+    public static void populatePatientLogsUpdate () throws SQLException
+    {
+        try {
+            databaseAccessor.populatePatientLogsUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on update logs in Patient Log");
+            throw e;
+        }
+    }
+    public static void populatePatientLogsInsert () throws SQLException
+    {
+        try {
+            databaseAccessor.populatePatientLogsInsert();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on insert logs in Patient Log");
+            throw e;
+        }
+    }
+    public static void populatePatientLogsDelete () throws SQLException
+    {
+        try {
+            databaseAccessor.populatePatientLogsDelete();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on delete logs in Patient Log");
+            throw e;
+        }
+    }
+
     /************************************************************
      QUESTIONNAIRE_LOG METHODS
      *************************************************************/
@@ -319,6 +356,43 @@ public class DataLayer
     public static ArrayList<QuestionnaireLog> getAllQuestionnaireLogs() throws SQLException
     {
         return databaseAccessor.getAllQuestionnaireLogs();
+    }
+
+    public static void populateQuestionnaireLogsUpdate () throws SQLException
+    {
+        try {
+            databaseAccessor.populateQuestionnaireLogsUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on update logs in Questionnaire Log");
+            throw e;
+        }
+    }
+    public static void populateQuestionnaireLogsInsert () throws SQLException
+    {
+        try {
+            databaseAccessor.populateQuestionnaireLogsInsert();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on insert logs in Questionnaire Log");
+            throw e;
+        }
+    }
+    public static void populateQuestionnaireLogsDelete () throws SQLException
+    {
+        try {
+            databaseAccessor.populateQuestionnaireLogsDelete();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on delete logs in Questionnaire Log");
+            throw e;
+        }
     }
 
     /************************************************************

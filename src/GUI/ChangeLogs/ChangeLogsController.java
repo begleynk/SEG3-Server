@@ -36,6 +36,12 @@ public class ChangeLogsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        try {
+            populateBothLists();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SHIT IS NOT WORKING!!!!!!!!!!!");
+        }
         fetchAllLogs();
     }
 
@@ -52,4 +58,16 @@ public class ChangeLogsController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public void populateBothLists() throws SQLException {
+
+        DataLayer.populatePatientLogsUpdate();
+        DataLayer.populatePatientLogsInsert();
+        DataLayer.populatePatientLogsDelete();
+        DataLayer.populateQuestionnaireLogsUpdate();
+        DataLayer.populateQuestionnaireLogsInsert();
+        DataLayer.populateQuestionnaireLogsDelete();
+
+    }
+
 }

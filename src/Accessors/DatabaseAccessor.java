@@ -265,13 +265,13 @@ public class DatabaseAccessor {
     public void populatePatientLogsUpdate() throws SQLException
     {
         Statement statement = createStatement();
-        statement.execute("CREATE TRIGGER update_Patient_Log AFTER UPDATE ON Patient\n" +
+        statement.execute("CREATE TRIGGER IF NOT EXISTS update_Patient_Log AFTER UPDATE ON Patient\n" +
                 "BEGIN\n" +
                 "  INSERT INTO Patient_Log  (P_NHS_number_OLD, P_NHS_number_NEW, P_first_name_OLD, P_first_name_NEW,\n" +
                 "                            P_middle_name_OLD, P_middle_name_NEW, P_surname_OLD, P_surname_NEW,\n" +
                 "                            P_date_of_birth_OLD, P_date_of_birth_NEW, P_postcode_OLD, P_postcode_NEW, SQL_action, Time_enter)\n" +
                 "          values (old.P_NHS_number,new.P_NHS_number,old.P_first_name,new.P_first_name,old.P_middle_name,\n" +
-                "                  new.P_middle_name,old.P_surname, new.P_surname,old.P_date_of_birth, new.P_date_of_birth\n" +
+                "                  new.P_middle_name,old.P_surname, new.P_surname, old.P_date_of_birth, new.P_date_of_birth,\n" +
                 "                  old.P_postcode, new.P_postcode, 'UPDATE', DATETIME('NOW') );\n" +
                 "END");
     }
@@ -279,13 +279,13 @@ public class DatabaseAccessor {
     public void populatePatientLogsInsert() throws SQLException
     {
         Statement statement = createStatement();
-        statement.execute("CREATE TRIGGER insert_Patient_Log AFTER INSERT ON Patient\n" +
+        statement.execute("CREATE TRIGGER IF NOT EXISTS insert_Patient_Log AFTER INSERT ON Patient\n" +
                 "BEGIN\n" +
                 "  INSERT INTO Patient_Log  (P_NHS_number_NEW, P_first_name_NEW,\n" +
                 "                            P_middle_name_NEW, P_surname_NEW,\n" +
                 "                            P_date_of_birth_NEW, P_postcode_NEW, SQL_action, Time_enter)\n" +
                 "          values (new.P_NHS_number,new.P_first_name,\n" +
-                "                  new.P_middle_name,new.P_surname, new.P_date_of_birth\n" +
+                "                  new.P_middle_name,new.P_surname, new.P_date_of_birth,\n" +
                 "                  new.P_postcode, 'INSERT', DATETIME('NOW') );\n" +
                 "END");
     }
@@ -293,13 +293,13 @@ public class DatabaseAccessor {
     public void populatePatientLogsDelete() throws SQLException
     {
         Statement statement = createStatement();
-        statement.execute("CREATE TRIGGER delete_Patient_Log DELETE ON Patient\n" +
+        statement.execute("CREATE TRIGGER IF NOT EXISTS delete_Patient_Log DELETE ON Patient\n" +
                 "BEGIN\n" +
                 "  INSERT INTO Patient_Log  (P_NHS_number_OLD, P_first_name_OLD,\n" +
                 "                            P_middle_name_OLD, P_surname_OLD,\n" +
                 "                            P_date_of_birth_OLD, P_postcode_OLD, SQL_action, Time_enter)\n" +
                 "          values (old.P_NHS_number,old.P_first_name,\n" +
-                "                  old.P_middle_name,old.P_surname, old.P_date_of_birth\n" +
+                "                  old.P_middle_name,old.P_surname, old.P_date_of_birth,\n" +
                 "                  old.P_postcode, 'DELETE', DATETIME('NOW') );\n" +
                 "END");
     }
@@ -328,7 +328,7 @@ public class DatabaseAccessor {
     public void populateQuestionnaireLogsUpdate() throws SQLException
     {
         Statement statement = createStatement();
-        statement.execute("CREATE TRIGGER update_Questionnaire_Log AFTER UPDATE  ON Questionnaire\n" +
+        statement.execute("CREATE TRIGGER IF NOT EXISTS update_Questionnaire_Log AFTER UPDATE  ON Questionnaire\n" +
                 "BEGIN\n" +
                 "  INSERT INTO Questionnaire_Log  (Q_id_OLD, Q_id_NEW, Q_title_OLD, Q_title_NEW,\n" +
                 "                            Q_state_OLD, Q_state_NEW, SQL_action, Time_enter)\n" +
@@ -340,7 +340,7 @@ public class DatabaseAccessor {
     public void populateQuestionnaireLogsInsert() throws SQLException
     {
         Statement statement = createStatement();
-        statement.execute("CREATE TRIGGER insert_Questionnaire_Log AFTER INSERT  ON Questionnaire\n" +
+        statement.execute("CREATE TRIGGER IF NOT EXISTS insert_Questionnaire_Log AFTER INSERT  ON Questionnaire\n" +
                 "BEGIN\n" +
                 "  INSERT INTO Questionnaire_Log  (Q_id_NEW, Q_title_NEW,\n" +
                 "                            Q_state_NEW, SQL_action, Time_enter)\n" +
@@ -351,7 +351,7 @@ public class DatabaseAccessor {
     public void populateQuestionnaireLogsDelete() throws SQLException
     {
         Statement statement = createStatement();
-        statement.execute("CREATE TRIGGER delete_Questionnaire_Log DELETE  ON Questionnaire\n" +
+        statement.execute("CREATE TRIGGER IF NOT EXISTS delete_Questionnaire_Log DELETE  ON Questionnaire\n" +
                 "BEGIN\n" +
                 "  INSERT INTO Questionnaire_Log  (Q_id_OLD, Q_title_OLD, Q_state_OLD, SQL_action, Time_enter)\n" +
                 "      values (old.Q_id, old.Q_title, old.Q_state, 'DELETE', DATETIME('NOW') );\n" +
