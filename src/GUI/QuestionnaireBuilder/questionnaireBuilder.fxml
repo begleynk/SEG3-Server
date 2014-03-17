@@ -52,7 +52,7 @@
                     <Label text="Title:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="17.0" />
                     <TextField fx:id="questionnaireTitleField" prefWidth="448.0" promptText="Questionnaire Title" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
                     <Label layoutX="14.0" layoutY="48.0" text="Questions:" />
-                    <Button mnemonicParsing="false" prefWidth="-1.0" text="Save Draft" AnchorPane.rightAnchor="87.0" AnchorPane.topAnchor="46.0" />
+                    <Button fx:id="saveDraftButton" mnemonicParsing="false" onAction="#saveQuestionnaire" prefWidth="-1.0" text="Save Draft" AnchorPane.rightAnchor="87.0" AnchorPane.topAnchor="46.0" />
                   </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="268.0" prefWidth="515.0">
