@@ -1,0 +1,5 @@
+Colors scheme
+	white - RGBA 255, 255, 255, 255,
+		  - HEX ff ff ff ff
+	blue  - RGBA 108, 207, 228, 255
+		  - HEX 76 cf e4 ff
