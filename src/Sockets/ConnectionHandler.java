@@ -85,5 +85,6 @@ public class ConnectionHandler
                 throw e;
             }
         }
+        connections.clear();
     }
 }

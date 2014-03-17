@@ -4,6 +4,7 @@
 <?import javafx.collections.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane id="AnchorPane" fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="547.0" prefWidth="725.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.QuestionnaireDistribute.QuestionnaireDistributeController">
   <children>
@@ -20,14 +21,18 @@
                 </ContextMenu>
               </contextMenu>
             </ListView>
-            <Label layoutX="14.0" layoutY="14.0" text="Select a Questionnaire:" />
+            <Label layoutX="14.0" layoutY="14.0" text="Select a Questionnaire:">
+              <font>
+                <Font size="12.0" fx:id="x1" />
+              </font>
+            </Label>
             <TextField id="searchSingleQuestionnaire" fx:id="searchQuestionnaireField" onKeyReleased="#questionnaireSearchInputChangedAction" prefWidth="174.0" promptText="Questionnaire Search" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="44.0" />
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="545.0000999999975" prefWidth="517.0000999999975">
           <children>
             <Button id="deployButton" mnemonicParsing="false" onAction="#assignAction" prefHeight="48.0" prefWidth="99.0" text="Assign" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="17.0" />
-            <Label text="Select Patient to be assigned the Questionnaire Selected:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="17.0" />
+            <Label font="$x1" text="Select Patient(s) to be assigned for the Questionnaire selected:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
             <Button id="selectAllPatients" mnemonicParsing="false" onAction="#selectAllPatients" text="Select All" AnchorPane.rightAnchor="214.0" AnchorPane.topAnchor="44.0" />
             <ListView fx:id="patientListView" prefHeight="462.0" prefWidth="517.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
               <contextMenu>

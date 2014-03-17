@@ -50,7 +50,8 @@ public class MainSceneController implements Initializable {
             null, // Separator
             "/GUI/ConnectTablets/settingControls.fxml",
             null, // Separator
-            null, // TODO: Change Logs
+            "/GUI/ChangeLogs/changeLogs.fxml",
+             // null,
     };
 
     @Override

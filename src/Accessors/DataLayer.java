@@ -204,7 +204,7 @@ public class DataLayer
         return true;
     }
 
-    public static Questionnaire setQuestionnaireStateToDepolyed(Questionnaire questionnaire) throws SQLException, NoQuestionnaireException
+    public static Questionnaire setQuestionnaireStateToDeployed(Questionnaire questionnaire) throws SQLException, NoQuestionnaireException
     {
         try
         {
@@ -304,6 +304,10 @@ public class DataLayer
         }
         return allInsertsSuccessful;
     }
+
+    /************************************************************
+     PATIENT_LOG METHODS
+     *************************************************************/
 
     /************************************************************
      ADMIN METHODS

@@ -3,54 +3,26 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.ConnectTablets.SettingControlsController">
+<AnchorPane id="AnchorPane" fx:id="noTabletSelected" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.ConnectTablets.SettingControlsController">
   <children>
-    <Accordion prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <expandedPane>
-        <TitledPane fx:id="x2" animated="false" text="Add Tablet">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-              <children>
-                <Label layoutX="72.0" layoutY="57.0" text="IP Address:" />
-                <Label layoutX="88.0" layoutY="79.0" text="Port:" />
-                <Label id="ipaddress" layoutX="140.0" layoutY="60.0" text="-" />
-                <Label id="port" layoutX="140.0" layoutY="82.0" text="-" />
-              </children>
-            </AnchorPane>
-          </content>
-        </TitledPane>
-      </expandedPane>
-      <panes>
-        <TitledPane fx:id="x1" animated="false" text="Linked Tablets">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-              <children>
-                <ListView prefHeight="331.0" prefWidth="413.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                <Button layoutX="431.0" layoutY="4.0" mnemonicParsing="false" text="Button" />
-              </children>
-            </AnchorPane>
-          </content>
-        </TitledPane>
-        <fx:reference source="x2" />
-        <TitledPane animated="false" expanded="false" styleClass="first-titled-pane" text="Administrator Settings">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-              <children>
-                <Label layoutX="14.0" layoutY="14.0" text="Require Admin password to:" textAlignment="LEFT" underline="true" />
-                <CheckBox layoutX="46.0" layoutY="37.0" mnemonicParsing="false" text="Export Answers" />
-                <CheckBox layoutX="46.0" layoutY="52.0" mnemonicParsing="false" text="Delete patients" />
-                <CheckBox layoutX="46.0" layoutY="67.0" mnemonicParsing="false" text="Edit patients" />
-                <CheckBox layoutX="46.0" layoutY="98.0" mnemonicParsing="false" text="Archive Questionnaire" />
-                <CheckBox layoutX="46.0" layoutY="83.0" mnemonicParsing="false" text="Deploy Questionnaires" />
-                <Button layoutX="193.0" layoutY="223.0" mnemonicParsing="false" text="Change Admin Password" />
-                <Button layoutX="47.0" layoutY="223.0" mnemonicParsing="false" text="Save" />
-                <Button layoutX="94.0" layoutY="223.0" mnemonicParsing="false" text="Cancel" />
-              </children>
-            </AnchorPane>
-          </content>
-        </TitledPane>
-      </panes>
-    </Accordion>
+    <SplitPane dividerPositions="0.3277591973244147" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <children>
+            <Button fx:id="disconnectAll" mnemonicParsing="false" onAction="#disconnectAllTablets" text="Disconnect All" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="31.0" />
+            <ListView fx:id="tabletList" prefHeight="321.0" prefWidth="193.0" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="31.0" />
+            <Label prefWidth="52.0" text="Tablets" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="127.0" AnchorPane.topAnchor="9.0">
+              <font>
+                <Font name="System Bold" size="13.0" />
+              </font>
+            </Label>
+            <Hyperlink fx:id="refresh" onAction="#refreshTabletList" text="Refresh" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="6.0" />
+          </children>
+        </AnchorPane>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+      </items>
+    </SplitPane>
   </children>
 </AnchorPane>

@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
- * Created by Ahmet Semih Erşahin on 11/03/2014.
- *
+ * Created by James Bellamy on 11/03/2014.
+ * 
  */
 public class QuestionnaireDistributeController implements Initializable {
 
@@ -170,6 +170,7 @@ public class QuestionnaireDistributeController implements Initializable {
 
     public void getPatientSelection() {
         selectedPatients = new ArrayList<>(patientListView.getSelectionModel().getSelectedItems());
+        //System.out.println(selectedPatients);
     }
 
     public void selectAllPatients() {

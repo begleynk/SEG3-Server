@@ -2,9 +2,7 @@ package Accessors;
 
 import Exceptions.NoQuestionnaireException;
 import Helpers.OSHelper;
-import ModelObjects.Patient;
-import ModelObjects.Questionnaire;
-import ModelObjects.QuestionnairePointer;
+import ModelObjects.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -244,6 +242,45 @@ public class DatabaseAccessor {
         return true;
     }
 
+    /************************************************************
+     PATIENT LOG METHODS
+     *************************************************************/
+
+    public ArrayList<PatientLog> getAllPatientLogs() throws SQLException
+    {
+        ArrayList<PatientLog> patientLogs = new ArrayList<PatientLog>();
+        Statement statement = createStatement();
+        String query = "SELECT * FROM Patient_Log";
+        ResultSet result = statement.executeQuery(query);
+        while(result.next())
+        {
+            PatientLog patientLog = new PatientLog(result.getInt(1), result.getString(2), result.getString(3), result.getString(4),result.getString(5),result.getString(6),
+                    result.getString(7), result.getString(8), result.getString(9), result.getString(10), result.getString(11),
+                    result.getString(12), result.getString(13), result.getString(14), result.getString(15));
+            patientLogs.add(patientLog);
+        }
+        return patientLogs;
+    }
+
+
+    /************************************************************
+     QUESTIONNAIRE LOG METHODS
+     *************************************************************/
+    public ArrayList<QuestionnaireLog> getAllQuestionnaireLogs() throws SQLException
+    {
+        ArrayList<QuestionnaireLog> questionnaireLogs = new ArrayList<QuestionnaireLog>();
+        Statement statement = createStatement();
+        String query = "SELECT * FROM Questionnaire_Log";
+        ResultSet result = statement.executeQuery(query);
+        while(result.next())
+        {
+            QuestionnaireLog questionnaireLog = new QuestionnaireLog(result.getInt(1), result.getInt(2), result.getInt(3),
+                    result.getString(4),result.getString(5),result.getString(6),
+                    result.getString(7), result.getString(8), result.getString(9));
+            questionnaireLogs.add(questionnaireLog);
+        }
+        return questionnaireLogs;
+    }
     /*
     CREATE TABLE IF NOT EXISTS 'Patient_Questionnaire' (
     'P_NHS_number' int(10) NOT NULL,
