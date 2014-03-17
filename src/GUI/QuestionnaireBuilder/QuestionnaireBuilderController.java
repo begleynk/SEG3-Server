@@ -325,6 +325,7 @@ public class QuestionnaireBuilderController implements Initializable {
             draftQuestionnaire = DataLayer.getQuestionnaireWithPointer(pointer);
             questionnaireTitleField.setText(draftQuestionnaire.getTitle());
             // TODO: Setup Question Tree
+            System.out.println(draftQuestionnaire.toString());
             questionTypeChooser.getSelectionModel().select(0);
             setQuestionnaireEditingViewVisible(true);
             isExistingQuestionnaire = true;
