@@ -34,7 +34,15 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="222.00009999999747" prefWidth="482.0">
                   <children>
-                    <TreeView fx:id="questionTreeView" prefHeight="216.0" prefWidth="515.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="74.0" />
+                    <TreeView fx:id="questionTreeView" prefHeight="216.0" prefWidth="515.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="74.0">
+                      <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#clearTreeViewSelection" text="Select None" />
+                          </items>
+                        </ContextMenu>
+                      </contextMenu>
+                    </TreeView>
                     <ToolBar id="questionnaireToolbar" prefWidth="482.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="0.0">
                       <items>
                         <ChoiceBox fx:id="questionTypeChooser" prefWidth="-1.0" />

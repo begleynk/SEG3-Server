@@ -7,6 +7,7 @@ import Helpers.GUI.FlexibleToolbarSpace;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
 import ModelObjects.Questions.Question;
+import ModelObjects.Questions.Types.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -57,7 +58,7 @@ public class QuestionnaireBuilderController implements Initializable {
     // Questionnaire specific controls
     @FXML private TextField questionnaireTitleField;
     @FXML private Button deployButton;
-    @FXML private TreeView<String> questionTreeView;
+    @FXML private TreeView<Question> questionTreeView;
 
     // Control for creating a question
     @FXML private ChoiceBox<Object> questionTypeChooser;
@@ -183,11 +184,58 @@ public class QuestionnaireBuilderController implements Initializable {
                 }
         );
 
+        this.questionTreeView.setCellFactory(new Callback<TreeView<Question>, TreeCell<Question>>() {
+            @Override
+            public TreeCell<Question> call(TreeView<Question> questionTreeView) {
+                return new TreeCell<Question>() {
+                    @Override
+                    protected void updateItem(Question question, boolean aBool) {
+                        super.updateItem(question, aBool);
+                        if (question != null) {
+                            setText("Title: " + question.getTitle() + "  Description: " + question.getDescription());
+                        }
+                    }
+                };
+            }
+        });
+        this.questionTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Question>>() {
+            @Override
+            public void changed(ObservableValue<? extends TreeItem<Question>> observableValue, TreeItem<Question> old_item, TreeItem<Question> new_item) {
+                if (new_item != null) {
+                    Question question = new_item.getValue();
+
+                    questionTypeChooser.getSelectionModel().select(0);
+                    setupViewForEditingQuestion();
+
+                    if (question.getClass() == TextQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Free Text Question");
+                        setQuestionTypeView(0);
+                    }
+                    if (question.getClass() == SelectOneQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Select One Question");
+                    }
+                    if (question.getClass() == SelectManyQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Select Many Question");
+                    }
+                    if (question.getClass() == YesNoQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Yes or No Question");
+                    }
+                    if (question.getClass() == RankQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Rank Question");
+                    }
+                    if (question.getClass() == RangeQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Range Question");
+                    }
+                }
+            }
+        });
+
         // Setup the questionTypeChooser Control
         this.questionTypeChooser.setItems(FXCollections.observableArrayList(questionTypeOptions));
         this.questionTypeChooser.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
+                clearTreeViewSelection();
                 if (newNumber.intValue() > 1) {
                     setupViewForAddingQuestion();
                     setQuestionTypeView(newNumber.intValue());
@@ -309,13 +357,18 @@ public class QuestionnaireBuilderController implements Initializable {
     // Question Tree View Methods
 
     public void populateTree() {
-        TreeItem<String> rootItem = new TreeItem<> ("Questions");
+        TreeItem<Question> rootItem = new TreeItem<>(null);
         rootItem.setExpanded(true);
         questionTreeView.setRoot(rootItem);
         for (Question question : this.draftQuestionnaire.getQuestions()) {
-            TreeItem<String> leaf = new TreeItem<>(question.getTitle());
+            TreeItem<Question> leaf = new TreeItem<>(question);
             questionTreeView.getRoot().getChildren().add(leaf);
+            // TODO: recursive call to all dependent questions
         }
+    }
+
+    public void clearTreeViewSelection() {
+        this.questionTreeView.getSelectionModel().clearSelection();
     }
 
     // Question ToolBar Actions

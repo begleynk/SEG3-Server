@@ -2,7 +2,7 @@ package GUI.QuestionnaireBuilder.QuestionTemplates.YesNoChoice;
 
 import GUI.QuestionnaireBuilder.QuestionTemplates.QuestionTypeController;
 import ModelObjects.Questions.Question;
-import ModelObjects.Questions.Types.TextQuestion;
+import ModelObjects.Questions.Types.YesNoQuestion;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -28,7 +28,7 @@ public class YesNoChoiceController extends QuestionTypeController implements Ini
     @Override
     public Question getConstructedQuestion(String Id, boolean required) {
         if (isQuestionDefined()) {
-            return new TextQuestion(Id, titleField.getText(), descriptionField.getText(), required);
+            return new YesNoQuestion(Id, titleField.getText(), descriptionField.getText(), required);
         } else {
             return null;
         }
