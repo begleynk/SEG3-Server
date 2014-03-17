@@ -15,13 +15,36 @@
             <ListView fx:id="tabletList" prefHeight="321.0" prefWidth="193.0" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="31.0" />
             <Label prefWidth="52.0" text="Tablets" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="127.0" AnchorPane.topAnchor="9.0">
               <font>
-                <Font name="System Bold" size="13.0" />
+                <Font name="System Bold" size="13.0" fx:id="x1" />
               </font>
             </Label>
             <Hyperlink fx:id="refresh" onAction="#refreshTabletList" text="Refresh" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="6.0" />
           </children>
         </AnchorPane>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <children>
+            <Label fx:id="noTabletSelectedLabel" text="No Tablet Selected" textFill="#808080" AnchorPane.bottomAnchor="191.0" AnchorPane.leftAnchor="141.0" AnchorPane.rightAnchor="140.0" AnchorPane.topAnchor="191.0">
+              <font>
+                <Font size="13.0" />
+              </font>
+            </Label>
+            <AnchorPane fx:id="detailsPane" prefHeight="398.0" prefWidth="399.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <children>
+                <Button layoutX="14.0" layoutY="363.0" mnemonicParsing="false" onAction="#disconnectTablet" text="Disconnect" />
+                <Label id="connectionData5" fx:id="connectionData1" prefWidth="296.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="63.0" />
+                <Label id="connectionData4" fx:id="connectionData2" prefWidth="296.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="120.0" />
+                <Label fx:id="connectionData3" prefWidth="282.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="181.0" />
+                <Label id="connectionData2" fx:id="connectionData4" prefWidth="296.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="239.0" />
+                <Label id="connectionData1" fx:id="connectionData5" prefWidth="282.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="295.0" />
+                <Label font="$x1" text="Thread ID" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="214.0" />
+                <Label font="$x1" text="Thread Name" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="271.0" />
+                <Label font="$x1" text="Connection Port" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="152.0" />
+                <Label font="$x1" text="Connected At" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="94.0" />
+                <Label font="$x1" text="IP Address" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="37.0" />
+              </children>
+            </AnchorPane>
+          </children>
+        </AnchorPane>
       </items>
     </SplitPane>
   </children>
