@@ -38,16 +38,12 @@ END;
 
 CREATE TRIGGER delete_Patient_Log DELETE ON Patient
 BEGIN
-
   INSERT INTO Patient_Log  (P_NHS_number_OLD, P_first_name_OLD,
                             P_middle_name_OLD, P_surname_OLD,
                             P_date_of_birth_OLD, P_postcode_OLD, SQL_action, Time_enter)
-
           values (old.P_NHS_number,old.P_first_name,
                   old.P_middle_name,old.P_surname, old.P_date_of_birth
                   old.P_postcode, 'DELETE', DATETIME('NOW') );
-
-
 END;
 
 
