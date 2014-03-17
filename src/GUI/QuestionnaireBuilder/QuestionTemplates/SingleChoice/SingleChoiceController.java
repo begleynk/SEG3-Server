@@ -2,7 +2,7 @@ package GUI.QuestionnaireBuilder.QuestionTemplates.SingleChoice;
 
 import GUI.QuestionnaireBuilder.QuestionTemplates.QuestionTypeController;
 import ModelObjects.Questions.Question;
-import ModelObjects.Questions.Types.SelectManyQuestion;
+import ModelObjects.Questions.Types.SelectOneQuestion;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -56,7 +56,7 @@ public class SingleChoiceController extends QuestionTypeController implements In
     public Question getConstructedQuestion(String Id, boolean required) {
         if (isQuestionDefined()) {
             List<String> choices = new ArrayList<>(choicesListView.getItems());
-            return new SelectManyQuestion(Id, titleField.getText(),descriptionField.getText(), required, choices);
+            return new SelectOneQuestion(Id, titleField.getText(),descriptionField.getText(), required, choices);
         } else {
             return null;
         }
