@@ -59,7 +59,7 @@ public class QuestionnaireBuilderController implements Initializable {
 
     // Questionnaire specific controls
     @FXML private TextField questionnaireTitleField;
-    @FXML private Button deployButton;
+    @FXML private Button deleteButton;
     @FXML private Button saveDraftButton;
     @FXML private TreeView<Question> questionTreeView;
 
@@ -165,7 +165,7 @@ public class QuestionnaireBuilderController implements Initializable {
         questionnaireTitleField.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                deployButton.setDisable(!(questionnaireTitleField.getText().length() > 0));
+                deleteButton.setDisable(!(questionnaireTitleField.getText().length() > 0));
                 draftQuestionnaire.setTitle(questionnaireTitleField.getText());
             }
         });
@@ -315,7 +315,7 @@ public class QuestionnaireBuilderController implements Initializable {
         draftQuestionnaire = new Questionnaire("", 0);
         questionnaireTitleField.setText("");
         isExistingQuestionnaire = false;
-        deployButton.setDisable(true);
+        deleteButton.setDisable(true);
         populateTree();
     }
 
@@ -329,7 +329,7 @@ public class QuestionnaireBuilderController implements Initializable {
             questionTypeChooser.getSelectionModel().select(0);
             setQuestionnaireEditingViewVisible(true);
             isExistingQuestionnaire = true;
-            deployButton.setDisable(!(draftQuestionnaire.getTitle().length() > 0));
+            deleteButton.setDisable(!(draftQuestionnaire.getTitle().length() > 0));
             populateTree();
         } catch (NoQuestionnaireException e) {
             e.printStackTrace();

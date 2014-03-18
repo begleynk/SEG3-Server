@@ -65,19 +65,19 @@ public class PatientLog {
 
     public String toString() {
         return "Key: " + getPlkey() +
-                " Old NHS No: " +getNhsNumberOLD() +
-                " New NHS No: " +getNhsNumberNEW() +
-                " Old First Name: " +getFirstNameOLD() +
-                " New First Name: " +getFirstNameNEW() +
-                " Old Middle Name: " +getMiddleNameOLD() +
-                " New Middle NAme: " +getMiddleNameNEW() +
-                " Old Surname: " +getSurnameOLD() +
-                " New Surname: " +getSurnameNEW() +
-                " Old DOB: " +getDateOfBirthOLD() +
-                " New DOB: " +getDateOfBirthNEW() +
-                " Old Postcode: " +getPostcodeOLD() +
-                " New Postcode: " +getPostcodeNEW() +
-                " Action: " +getSqlAction() +
-                " Time: " +getTimeEnter();
+                "   Old NHS No: " +getNhsNumberOLD() +
+                "   New NHS No: " +getNhsNumberNEW() +
+                "   Old First Name: " +getFirstNameOLD() +
+                "   New First Name: " +getFirstNameNEW() +
+                "   Old Middle Name: " +getMiddleNameOLD() +
+                "   New Middle Name: " +getMiddleNameNEW() +
+                "   Old Surname: " +getSurnameOLD() +
+                "   New Surname: " +getSurnameNEW() +
+                "   Old DOB: " +getDateOfBirthOLD() +
+                "   New DOB: " +getDateOfBirthNEW() +
+                "   Old Postcode: " +getPostcodeOLD() +
+                "   New Postcode: " +getPostcodeNEW() +
+                "   Action: " +getSqlAction() +
+                "   Time: " +getTimeEnter();
     }
 }

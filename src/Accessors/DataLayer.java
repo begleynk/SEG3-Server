@@ -303,6 +303,8 @@ public class DataLayer
         return allInsertsSuccessful;
     }
 
+
+
     /************************************************************
      PATIENT_LOG METHODS
      *************************************************************/

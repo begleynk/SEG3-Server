@@ -24,10 +24,13 @@ public class QuestionnaireArchiveController implements Initializable {
 
     @FXML private ListView<QuestionnairePointer> deployedListView;
     @FXML private ListView<QuestionnairePointer> archivedListView;
+    @FXML private ListView<QuestionnairePointer> draftListView;
 
     private ObservableList<QuestionnairePointer> deployedQuestionnaires
             = FXCollections.observableArrayList();
     private ObservableList<QuestionnairePointer> archivedQuestionnaires
+            = FXCollections.observableArrayList();
+    private ObservableList<QuestionnairePointer> draftQuestionnaires
             = FXCollections.observableArrayList();
 
     @Override
@@ -50,9 +53,11 @@ public class QuestionnaireArchiveController implements Initializable {
 
         this.deployedListView.setCellFactory(callback);
         this.archivedListView.setCellFactory(callback);
+        this.draftListView.setCellFactory(callback);
 
         this.deployedListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.archivedListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        this.draftListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         fetchAll();
     }
@@ -60,6 +65,7 @@ public class QuestionnaireArchiveController implements Initializable {
     public void fetchAll() {
         fetchDeployedQuestionnaires();
         fetchArchivedQuestionnaires();
+        fetchDraftQuestionnaires();
     }
 
     // Fetching Data from Database
@@ -82,6 +88,15 @@ public class QuestionnaireArchiveController implements Initializable {
         }
     }
 
+    public void fetchDraftQuestionnaires() {
+        try {
+            this.draftQuestionnaires.setAll(DataLayer.getQuestionnairePointersForState(0));
+            updateDraftListView();
+        } catch (SQLException | NoQuestionnaireException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Updating UI when new Data has been fetched
 
     public void updateDeployedListView() {
@@ -90,6 +105,10 @@ public class QuestionnaireArchiveController implements Initializable {
 
     public void updateArchivedListView() {
         this.archivedListView.setItems(archivedQuestionnaires);
+    }
+
+    public void updateDraftListView() {
+        this.draftListView.setItems(draftQuestionnaires);
     }
 
     // Switching Button Actions
