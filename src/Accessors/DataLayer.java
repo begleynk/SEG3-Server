@@ -5,6 +5,8 @@ import ModelObjects.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Niklas Begley on 03/03/2014.
@@ -294,13 +296,24 @@ public class DataLayer
      QUESTIONNAIRE_PATIENT METHODS
      *************************************************************/
 
-    public static boolean linkPatientAndQuestionnaire(ArrayList<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
+    public static boolean linkPatientAndQuestionnaire(Patient patient, QuestionnairePointer questionnaire) throws SQLException
     {
-        boolean allInsertsSuccessful = true;
+        return databaseAccessor.linkPatientAndQuestionnairePointer(patient, questionnaire);
+    }
+
+    public static boolean unlinkPatientAndQuestionnaire(Patient patient, QuestionnairePointer questionnaire) throws SQLException
+    {
+        return databaseAccessor.unlinkPatientAndQuestionnairePointer(patient, questionnaire);
+    }
+
+    public static HashMap<String, Boolean> arePatientsAssignedToQuestionnaire(List<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
+    {
+        HashMap<String, Boolean> patientIsAssigned = new HashMap<>();
         for (Patient patient : patients) {
-            allInsertsSuccessful = databaseAccessor.linkPatientAndQuestionnairePointer(patient, questionnaire);
+            Boolean isAssigned = databaseAccessor.isPatientAssignedToQuestionnaire(patient, questionnaire);
+            patientIsAssigned.put(patient.getNhsNumber(), isAssigned);
         }
-        return allInsertsSuccessful;
+        return patientIsAssigned;
     }
 
     /************************************************************

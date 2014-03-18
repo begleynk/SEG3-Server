@@ -1,12 +1,11 @@
 package Helpers;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by NiklasBegley on 08/03/2014.
+ * Created by Niklas Begley on 08/03/2014.
+ *
  */
 public class IDHelper {
 

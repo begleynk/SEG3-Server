@@ -231,7 +231,7 @@ public class DatabaseAccessor {
 
     public boolean linkPatientAndQuestionnairePointer(Patient patient, QuestionnairePointer questionnaire) throws SQLException
     {
-        if(questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))
+        if (questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))
         {
             return false;
         }
@@ -240,6 +240,35 @@ public class DatabaseAccessor {
                 patient.getNhsNumber() + "','" +
                 questionnaire.getId() + "', '0');");
         return true;
+    }
+
+    public boolean unlinkPatientAndQuestionnairePointer(Patient patient, QuestionnairePointer questionnaire) throws SQLException
+    {
+        if (questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))
+        {
+            return false;
+        }
+        Statement statement = createStatement();
+        statement.execute("DELETE FROM Patient_Questionnaire WHERE P_NHS_number = '" +
+                patient.getNhsNumber() + "' AND Q_id = '" +
+                questionnaire.getId() + "'");
+        return true;
+    }
+
+    public boolean isPatientAssignedToQuestionnaire(Patient patient, QuestionnairePointer questionnaire) throws SQLException {
+        if (questionnaire == null || questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))
+        {
+            return false;
+        }
+        Statement statement = createStatement();
+        String query = "SELECT * FROM Patient_Questionnaire WHERE P_NHS_Number = '" + patient.getNhsNumber() + "' AND Q_id = '" + questionnaire.getId() + "';";
+
+        ResultSet result = statement.executeQuery(query);
+        if (result.next()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /************************************************************

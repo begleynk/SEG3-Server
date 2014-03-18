@@ -4,6 +4,7 @@ import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
 import GUI.QuestionnaireBuilder.QuestionTemplates.QuestionTypeController;
 import Helpers.GUI.FlexibleToolbarSpace;
+import Helpers.IDHelper;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
 import ModelObjects.Questions.Question;
@@ -374,7 +375,12 @@ public class QuestionnaireBuilderController implements Initializable {
     // Question ToolBar Actions
 
     public void saveConstructedQuestion() {
-        Question question = questionTypeController.getConstructedQuestion("some id", requiredCheckBox.isSelected());
+        Question question = null;
+        try {
+            question = questionTypeController.getConstructedQuestion(IDHelper.generateRandomID(), requiredCheckBox.isSelected());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (question != null) {
             draftQuestionnaire.addQuestion(question);
             System.out.println(draftQuestionnaire.toString());

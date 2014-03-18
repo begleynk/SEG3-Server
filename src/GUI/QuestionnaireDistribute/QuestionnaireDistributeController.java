@@ -4,18 +4,22 @@ import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
 import ModelObjects.Patient;
 import ModelObjects.QuestionnairePointer;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 /**
@@ -30,24 +34,28 @@ public class QuestionnaireDistributeController implements Initializable {
 
     // Patient Controls
     @FXML private TextField searchPatientField;
-    @FXML private ListView<Patient> patientListView;
-    @FXML private ChoiceBox customGroupsChooser;
+    @FXML private TableView<Patient> patientTableView;
+    @FXML private TableColumn<Patient, String> nhsNumberColumn;
+    @FXML private TableColumn<Patient, String> nameColumn;
+    @FXML private TableColumn<Patient, Boolean> checkBoxColumn;
 
     private QuestionnairePointer selectedQuestionnairePointer;
-    private ArrayList<Patient> selectedPatients;
 
     private ObservableList<QuestionnairePointer> allQuestionnairePointers
             = FXCollections.observableArrayList();
     private ObservableList<QuestionnairePointer> matchedQuestionnairePointers
             = FXCollections.observableArrayList();
 
-    private ObservableList<Patient> allPatients
+    private ObservableList<Patient> visiblePatients
             = FXCollections.observableArrayList();
-    private ObservableList<Patient> matchedPatients
+    private ObservableList<Patient> offScreenPatients
             = FXCollections.observableArrayList();
+
+    protected static HashMap<String, Boolean> isAssignedMap;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         // Setup Questionnaire Pointed ListView
         this.questionnairePointerListView.setCellFactory(new Callback<ListView<QuestionnairePointer>, ListCell<QuestionnairePointer>>() {
             @Override
@@ -67,27 +75,70 @@ public class QuestionnaireDistributeController implements Initializable {
                 new ChangeListener<QuestionnairePointer>() {
                     @Override
                     public void changed(ObservableValue<? extends QuestionnairePointer> observableValue, QuestionnairePointer old_pointer, QuestionnairePointer new_pointer) {
+                        if (old_pointer != null) {
+                            assignAction();
+                            System.out.println("Auto Saved Assignments");
+                        }
                         selectedQuestionnairePointer = new_pointer;
+                        if (new_pointer != null) {
+                            ArrayList<Patient> patients = new ArrayList<>(visiblePatients);
+                            try {
+                                isAssignedMap = DataLayer.arePatientsAssignedToQuestionnaire(patients, selectedQuestionnairePointer);
+                                for (Patient patient : visiblePatients) {
+                                    if (isAssignedMap.get(patient.getNhsNumber())) {
+                                        patient.setProperty_is_assigned(true);
+                                        patient.setOrignal_assignment(true);
+                                    } else {
+                                        patient.setProperty_is_assigned(false);
+                                        patient.setOrignal_assignment(false);
+                                    }
+                                }
+                                for (Patient patient : offScreenPatients) {
+                                    if (isAssignedMap.get(patient.getNhsNumber())) {
+                                        patient.setProperty_is_assigned(true);
+                                        patient.setOrignal_assignment(true);
+                                    } else {
+                                        patient.setProperty_is_assigned(false);
+                                        patient.setOrignal_assignment(false);
+                                    }
+                                }
+                                patientSearchInputChangedAction();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                            if (!patientTableView.getColumns().contains(checkBoxColumn)) {
+                                patientTableView.getColumns().add(checkBoxColumn);
+                            }
+                        } else {
+                            for (Patient patient : visiblePatients) {
+                                patient.setProperty_is_assigned(false);
+                                patient.setOrignal_assignment(false);
+                            }
+                            for (Patient patient : offScreenPatients) {
+                                patient.setProperty_is_assigned(false);
+                                patient.setOrignal_assignment(false);
+                            }
+                            isAssignedMap.clear();
+                            patientTableView.getColumns().remove(checkBoxColumn);
+                        }
                     }
                 }
         );
 
-        this.patientListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        this.patientListView.setCellFactory(new Callback<ListView<Patient>, ListCell<Patient>>() {
-            @Override
-            public ListCell<Patient> call(ListView<Patient> p) {
-                return new ListCell<Patient>() {
-                    @Override
-                    protected void updateItem(Patient patient, boolean aBool) {
-                        super.updateItem(patient, aBool);
-                        if (patient != null) {
-                            setText("#" + patient.getNhsNumber() + ": \n" + patient.getFirst_name() + " " + patient.getSurname());
-                        }
-                    }
-
-                };
+        this.nhsNumberColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("property_nhs_number"));
+        this.nameColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("property_full_name"));
+        this.checkBoxColumn.setCellValueFactory(new PropertyValueFactory<Patient, Boolean>("property_is_assigned"));
+        this.checkBoxColumn.setCellFactory(new Callback<TableColumn<Patient, Boolean>, TableCell<Patient, Boolean>>() {
+            public TableCell<Patient, Boolean> call(TableColumn<Patient, Boolean> p) {
+                return new TableCellCheckBox<>();
             }
         });
+
+        this.patientTableView.setEditable(true);
+        this.patientTableView.getColumns().remove(this.checkBoxColumn);
+        this.patientTableView.setItems(visiblePatients);
+
+        this.questionnairePointerListView.setItems(matchedQuestionnairePointers);
 
         fetchDeployedQuestionnaires();
         fetchAllPatients();
@@ -98,7 +149,8 @@ public class QuestionnaireDistributeController implements Initializable {
     // Fetching Menu data [QuestionnairePointer(s)]
     public void fetchDeployedQuestionnaires() {
         try {
-            this.allQuestionnairePointers.setAll(DataLayer.getQuestionnairePointersForState(1));
+            this.allQuestionnairePointers.clear();
+            this.allQuestionnairePointers.addAll(DataLayer.getQuestionnairePointersForState(1));
             questionnaireSearchInputChangedAction();
         } catch (SQLException | NoQuestionnaireException e) {
             e.printStackTrace();
@@ -107,23 +159,23 @@ public class QuestionnaireDistributeController implements Initializable {
 
     public void questionnaireSearchInputChangedAction() {
         String searchTerm = searchQuestionnaireField.getText();
-        questionnairePointerListView.getSelectionModel().clearSelection();
         if (searchTerm == null || searchTerm.equals("") ) {
-            questionnairePointerListView.setItems(allQuestionnairePointers);
+            matchedQuestionnairePointers.setAll(allQuestionnairePointers);
         } else {
-            questionnairePointerListView.setItems(fuzzySearchQuestionnairePointerUsingSearchTerm(searchTerm));
+            fuzzySearchQuestionnairePointerUsingSearchTerm(searchTerm);
         }
     }
 
     public ObservableList<QuestionnairePointer> fuzzySearchQuestionnairePointerUsingSearchTerm(String searchTerm) {
-        matchedQuestionnairePointers.clear();
         searchTerm = searchTerm.trim().toLowerCase();
+        ArrayList<QuestionnairePointer> pointers = new ArrayList<>();
         for (QuestionnairePointer pointer : allQuestionnairePointers) {
             if (pointer.getTitle().toLowerCase().startsWith(searchTerm) ||
                     pointer.getTitle().toLowerCase().contains(searchTerm)) {
-                matchedQuestionnairePointers.add(pointer);
+                pointers.add(pointer);
             }
         }
+        matchedQuestionnairePointers.setAll(pointers);
         return matchedQuestionnairePointers;
     }
 
@@ -135,69 +187,108 @@ public class QuestionnaireDistributeController implements Initializable {
 
     public void fetchAllPatients() {
         try {
-            this.allPatients.setAll(DataLayer.getAllPatients());
+            this.visiblePatients.clear();
+            this.offScreenPatients.clear();
+            this.visiblePatients.addAll(DataLayer.getAllPatients());
             patientSearchInputChangedAction();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public void patientSearchInputChangedAction() {
+        String searchTerm = searchPatientField.getText();
+        if (searchTerm == null || searchTerm.equals("") ) {
+            visiblePatients.addAll(offScreenPatients);
+            offScreenPatients.clear();
+        } else {
+            fuzzySearchPatientsUsingSearchTerm(searchTerm);
+        }
+
+        //System.out.println("Visible :" + visiblePatients.size());
+        //System.out.println("OffScreen :" + offScreenPatients.size());
+    }
+
     public ObservableList<Patient> fuzzySearchPatientsUsingSearchTerm(String searchTerm) {
-        matchedPatients.clear();
         searchTerm = searchTerm.trim().toLowerCase();
-        for (Patient aPatient : allPatients) {
+        offScreenPatients.addAll(visiblePatients);
+        visiblePatients.clear();
+        ArrayList<Patient> patients = new ArrayList<>();
+        for (Patient aPatient : offScreenPatients) {
             if (aPatient.getNhsNumber().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getFirst_name().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getMiddle_name().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getSurname().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getDateOfBirth().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getPostcode().toLowerCase().startsWith(searchTerm)) {
-                matchedPatients.add(aPatient);
+                patients.add(aPatient);
             }
         }
-        return matchedPatients;
-    }
-
-    public void patientSearchInputChangedAction() {
-        String searchTerm = searchPatientField.getText();
-        patientListView.getSelectionModel().clearSelection();
-        if (searchTerm == null || searchTerm.equals("") ) {
-            patientListView.setItems(allPatients);
-        } else {
-            patientListView.setItems(fuzzySearchPatientsUsingSearchTerm(searchTerm));
+        for (Patient patient : patients) {
+            offScreenPatients.remove(patient);
         }
-    }
-
-    public void getPatientSelection() {
-        selectedPatients = new ArrayList<>(patientListView.getSelectionModel().getSelectedItems());
-        //System.out.println(selectedPatients);
-    }
-
-    public void selectAllPatients() {
-        patientListView.getSelectionModel().selectAll();
-    }
-
-    public void deselectPatients() {
-        patientListView.getSelectionModel().clearSelection();
+        visiblePatients.setAll(patients);
+        return visiblePatients;
     }
 
     // Assign Action
 
     public void assignAction() {
-        getPatientSelection();
-        if (selectedQuestionnairePointer != null && selectedPatients.size() > 0) {
-            try {
-                if (DataLayer.linkPatientAndQuestionnaire(selectedPatients, selectedQuestionnairePointer)) {
-                    System.out.println(selectedQuestionnairePointer.toString());
-                    System.out.println("Has been Assigned to:");
-                    for (Patient patient : selectedPatients) {
-                        System.out.println(patient.toString());
+        if (selectedQuestionnairePointer != null) {
+            searchPatientField.setText("");
+            patientSearchInputChangedAction();
+            for (Patient patient : visiblePatients) {
+                if (patient.getOrignal_assignment() && !patient.getProperty_is_assigned())
+                {
+                    // Remove assignment
+                    try {
+                        DataLayer.unlinkPatientAndQuestionnaire(patient, selectedQuestionnairePointer);
+                        patient.setOrignal_assignment(false);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
-                    questionnairePointerListView.getSelectionModel().clearSelection();
-                    patientListView.getSelectionModel().clearSelection();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+                else if (!patient.getOrignal_assignment() && patient.getProperty_is_assigned())
+                {
+                    // Add assignment
+                    try {
+                        DataLayer.linkPatientAndQuestionnaire(patient, selectedQuestionnairePointer);
+                        patient.setOrignal_assignment(true);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    public static class TableCellCheckBox<S, T> extends TableCell<S, T> {
+        private final CheckBox checkBox;
+        private ObservableValue<T> ov;
+
+        public TableCellCheckBox() {
+            this.checkBox = new CheckBox();
+            this.checkBox.setAlignment(Pos.CENTER);
+
+            setAlignment(Pos.CENTER);
+            setGraphic(checkBox);
+        }
+
+        @Override
+        public void updateItem(T item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                setGraphic(checkBox);
+                if (ov instanceof BooleanProperty) {
+                    checkBox.selectedProperty().unbindBidirectional((BooleanProperty) ov);
+                }
+                ov = getTableColumn().getCellObservableValue(getIndex());
+                if (ov instanceof BooleanProperty) {
+                    checkBox.selectedProperty().bindBidirectional((BooleanProperty) ov);
+                }
             }
         }
     }
