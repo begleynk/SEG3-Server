@@ -2,6 +2,7 @@ package Accessors;
 
 import Exceptions.NoQuestionnaireException;
 import ModelObjects.*;
+import ModelObjects.Questions.Question;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -137,6 +138,20 @@ public class DataLayer
         }
         catch (SQLException e)
         {
+            throw e;
+        }
+    }
+
+    public static Questionnaire getQuestionnaireByID(int id) throws SQLException, NoQuestionnaireException
+    {
+        try
+        {
+            return questionnaireAccessor.getQuestionnaireById(id);
+        }
+        catch(NoQuestionnaireException e)
+        {
+            e.printStackTrace();
+            System.err.println("Tried to find a questionnaire that does not exist.");
             throw e;
         }
     }
@@ -294,6 +309,20 @@ public class DataLayer
      QUESTIONNAIRE_PATIENT METHODS
      *************************************************************/
 
+    public static ArrayList<QuestionnairePointer> getQuestionnairePointersForPatient(Patient patient) throws SQLException
+    {
+        try
+        {
+            return databaseAccessor.getQuestionnairePointersForPatient(patient);
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error getting questionnaire pointers for patient " + patient.getNhsNumber());
+            throw e;
+        }
+    }
+
     public static boolean linkPatientAndQuestionnaire(ArrayList<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
     {
         boolean allInsertsSuccessful = true;
@@ -302,8 +331,6 @@ public class DataLayer
         }
         return allInsertsSuccessful;
     }
-
-
 
     /************************************************************
      PATIENT_LOG METHODS

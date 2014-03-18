@@ -216,6 +216,22 @@ public class DatabaseAccessor {
      QUESTIONNAIRE_PATIENT METHODS
      *************************************************************/
 
+    public ArrayList<QuestionnairePointer> getQuestionnairePointersForPatient(Patient patient) throws SQLException
+    {
+        Statement statement = createStatement();
+        String query = "SELECT * FROM Questionnaires WHERE State = 'Deployed' AND Q_id IN(" +
+                "SELECT * FROM Patient_Questionnaire WHERE Completed = 0 AND P_NSH_number = '" + patient.getNhsNumber() + "');";
+        ResultSet result = statement.executeQuery(query);
+
+        ArrayList<QuestionnairePointer> pointerList = new ArrayList<>();
+        while(result.next())
+        {
+            QuestionnairePointer questionnairePointer = new QuestionnairePointer(result.getInt(1), result.getString(2), result.getString(3));
+            pointerList.add(questionnairePointer);
+        }
+        return pointerList;
+    }
+
     public boolean linkPatientAndQuestionnaire(Patient patient, Questionnaire questionnaire) throws SQLException
     {
         if(questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))

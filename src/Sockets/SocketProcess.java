@@ -44,8 +44,7 @@ public class SocketProcess extends Thread {
             {
                 while (!(inputLine = in.readLine()).endsWith("END")) { }
 
-                System.out.println("Received the encrypted message: " + inputLine);
-                message = inputLine.substring(0, inputLine.length() - "END".length());
+                message = inputLine.substring(0, inputLine.length() - "END".length()); // Remove END
 
                 outputLine = SocketAPI.getResponseFor(message);
                 out.println(outputLine);
