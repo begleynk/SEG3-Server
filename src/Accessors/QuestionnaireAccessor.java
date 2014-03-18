@@ -18,7 +18,7 @@ import java.util.LinkedList;
  */
 public class QuestionnaireAccessor {
 
-    private static String questionnaireStoragePath = OSHelper.getStoragePath() + "/questionnaires/";
+    private static String questionnaireStoragePath = OSHelper.getStoragePath() + "questionnaires/";
     private static Gson json = JsonHelper.getInstance();
 
     public QuestionnaireAccessor() {

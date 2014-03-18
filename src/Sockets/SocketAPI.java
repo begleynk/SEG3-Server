@@ -2,11 +2,26 @@ package Sockets;
 
 import Accessors.DataLayer;
 import Accessors.QuestionnaireReader;
+import Exceptions.NoQuestionnaireException;
 import Helpers.JsonHelper;
 import ModelObjects.Patient;
+import ModelObjects.Questionnaire;
+import ModelObjects.QuestionnairePointer;
 import com.google.gson.Gson;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+import java.nio.charset.StandardCharsets;
+import java.security.AlgorithmParameters;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by Niklas Begley on 10/02/2014.
@@ -16,8 +31,12 @@ import java.sql.SQLException;
  */
 public class SocketAPI {
 
-    public static String getResponseFor(String input)
+    public static String getResponseFor(String encoded)
     {
+        System.out.println(encoded);
+        String input = Encryptor.decrypt(encoded);
+        System.out.println(input);
+
         /**
          *  API behaviour is defined here
          *
@@ -30,62 +49,95 @@ public class SocketAPI {
          */
         if (input.equals("Foo"))
         {
-            return "Bar\n"+ "END";
-        }
-        else if (input.equals("Bar"))
-        {
-            return "Foo\n"+ "END";
-        }
-        else if (input.equals("Credit"))
-        {
-            return "Suisse\n"+ "END";
-        }
-        else if (input.equals("Suisse"))
-        {
-            return "Credit\n"+ "END";
+            return Encryptor.encryptAndFormat("Bar\n");
         }
         else if (input.matches("(GetQuestionnaireByName:).*"))
         {
-            return QuestionnaireReader.getQuestionnaireByName(input.split(": ")[1]) + "END";
+            return Encryptor.encryptAndFormat(QuestionnaireReader.getQuestionnaireByName(input.split(": ")[1]));
         }
         else if (input.matches("(FindPatient:).*"))
         {
             /****************************************
-                FIND PATIENT BY NHS NUMBER
-            *****************************************/
+             FIND PATIENT BY NHS NUMBER
+             *****************************************/
+
             Patient patient;
             try
             {
                 patient = DataLayer.getPatientByNSHNUmber(input.split(": ")[1]);
+                if (patient != null)
+                {
+                    Gson json = JsonHelper.getInstance();
+                    return Encryptor.encryptAndFormat(json.toJson(patient));
+                }
+                else
+                {
+                    return Encryptor.encryptAndFormat("{'error_code': 666 }");
+                }
             }
             catch (SQLException e)
             {
-                return "{'error_code': 1337 }END";
+                e.printStackTrace();
+                return Encryptor.encryptAndFormat("{'error_code': 1337 }");
             }
-            if (patient == null)
-            {
-                return "{ 'error_code': 666 }END";
-            }
-            Gson json = JsonHelper.getInstance();
-            return json.toJson(patient) + "END";
         }
         else if (input.matches("(GetAllQuestionnairesForPatient:).*"))
         {
-            return "Method pending";
+            try
+            {
+                Patient patient = DataLayer.getPatientByNSHNUmber(input.split(": ")[1]);
+                if(patient != null)
+                {
+                    ArrayList<QuestionnairePointer> questionnaires = DataLayer.getQuestionnairePointersForPatient(patient);
+                    Gson json = JsonHelper.getInstance();
+                    return Encryptor.encryptAndFormat(json.toJson(questionnaires));
+                }
+                else
+                {
+                    return Encryptor.encryptAndFormat("{'error_code': 666 }");
+                }
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+                return Encryptor.encryptAndFormat("{'error_code': 1337 }");
+            }
         }
         else if (input.matches("(GetQuestionnaireByID:).*"))
         {
-            return "Method pending";
-//            Gson json = JsonHelper.getInstance();
-//            return json.toJson(QuestionnaireAccessor.getQuestionnaires());
+            try
+            {
+                Questionnaire questionnaire = DataLayer.getQuestionnaireByID(Integer.parseInt(input.split(": ")[1]));
+                if(questionnaire == null)
+                {
+                    // Can this be ever hit?
+                    return Encryptor.encryptAndFormat("{'error_code': 404 }");
+                }
+                else
+                {
+                    Gson json = JsonHelper.getInstance();
+                    return Encryptor.encryptAndFormat(json.toJson(questionnaire));
+                }
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+                return Encryptor.encryptAndFormat("{'error_code': 1337 }");
+            }
+            catch (NoQuestionnaireException e)
+            {
+                return Encryptor.encryptAndFormat("{'error_code': 404 }");
+            }
         }
         else if (input.equals("Close"))
         {
+            // Do not encrypt the kill signal!
             return "Close";
         }
         else
         {
-            return "WTF?"+ "END";
+            return Encryptor.encryptAndFormat("WTF?");
         }
     }
+
 }

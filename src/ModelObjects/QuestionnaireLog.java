@@ -41,13 +41,13 @@ public class QuestionnaireLog {
 
     public String toString (){
         return "Key: " + getQlkey() +
-                " Old Questionnaire ID: " +getIdOLD() +
-                " New Questionnaire ID: " +getIdNEW() +
-                " Old Questionnaire Title: " +getTitleOLD() +
-                " New Questionnaire Title: " +getTitleNEW() +
-                " Old Questionnaire State: " +getStateOLD() +
-                " New Questionnaire State: " +getStateNEW() +
-                " Action: " +getSqlAction() +
-                " Time: " +getTimeEnter();
+                "   Old Questionnaire ID: " +getIdOLD() +
+                "   New Questionnaire ID: " +getIdNEW() +
+                "   Old Questionnaire Title: " +getTitleOLD() +
+                "   New Questionnaire Title: " +getTitleNEW() +
+                "   Old Questionnaire State: " +getStateOLD() +
+                "   New Questionnaire State: " +getStateNEW() +
+                "   Action: " +getSqlAction() +
+                "   Time: " +getTimeEnter();
     }
 }

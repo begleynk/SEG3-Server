@@ -15,6 +15,7 @@ public abstract class Question {
     protected String title;
     protected String description;
     protected boolean required;
+    protected String type;
     protected HashMap<String, List<Question>> dependentQuestions = new HashMap<>();
 
     /**
@@ -31,6 +32,7 @@ public abstract class Question {
         this.title = title;
         this.description = description;
         this.required = required;
+        this.type = this.getClass().getSimpleName();
     }
 
     /**

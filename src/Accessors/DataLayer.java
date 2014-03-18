@@ -5,8 +5,6 @@ import ModelObjects.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Niklas Begley on 03/03/2014.
@@ -139,6 +137,20 @@ public class DataLayer
         }
         catch (SQLException e)
         {
+            throw e;
+        }
+    }
+
+    public static Questionnaire getQuestionnaireByID(int id) throws SQLException, NoQuestionnaireException
+    {
+        try
+        {
+            return questionnaireAccessor.getQuestionnaireById(id);
+        }
+        catch(NoQuestionnaireException e)
+        {
+            e.printStackTrace();
+            System.err.println("Tried to find a questionnaire that does not exist.");
             throw e;
         }
     }
@@ -296,7 +308,21 @@ public class DataLayer
      QUESTIONNAIRE_PATIENT METHODS
      *************************************************************/
 
-    public static boolean linkPatientAndQuestionnaire(Patient patient, QuestionnairePointer questionnaire) throws SQLException
+    public static ArrayList<QuestionnairePointer> getQuestionnairePointersForPatient(Patient patient) throws SQLException
+    {
+        try
+        {
+            return databaseAccessor.getQuestionnairePointersForPatient(patient);
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error getting questionnaire pointers for patient " + patient.getNhsNumber());
+            throw e;
+        }
+    }
+    
+    public static boolean linkPatientAndQuestionnaire(ArrayList<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
     {
         return databaseAccessor.linkPatientAndQuestionnairePointer(patient, questionnaire);
     }
@@ -325,6 +351,43 @@ public class DataLayer
         return databaseAccessor.getAllPatientLogs();
     }
 
+    public static void populatePatientLogsUpdate () throws SQLException
+    {
+        try {
+            databaseAccessor.populatePatientLogsUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on update logs in Patient Log");
+            throw e;
+        }
+    }
+    public static void populatePatientLogsInsert () throws SQLException
+    {
+        try {
+            databaseAccessor.populatePatientLogsInsert();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on insert logs in Patient Log");
+            throw e;
+        }
+    }
+    public static void populatePatientLogsDelete () throws SQLException
+    {
+        try {
+            databaseAccessor.populatePatientLogsDelete();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on delete logs in Patient Log");
+            throw e;
+        }
+    }
+
     /************************************************************
      QUESTIONNAIRE_LOG METHODS
      *************************************************************/
@@ -332,6 +395,43 @@ public class DataLayer
     public static ArrayList<QuestionnaireLog> getAllQuestionnaireLogs() throws SQLException
     {
         return databaseAccessor.getAllQuestionnaireLogs();
+    }
+
+    public static void populateQuestionnaireLogsUpdate () throws SQLException
+    {
+        try {
+            databaseAccessor.populateQuestionnaireLogsUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on update logs in Questionnaire Log");
+            throw e;
+        }
+    }
+    public static void populateQuestionnaireLogsInsert () throws SQLException
+    {
+        try {
+            databaseAccessor.populateQuestionnaireLogsInsert();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on insert logs in Questionnaire Log");
+            throw e;
+        }
+    }
+    public static void populateQuestionnaireLogsDelete () throws SQLException
+    {
+        try {
+            databaseAccessor.populateQuestionnaireLogsDelete();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on delete logs in Questionnaire Log");
+            throw e;
+        }
     }
 
     /************************************************************

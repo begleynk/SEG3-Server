@@ -3,6 +3,7 @@ package GUI.QuestionnaireBuilder;
 import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
 import GUI.QuestionnaireBuilder.QuestionTemplates.QuestionTypeController;
+import Helpers.GUI.AlertDialog;
 import Helpers.GUI.FlexibleToolbarSpace;
 import Helpers.IDHelper;
 import ModelObjects.Questionnaire;
@@ -25,6 +26,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -58,7 +60,8 @@ public class QuestionnaireBuilderController implements Initializable {
 
     // Questionnaire specific controls
     @FXML private TextField questionnaireTitleField;
-    @FXML private Button deployButton;
+    @FXML private Button deleteButton;
+    @FXML private Button saveDraftButton;
     @FXML private TreeView<Question> questionTreeView;
 
     // Control for creating a question
@@ -118,6 +121,15 @@ public class QuestionnaireBuilderController implements Initializable {
         this.deleteExistingQuestionButton = new Button("Delete");
         this.clearQuestionFieldsButton = new Button("Clear");
 
+        // Saving a questoinnaire draft
+        this.saveDraftButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                saveQuestionnaire();
+                fetchDraftQuestionnaires();
+            }
+        });
+
         // Set Actions for QuestionToolbar buttons
         this.saveNewQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -154,7 +166,7 @@ public class QuestionnaireBuilderController implements Initializable {
         questionnaireTitleField.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                deployButton.setDisable(!(questionnaireTitleField.getText().length() > 0));
+                deleteButton.setDisable(!(questionnaireTitleField.getText().length() > 0));
                 draftQuestionnaire.setTitle(questionnaireTitleField.getText());
             }
         });
@@ -304,7 +316,7 @@ public class QuestionnaireBuilderController implements Initializable {
         draftQuestionnaire = new Questionnaire("", 0);
         questionnaireTitleField.setText("");
         isExistingQuestionnaire = false;
-        deployButton.setDisable(true);
+        deleteButton.setDisable(true);
         populateTree();
     }
 
@@ -314,10 +326,11 @@ public class QuestionnaireBuilderController implements Initializable {
             draftQuestionnaire = DataLayer.getQuestionnaireWithPointer(pointer);
             questionnaireTitleField.setText(draftQuestionnaire.getTitle());
             // TODO: Setup Question Tree
+            System.out.println(draftQuestionnaire.toString());
             questionTypeChooser.getSelectionModel().select(0);
             setQuestionnaireEditingViewVisible(true);
             isExistingQuestionnaire = true;
-            deployButton.setDisable(!(draftQuestionnaire.getTitle().length() > 0));
+            deleteButton.setDisable(!(draftQuestionnaire.getTitle().length() > 0));
             populateTree();
         } catch (NoQuestionnaireException e) {
             e.printStackTrace();
@@ -418,6 +431,24 @@ public class QuestionnaireBuilderController implements Initializable {
             }
         } else {
             questionStackPane.getChildren().clear();
+        }
+    }
+
+    public void saveQuestionnaire()
+    {
+        boolean success;
+        try
+        {
+            success = DataLayer.addQuestionnaire(draftQuestionnaire);
+        }
+        catch (SQLException e)
+        {
+            success = false;
+            e.printStackTrace();
+        }
+        if(!success)
+        {
+            new AlertDialog((Stage)root.getScene().getWindow(), "There was an error saving the questionnaire. Try again.", AlertDialog.ICON_INFO).showAndWait();
         }
     }
 
