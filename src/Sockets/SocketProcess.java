@@ -33,22 +33,29 @@ public class SocketProcess extends Thread {
 
     public void run()
     {
-        try(
+        try
+        (
         PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         )
         {
-            String inputLine, outputLine;
-
-            while ((inputLine = in.readLine()) != null)
+            String inputLine, outputLine, message;
+            while(true)
             {
-                outputLine = SocketAPI.getResponseFor(inputLine);
+                while (!(inputLine = in.readLine()).endsWith("END")) { }
+
+                System.out.println("Received the encrypted message: " + inputLine);
+                message = inputLine.substring(0, inputLine.length() - "END".length());
+
+                outputLine = SocketAPI.getResponseFor(message);
                 out.println(outputLine);
 
                 if (outputLine.equals("Close"))
+                {
                     break;
+                }
             }
-            socket.close();
+            ConnectionHandler.closeConnection(this);
         }
         catch (SocketException e)
         {

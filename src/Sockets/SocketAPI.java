@@ -27,6 +27,91 @@ import java.sql.SQLException;
  */
 public class SocketAPI {
 
+    public static String getResponseFor(String encoded)
+    {
+        System.out.println(encoded);
+        String input = decrypt(encoded);
+        System.out.println(input);
+
+        /**
+         *  API behaviour is defined here
+         *
+         *  E.g Getting a list of patients could be something like:
+         *
+         *  else if input.matches("GetPatientList")
+         *  {
+         *      return PatientRepository.getAllPatients();
+         *  }
+         */
+        if (input.equals("Foo"))
+        {
+            return encryptAndFormat("Bar\n");
+        }
+        else if (input.equals("Bar"))
+        {
+            return encryptAndFormat("Foo\n");
+        }
+        else if (input.equals("Credit"))
+        {
+            return encryptAndFormat("Suisse\n");
+        }
+        else if (input.equals("Suisse"))
+        {
+            return encryptAndFormat("Credit\n");
+        }
+        else if (input.matches("(GetQuestionnaireByName:).*"))
+        {
+            return encryptAndFormat(QuestionnaireReader.getQuestionnaireByName(input.split(": ")[1]));
+        }
+        else if (input.matches("(FindPatient:).*"))
+        {
+            /****************************************
+             FIND PATIENT BY NHS NUMBER
+             *****************************************/
+
+            System.out.println("Finding patient...");
+
+            Patient patient;
+            try
+            {
+                patient = DataLayer.getPatientByNSHNUmber(input.split(": ")[1]);
+            }
+            catch (SQLException e)
+            {
+                return encryptAndFormat("{'error_code': 1337 }");
+            }
+            if (patient == null)
+            {
+                return encryptAndFormat("{ 'error_code': 666 }");
+            }
+            Gson json = JsonHelper.getInstance();
+            return encryptAndFormat(json.toJson(patient));
+        }
+        else if (input.matches("(GetAllQuestionnairesForPatient:).*"))
+        {
+            return encryptAndFormat("Method pending");
+        }
+        else if (input.matches("(GetQuestionnaireByID:).*"))
+        {
+            return encryptAndFormat("Method pending");
+//            Gson json = JsonHelper.getInstance();
+//            return json.toJson(QuestionnaireAccessor.getQuestionnaires());
+        }
+        else if (input.equals("Close"))
+        {
+            // Do not encrypt the kill signal!
+            return "Close";
+        }
+        else
+        {
+            return encryptAndFormat("WTF?");
+        }
+    }
+
+    /*********************************************
+                    ENCRYPTION
+     *********************************************/
+
     private static SecretKeySpec secret;
 
     private static IvParameterSpec iv;
@@ -96,7 +181,7 @@ public class SocketAPI {
         {
             byte[] encrypted = DatatypeConverter.parseBase64Binary(message);
             byte[] decrypted = decryptor.doFinal(encrypted);
-            return new String(decrypted, StandardCharsets.UTF_8);
+            return new String(decrypted, "UTF-8");
         }
         catch (Exception e)
         {
@@ -116,7 +201,7 @@ public class SocketAPI {
         }
         try
         {
-            byte[] encrypted = encryptor.doFinal(message.getBytes(StandardCharsets.UTF_8));
+            byte[] encrypted = encryptor.doFinal(message.getBytes("UTF-8"));
             return DatatypeConverter.printBase64Binary(encrypted);
         }
         catch(Exception e)
@@ -126,79 +211,11 @@ public class SocketAPI {
         return "";
     }
 
-    public static String getResponseFor(String encoded)
+    private static String encryptAndFormat(String message)
     {
-        String input = decrypt(encoded);
-
-        /**
-         *  API behaviour is defined here
-         *
-         *  E.g Getting a list of patients could be something like:
-         *
-         *  else if input.matches("GetPatientList")
-         *  {
-         *      return PatientRepository.getAllPatients();
-         *  }
-         */
-        if (input.equals("Foo"))
-        {
-            return encrypt("Bar\n"+ "END");
-        }
-        else if (input.equals("Bar"))
-        {
-            return encrypt("Foo\n"+ "END");
-        }
-        else if (input.equals("Credit"))
-        {
-            return encrypt("Suisse\n"+ "END");
-        }
-        else if (input.equals("Suisse"))
-        {
-            return encrypt("Credit\n"+ "END");
-        }
-        else if (input.matches("(GetQuestionnaireByName:).*"))
-        {
-            return encrypt(QuestionnaireReader.getQuestionnaireByName(input.split(": ")[1]) + "END");
-        }
-        else if (input.matches("(FindPatient:).*"))
-        {
-            /****************************************
-             FIND PATIENT BY NHS NUMBER
-             *****************************************/
-            Patient patient;
-            try
-            {
-                patient = DataLayer.getPatientByNSHNUmber(input.split(": ")[1]);
-            }
-            catch (SQLException e)
-            {
-                return encrypt("{'error_code': 1337 }END");
-            }
-            if (patient == null)
-            {
-                return encrypt("{ 'error_code': 666 }END");
-            }
-            Gson json = JsonHelper.getInstance();
-            return encrypt(json.toJson(patient) + "END");
-        }
-        else if (input.matches("(GetAllQuestionnairesForPatient:).*"))
-        {
-            return encrypt("Method pending");
-        }
-        else if (input.matches("(GetQuestionnaireByID:).*"))
-        {
-            return encrypt("Method pending");
-//            Gson json = JsonHelper.getInstance();
-//            return json.toJson(QuestionnaireAccessor.getQuestionnaires());
-        }
-        else if (input.equals("Close"))
-        {
-            // Do not encrypt the kill signal!
-            return "Close";
-        }
-        else
-        {
-            return encrypt("WTF?"+ "END");
-        }
+        System.out.println("Encrypting: " + message);
+        String response = encrypt(message) + "END";
+        System.out.println(response);
+        return response;
     }
 }
