@@ -422,7 +422,7 @@ public class QuestionnaireBuilderController implements Initializable {
                 AnchorPane.setLeftAnchor(pane, 0.0);
 
                 questionTypeController = fxmlLoader.getController();
-                questionTypeIdentifierLabel.setText(questionTypeController.getQuestionTypeIdentifier());
+                questionTypeIdentifierLabel.setText(questionTypeController.getQuestionTypeIdentifier() + "title:");
 
                 questionStackPane.getChildren().add(0, pane);
 
