@@ -233,8 +233,12 @@ public class DatabaseAccessor {
     public ArrayList<QuestionnairePointer> getQuestionnairePointersForPatient(Patient patient) throws SQLException
     {
         Statement statement = createStatement();
-        String query = "SELECT * FROM Questionnaire WHERE State = 'Deployed' AND Q_id IN(" +
-                "SELECT * FROM Patient_Questionnaire WHERE Completed = 0 AND P_NSH_number = '" + patient.getNhsNumber() + "');";
+        String query = "SELECT Questionnaire.Q_id, Questionnaire.Q_title, Questionnaire.Q_state " +
+                       "FROM Patient_Questionnaire " +
+                       "INNER JOIN Questionnaire " +
+                       "ON Patient_Questionnaire.Q_id = Questionnaire.Q_id " +
+                       "WHERE Q_state = 'Deployed' AND P_NHS_number ='" + patient.getNhsNumber() +"';";
+        System.out.println(query);
         ResultSet result = statement.executeQuery(query);
 
         ArrayList<QuestionnairePointer> pointerList = new ArrayList<>();
