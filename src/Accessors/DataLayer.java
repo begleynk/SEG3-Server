@@ -5,6 +5,8 @@ import ModelObjects.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Niklas Begley on 03/03/2014.
@@ -322,7 +324,7 @@ public class DataLayer
         }
     }
     
-    public static boolean linkPatientAndQuestionnaire(ArrayList<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
+    public static boolean linkPatientAndQuestionnaire(Patient patient, QuestionnairePointer questionnaire) throws SQLException
     {
         return databaseAccessor.linkPatientAndQuestionnairePointer(patient, questionnaire);
     }
