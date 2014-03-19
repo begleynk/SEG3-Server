@@ -6,7 +6,6 @@ import ModelObjects.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Niklas Begley on 03/03/2014.
@@ -105,6 +104,22 @@ public class DataLayer
         try
         {
             patients = databaseAccessor.getAllPatients();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error getting all patients.");
+            throw e;
+        }
+        return patients;
+    }
+
+    public static ArrayList<TablePatient> getAllTablePatients() throws SQLException
+    {
+        ArrayList<TablePatient> patients;
+        try
+        {
+            patients = databaseAccessor.getAllTablePatients();
         }
         catch (SQLException e)
         {
@@ -290,10 +305,20 @@ public class DataLayer
         return databaseAccessor.unlinkPatientAndQuestionnairePointer(patient, questionnaire);
     }
 
-    public static HashMap<String, Boolean> arePatientsAssignedToQuestionnaire(List<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
+    public static HashMap<String, Boolean> arePatientsAssignedToQuestionnaire(ArrayList<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
     {
         HashMap<String, Boolean> patientIsAssigned = new HashMap<>();
         for (Patient patient : patients) {
+            Boolean isAssigned = databaseAccessor.isPatientAssignedToQuestionnaire(patient, questionnaire);
+            patientIsAssigned.put(patient.getNhsNumber(), isAssigned);
+        }
+        return patientIsAssigned;
+    }
+
+    public static HashMap<String, Boolean> areTablePatientsAssignedToQuestionnaire(ArrayList<TablePatient> patients, QuestionnairePointer questionnaire) throws SQLException
+    {
+        HashMap<String, Boolean> patientIsAssigned = new HashMap<>();
+        for (TablePatient patient : patients) {
             Boolean isAssigned = databaseAccessor.isPatientAssignedToQuestionnaire(patient, questionnaire);
             patientIsAssigned.put(patient.getNhsNumber(), isAssigned);
         }

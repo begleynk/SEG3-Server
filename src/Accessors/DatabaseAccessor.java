@@ -160,6 +160,20 @@ public class DatabaseAccessor {
         return patients;
     }
 
+    public ArrayList<TablePatient> getAllTablePatients() throws SQLException
+    {
+        ArrayList<TablePatient> patients = new ArrayList<TablePatient>();
+        Statement statement = createStatement();
+        String query = "SELECT * FROM Patient";
+        ResultSet result = statement.executeQuery(query);
+        while(result.next())
+        {
+            TablePatient patient = new TablePatient(result.getString(1), result.getString(2), result.getString(3), result.getString(4),result.getString(5),result.getString(6));
+            patients.add(patient);
+        }
+        return patients;
+    }
+
     public Patient getPatientByNHSNumber(String nhsNumber) throws SQLException
     {
         Statement statement = createStatement();

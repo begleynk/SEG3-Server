@@ -4,6 +4,7 @@ import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
 import ModelObjects.Patient;
 import ModelObjects.QuestionnairePointer;
+import ModelObjects.TablePatient;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -34,10 +35,10 @@ public class QuestionnaireDistributeController implements Initializable {
 
     // Patient Controls
     @FXML private TextField searchPatientField;
-    @FXML private TableView<Patient> patientTableView;
-    @FXML private TableColumn<Patient, String> nhsNumberColumn;
-    @FXML private TableColumn<Patient, String> nameColumn;
-    @FXML private TableColumn<Patient, Boolean> checkBoxColumn;
+    @FXML private TableView<TablePatient> patientTableView;
+    @FXML private TableColumn<TablePatient, String> nhsNumberColumn;
+    @FXML private TableColumn<TablePatient, String> nameColumn;
+    @FXML private TableColumn<TablePatient, Boolean> checkBoxColumn;
 
     private QuestionnairePointer selectedQuestionnairePointer;
 
@@ -46,9 +47,9 @@ public class QuestionnaireDistributeController implements Initializable {
     private ObservableList<QuestionnairePointer> matchedQuestionnairePointers
             = FXCollections.observableArrayList();
 
-    private ObservableList<Patient> visiblePatients
+    private ObservableList<TablePatient> visiblePatients
             = FXCollections.observableArrayList();
-    private ObservableList<Patient> offScreenPatients
+    private ObservableList<TablePatient> offScreenPatients
             = FXCollections.observableArrayList();
 
     protected static HashMap<String, Boolean> isAssignedMap;
@@ -81,10 +82,10 @@ public class QuestionnaireDistributeController implements Initializable {
                         }
                         selectedQuestionnairePointer = new_pointer;
                         if (new_pointer != null) {
-                            ArrayList<Patient> patients = new ArrayList<>(visiblePatients);
+                            ArrayList<TablePatient> patients = new ArrayList<>(visiblePatients);
                             try {
-                                isAssignedMap = DataLayer.arePatientsAssignedToQuestionnaire(patients, selectedQuestionnairePointer);
-                                for (Patient patient : visiblePatients) {
+                                isAssignedMap = DataLayer.areTablePatientsAssignedToQuestionnaire(patients, selectedQuestionnairePointer);
+                                for (TablePatient patient : visiblePatients) {
                                     if (isAssignedMap.get(patient.getNhsNumber())) {
                                         patient.setProperty_is_assigned(true);
                                         patient.setOrignal_assignment(true);
@@ -93,7 +94,7 @@ public class QuestionnaireDistributeController implements Initializable {
                                         patient.setOrignal_assignment(false);
                                     }
                                 }
-                                for (Patient patient : offScreenPatients) {
+                                for (TablePatient patient : offScreenPatients) {
                                     if (isAssignedMap.get(patient.getNhsNumber())) {
                                         patient.setProperty_is_assigned(true);
                                         patient.setOrignal_assignment(true);
@@ -110,11 +111,11 @@ public class QuestionnaireDistributeController implements Initializable {
                                 patientTableView.getColumns().add(checkBoxColumn);
                             }
                         } else {
-                            for (Patient patient : visiblePatients) {
+                            for (TablePatient patient : visiblePatients) {
                                 patient.setProperty_is_assigned(false);
                                 patient.setOrignal_assignment(false);
                             }
-                            for (Patient patient : offScreenPatients) {
+                            for (TablePatient patient : offScreenPatients) {
                                 patient.setProperty_is_assigned(false);
                                 patient.setOrignal_assignment(false);
                             }
@@ -125,11 +126,11 @@ public class QuestionnaireDistributeController implements Initializable {
                 }
         );
 
-        this.nhsNumberColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("property_nhs_number"));
-        this.nameColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("property_full_name"));
-        this.checkBoxColumn.setCellValueFactory(new PropertyValueFactory<Patient, Boolean>("property_is_assigned"));
-        this.checkBoxColumn.setCellFactory(new Callback<TableColumn<Patient, Boolean>, TableCell<Patient, Boolean>>() {
-            public TableCell<Patient, Boolean> call(TableColumn<Patient, Boolean> p) {
+        this.nhsNumberColumn.setCellValueFactory(new PropertyValueFactory<TablePatient, String>("property_nhs_number"));
+        this.nameColumn.setCellValueFactory(new PropertyValueFactory<TablePatient, String>("property_full_name"));
+        this.checkBoxColumn.setCellValueFactory(new PropertyValueFactory<TablePatient, Boolean>("property_is_assigned"));
+        this.checkBoxColumn.setCellFactory(new Callback<TableColumn<TablePatient, Boolean>, TableCell<TablePatient, Boolean>>() {
+            public TableCell<TablePatient, Boolean> call(TableColumn<TablePatient, Boolean> p) {
                 return new TableCellCheckBox<>();
             }
         });
@@ -189,7 +190,7 @@ public class QuestionnaireDistributeController implements Initializable {
         try {
             this.visiblePatients.clear();
             this.offScreenPatients.clear();
-            this.visiblePatients.addAll(DataLayer.getAllPatients());
+            this.visiblePatients.addAll(DataLayer.getAllTablePatients());
             patientSearchInputChangedAction();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -209,12 +210,12 @@ public class QuestionnaireDistributeController implements Initializable {
         //System.out.println("OffScreen :" + offScreenPatients.size());
     }
 
-    public ObservableList<Patient> fuzzySearchPatientsUsingSearchTerm(String searchTerm) {
+    public ObservableList<TablePatient> fuzzySearchPatientsUsingSearchTerm(String searchTerm) {
         searchTerm = searchTerm.trim().toLowerCase();
         offScreenPatients.addAll(visiblePatients);
         visiblePatients.clear();
-        ArrayList<Patient> patients = new ArrayList<>();
-        for (Patient aPatient : offScreenPatients) {
+        ArrayList<TablePatient> patients = new ArrayList<>();
+        for (TablePatient aPatient : offScreenPatients) {
             if (aPatient.getNhsNumber().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getFirst_name().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getMiddle_name().toLowerCase().startsWith(searchTerm) ||
@@ -237,7 +238,7 @@ public class QuestionnaireDistributeController implements Initializable {
         if (selectedQuestionnairePointer != null) {
             searchPatientField.setText("");
             patientSearchInputChangedAction();
-            for (Patient patient : visiblePatients) {
+            for (TablePatient patient : visiblePatients) {
                 if (patient.getOrignal_assignment() && !patient.getProperty_is_assigned())
                 {
                     // Remove assignment
