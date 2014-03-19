@@ -28,18 +28,6 @@ public class MainSceneController implements Initializable {
     @FXML private ImageView mainLogo;
 
 
-    // load the image
-    //Image image = new Image("/GUI/Theme/MediQ_logo_with_text_1.png");
-
-/*
-
-    // load the image
-    Image image = new Image("flower.png");
-
-    // simple displays ImageView the image as is
-    ImageView iv1 = new ImageView();
-    iv1.setImage(image);
-*/
 
     private final Object[] menuOptions = {
             "Welcome",
@@ -74,6 +62,7 @@ public class MainSceneController implements Initializable {
         this.setView(0);
         this.setupMenu();
         this.viewChooser.getSelectionModel().select(0);
+        setLogo();
     }
 
     public void setView(int viewIndex) {
@@ -91,6 +80,15 @@ public class MainSceneController implements Initializable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setLogo(){
+        // load the image
+        Image image = new Image("/GUI/Theme/MediQ_logo_main.png");
+        //could also "file:/Gui/..."
+        mainLogo.setImage(image);
+        //mainLogo.relocate(200,200);
+
     }
 
     public void setupMenu() {
