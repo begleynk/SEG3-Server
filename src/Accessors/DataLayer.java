@@ -2,6 +2,7 @@ package Accessors;
 
 import Exceptions.NoQuestionnaireException;
 import ModelObjects.*;
+import ModelObjects.Questions.Question;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -238,7 +239,12 @@ public class DataLayer
         try
         {
             // 1 = Deployed
-            databaseAccessor.setQuestionnairePointerState(pointer, states[1]);
+            if(databaseAccessor.setQuestionnairePointerState(pointer, states[1]));
+            {
+                Questionnaire questionnaire = questionnaireAccessor.getQuestionnaireById(pointer.getId());
+                questionnaire.setState(states[1]);
+                questionnaireAccessor.saveQuestionnaire(questionnaire);
+            }
         }
         catch (SQLException e)
         {
@@ -260,7 +266,12 @@ public class DataLayer
         try
         {
             // 2 = Archived
-            databaseAccessor.setQuestionnairePointerState(pointer, states[2]);
+            if(databaseAccessor.setQuestionnairePointerState(pointer, states[2]));
+            {
+                Questionnaire questionnaire = questionnaireAccessor.getQuestionnaireById(pointer.getId());
+                questionnaire.setState(states[2]);
+                questionnaireAccessor.saveQuestionnaire(questionnaire);
+            }
         }
         catch (SQLException e)
         {

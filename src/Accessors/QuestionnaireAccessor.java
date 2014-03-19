@@ -4,6 +4,7 @@ import Exceptions.NoQuestionnaireException;
 import Helpers.JsonHelper;
 import Helpers.OSHelper;
 import ModelObjects.Questionnaire;
+import ModelObjects.QuestionnairePointer;
 import com.google.gson.Gson;
 
 import java.io.*;
