@@ -49,11 +49,11 @@ public class SocketAPI {
          */
         if (input.equals("Foo"))
         {
+            /****************************************
+             SANITY CHECK
+             *****************************************/
+
             return Encryptor.encryptAndFormat("Bar\n");
-        }
-        else if (input.matches("(GetQuestionnaireByName:).*"))
-        {
-            return Encryptor.encryptAndFormat(QuestionnaireReader.getQuestionnaireByName(input.split(": ")[1]));
         }
         else if (input.matches("(FindPatient:).*"))
         {
@@ -83,6 +83,10 @@ public class SocketAPI {
         }
         else if (input.matches("(GetAllQuestionnairesForPatient:).*"))
         {
+            /****************************************
+             GET QUESTIONNAIRE FOR PATIENT
+             *****************************************/
+
             try
             {
                 Patient patient = DataLayer.getPatientByNSHNUmber(input.split(": ")[1]);
@@ -105,6 +109,9 @@ public class SocketAPI {
         }
         else if (input.matches("(GetQuestionnaireByID:).*"))
         {
+            /****************************************
+             GET QUESTIONNAIRE BY ID
+             *****************************************/
             try
             {
                 Questionnaire questionnaire = DataLayer.getQuestionnaireByID(Integer.parseInt(input.split(": ")[1]));
@@ -131,7 +138,11 @@ public class SocketAPI {
         }
         else if (input.equals("Close"))
         {
-            // Do not encrypt the kill signal!
+            /****************************************
+             * CLOSE CONNECTION
+             * Do not encrypt the kill signal!
+             *****************************************/
+        
             return "Close";
         }
         else
