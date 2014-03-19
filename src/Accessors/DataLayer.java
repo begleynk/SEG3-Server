@@ -218,50 +218,6 @@ public class DataLayer
         return true;
     }
 
-    public static Questionnaire setQuestionnaireStateToDeployed(Questionnaire questionnaire) throws SQLException, NoQuestionnaireException
-    {
-        try
-        {
-            // 1 = Deployed
-            databaseAccessor.setQuestionnaireState(questionnaire, states[1]);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            throw e;
-        }
-        catch (NoQuestionnaireException e)
-        {
-            e.printStackTrace();
-            System.err.println("Tried to deploy unsaved questionnaire.");
-            throw e;
-        }
-        questionnaire.setState(states[1]);
-        return questionnaire;
-    }
-
-    public static Questionnaire setQuestionnaireStateToArchived(Questionnaire questionnaire) throws SQLException, NoQuestionnaireException
-    {
-        try
-        {
-            // 2 = Archived
-            databaseAccessor.setQuestionnaireState(questionnaire, states[2]);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            throw e;
-        }
-        catch (NoQuestionnaireException e)
-        {
-            e.printStackTrace();
-            System.err.println("Tried to archive unsaved questionnaire.");
-            throw e;
-        }
-        questionnaire.setState(states[2]);
-        return questionnaire;
-    }
-
     public static QuestionnairePointer setQuestionnairePointerStateToDepolyed(QuestionnairePointer pointer) throws  SQLException, NoQuestionnaireException
     {
         try

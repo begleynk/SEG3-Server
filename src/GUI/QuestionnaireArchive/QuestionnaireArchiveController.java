@@ -44,7 +44,7 @@ public class QuestionnaireArchiveController implements Initializable {
                     protected void updateItem(QuestionnairePointer pointer, boolean aBool) {
                         super.updateItem(pointer, aBool);
                         if (pointer != null) {
-                            setText(pointer.getTitle());
+                            setText(" " + pointer.getTitle());
                         }
                     }
                 };
@@ -59,10 +59,10 @@ public class QuestionnaireArchiveController implements Initializable {
         this.archivedListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.draftListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        fetchAll();
-    }
+        this.deployedListView.setItems(deployedQuestionnaires);
+        this.archivedListView.setItems(archivedQuestionnaires);
+        this.draftListView.setItems(draftQuestionnaires);
 
-    public void fetchAll() {
         fetchDeployedQuestionnaires();
         fetchArchivedQuestionnaires();
         fetchDraftQuestionnaires();
@@ -73,7 +73,6 @@ public class QuestionnaireArchiveController implements Initializable {
     public void fetchDeployedQuestionnaires() {
         try {
             this.deployedQuestionnaires.setAll(DataLayer.getQuestionnairePointersForState(1));
-            updateDeployedListView();
         } catch (SQLException | NoQuestionnaireException e) {
             e.printStackTrace();
         }
@@ -82,7 +81,6 @@ public class QuestionnaireArchiveController implements Initializable {
     public void fetchArchivedQuestionnaires() {
         try {
             this.archivedQuestionnaires.setAll(DataLayer.getQuestionnairePointersForState(2));
-            updateArchivedListView();
         } catch (SQLException | NoQuestionnaireException e) {
             e.printStackTrace();
         }
@@ -91,24 +89,9 @@ public class QuestionnaireArchiveController implements Initializable {
     public void fetchDraftQuestionnaires() {
         try {
             this.draftQuestionnaires.setAll(DataLayer.getQuestionnairePointersForState(0));
-            updateDraftListView();
         } catch (SQLException | NoQuestionnaireException e) {
             e.printStackTrace();
         }
-    }
-
-    // Updating UI when new Data has been fetched
-
-    public void updateDeployedListView() {
-        this.deployedListView.setItems(deployedQuestionnaires);
-    }
-
-    public void updateArchivedListView() {
-        this.archivedListView.setItems(archivedQuestionnaires);
-    }
-
-    public void updateDraftListView() {
-        this.draftListView.setItems(draftQuestionnaires);
     }
 
     // Switching Button Actions
@@ -122,7 +105,8 @@ public class QuestionnaireArchiveController implements Initializable {
                 e.printStackTrace();
             }
         }
-        fetchAll();
+        fetchArchivedQuestionnaires();
+        fetchDeployedQuestionnaires();
     }
 
     public void archiveQuestionnairesAction() {
@@ -134,6 +118,20 @@ public class QuestionnaireArchiveController implements Initializable {
                 e.printStackTrace();
             }
         }
-        fetchAll();
+        fetchArchivedQuestionnaires();
+        fetchDeployedQuestionnaires();
+    }
+
+    public void deployQuestionnairesAction() {
+        ObservableList<QuestionnairePointer> selectedItems = this.draftListView.getSelectionModel().getSelectedItems();
+        for (QuestionnairePointer pointer : selectedItems) {
+            try {
+                DataLayer.setQuestionnairePointerStateToDepolyed(pointer);
+            } catch (SQLException | NoQuestionnaireException e) {
+                e.printStackTrace();
+            }
+        }
+        fetchDeployedQuestionnaires();
+        fetchDraftQuestionnaires();
     }
 }
