@@ -1,7 +1,6 @@
 package Sockets;
 
 import Accessors.DataLayer;
-import Accessors.QuestionnaireReader;
 import Exceptions.NoQuestionnaireException;
 import Helpers.JsonHelper;
 import ModelObjects.Patient;
@@ -9,17 +8,6 @@ import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
 import com.google.gson.Gson;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-import java.nio.charset.StandardCharsets;
-import java.security.AlgorithmParameters;
-import java.security.SecureRandom;
-import java.security.spec.KeySpec;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
