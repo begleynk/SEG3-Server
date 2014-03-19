@@ -42,9 +42,9 @@ public class QuestionnaireDistributeController implements Initializable {
 
     private QuestionnairePointer selectedQuestionnairePointer;
 
-    private ObservableList<QuestionnairePointer> allQuestionnairePointers
+    private ObservableList<QuestionnairePointer> visibleQuestionnairePointers
             = FXCollections.observableArrayList();
-    private ObservableList<QuestionnairePointer> matchedQuestionnairePointers
+    private ObservableList<QuestionnairePointer> offScreenQuestionnairePointers
             = FXCollections.observableArrayList();
 
     private ObservableList<TablePatient> visiblePatients
@@ -85,6 +85,7 @@ public class QuestionnaireDistributeController implements Initializable {
                             ArrayList<TablePatient> patients = new ArrayList<>(visiblePatients);
                             try {
                                 isAssignedMap = DataLayer.areTablePatientsAssignedToQuestionnaire(patients, selectedQuestionnairePointer);
+                                // Setup properties in all TablePatient objects to model the current database state
                                 for (TablePatient patient : visiblePatients) {
                                     if (isAssignedMap.get(patient.getNhsNumber())) {
                                         patient.setProperty_is_assigned(true);
@@ -111,6 +112,7 @@ public class QuestionnaireDistributeController implements Initializable {
                                 patientTableView.getColumns().add(checkBoxColumn);
                             }
                         } else {
+                            // Reset all properties
                             for (TablePatient patient : visiblePatients) {
                                 patient.setProperty_is_assigned(false);
                                 patient.setOrignal_assignment(false);
@@ -139,7 +141,7 @@ public class QuestionnaireDistributeController implements Initializable {
         this.patientTableView.getColumns().remove(this.checkBoxColumn);
         this.patientTableView.setItems(visiblePatients);
 
-        this.questionnairePointerListView.setItems(matchedQuestionnairePointers);
+        this.questionnairePointerListView.setItems(visibleQuestionnairePointers);
 
         fetchDeployedQuestionnaires();
         fetchAllPatients();
@@ -150,8 +152,9 @@ public class QuestionnaireDistributeController implements Initializable {
     // Fetching Menu data [QuestionnairePointer(s)]
     public void fetchDeployedQuestionnaires() {
         try {
-            this.allQuestionnairePointers.clear();
-            this.allQuestionnairePointers.addAll(DataLayer.getQuestionnairePointersForState(1));
+            this.offScreenQuestionnairePointers.clear();
+            this.visibleQuestionnairePointers.clear();
+            this.visibleQuestionnairePointers.addAll(DataLayer.getQuestionnairePointersForState(1));
             questionnaireSearchInputChangedAction();
         } catch (SQLException | NoQuestionnaireException e) {
             e.printStackTrace();
@@ -161,35 +164,41 @@ public class QuestionnaireDistributeController implements Initializable {
     public void questionnaireSearchInputChangedAction() {
         String searchTerm = searchQuestionnaireField.getText();
         if (searchTerm == null || searchTerm.equals("") ) {
-            matchedQuestionnairePointers.setAll(allQuestionnairePointers);
+            visibleQuestionnairePointers.addAll(offScreenQuestionnairePointers);
+            offScreenQuestionnairePointers.clear();
         } else {
             fuzzySearchQuestionnairePointerUsingSearchTerm(searchTerm);
         }
     }
 
-    public ObservableList<QuestionnairePointer> fuzzySearchQuestionnairePointerUsingSearchTerm(String searchTerm) {
+    public void fuzzySearchQuestionnairePointerUsingSearchTerm(String searchTerm) {
         searchTerm = searchTerm.trim().toLowerCase();
+        offScreenQuestionnairePointers.addAll(visibleQuestionnairePointers);
+        visibleQuestionnairePointers.clear();
         ArrayList<QuestionnairePointer> pointers = new ArrayList<>();
-        for (QuestionnairePointer pointer : allQuestionnairePointers) {
+        for (QuestionnairePointer pointer : offScreenQuestionnairePointers) {
             if (pointer.getTitle().toLowerCase().startsWith(searchTerm) ||
                     pointer.getTitle().toLowerCase().contains(searchTerm)) {
                 pointers.add(pointer);
             }
         }
-        matchedQuestionnairePointers.setAll(pointers);
-        return matchedQuestionnairePointers;
+        for (QuestionnairePointer pointer : pointers) {
+            offScreenQuestionnairePointers.remove(pointer);
+        }
+        visibleQuestionnairePointers.setAll(pointers);
     }
 
     public void deselectQuestionnaire() {
         questionnairePointerListView.getSelectionModel().clearSelection();
+        searchQuestionnaireField.requestFocus();
     }
 
     // Patient View Methods
 
     public void fetchAllPatients() {
         try {
-            this.visiblePatients.clear();
             this.offScreenPatients.clear();
+            this.visiblePatients.clear();
             this.visiblePatients.addAll(DataLayer.getAllTablePatients());
             patientSearchInputChangedAction();
         } catch (SQLException e) {
@@ -205,12 +214,9 @@ public class QuestionnaireDistributeController implements Initializable {
         } else {
             fuzzySearchPatientsUsingSearchTerm(searchTerm);
         }
-
-        //System.out.println("Visible :" + visiblePatients.size());
-        //System.out.println("OffScreen :" + offScreenPatients.size());
     }
 
-    public ObservableList<TablePatient> fuzzySearchPatientsUsingSearchTerm(String searchTerm) {
+    public void fuzzySearchPatientsUsingSearchTerm(String searchTerm) {
         searchTerm = searchTerm.trim().toLowerCase();
         offScreenPatients.addAll(visiblePatients);
         visiblePatients.clear();
@@ -229,7 +235,6 @@ public class QuestionnaireDistributeController implements Initializable {
             offScreenPatients.remove(patient);
         }
         visiblePatients.setAll(patients);
-        return visiblePatients;
     }
 
     // Assign Action

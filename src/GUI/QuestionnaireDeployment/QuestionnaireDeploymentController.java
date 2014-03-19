@@ -1,4 +1,4 @@
-package GUI.QuestionnaireArchive;
+package GUI.QuestionnaireDeployment;
 
 import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
  * Created by James Bellamy on 10/03/2014.
  *
  */
-public class QuestionnaireArchiveController implements Initializable {
+public class QuestionnaireDeploymentController implements Initializable {
 
     @FXML private ListView<QuestionnairePointer> deployedListView;
     @FXML private ListView<QuestionnairePointer> archivedListView;

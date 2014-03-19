@@ -22,7 +22,6 @@ import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -32,6 +31,7 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -56,7 +56,7 @@ public class QuestionnaireBuilderController implements Initializable {
     // StackPane that holds the questionnaire editing view
     @FXML private StackPane questionnaireStackPane;
     // SplitPane which contains all of the controls used to create // edit a questionnaire
-    @FXML private SplitPane questionnaireEditingView;
+    @FXML private SplitPane questionnaireSplitPane;
 
     // Questionnaire specific controls
     @FXML private TextField questionnaireTitleField;
@@ -106,97 +106,34 @@ public class QuestionnaireBuilderController implements Initializable {
             "/GUI/QuestionnaireBuilder/QuestionTemplates/Rank/RankQuestion.fxml",
     };
 
-    private ObservableList<QuestionnairePointer> allQuestionnairePointers
+    private ObservableList<QuestionnairePointer> visibleQuestionnairePointers
             = FXCollections.observableArrayList();
-    private ObservableList<QuestionnairePointer> matchedQuestionnairePointers
+    private ObservableList<QuestionnairePointer> offScreenQuestionnairePointers
             = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        // Setup QuestionToolbar buttons
-        this.saveNewQuestionButton = new Button("Save New");
-        this.cancelNewQuestionButton = new Button("Cancel");
-        this.saveChangesQuestionButton = new Button("Save Changes");
-        this.deleteExistingQuestionButton = new Button("Delete");
-        this.clearQuestionFieldsButton = new Button("Clear");
+        setupButtonsAndActions();
 
-        // Saving a questoinnaire draft
-        this.saveDraftButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                saveQuestionnaire();
-                fetchDraftQuestionnaires();
-            }
-        });
+        setupQuestionnairePointerListView();
 
-        // Set Actions for QuestionToolbar buttons
-        this.saveNewQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
+        // Setup the questionTypeChooser Control
+        this.questionTypeChooser.setItems(FXCollections.observableArrayList(questionTypeOptions));
+        this.questionTypeChooser.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
-                saveConstructedQuestion();
-            }
-        });
-        this.cancelNewQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                questionTypeChooser.getSelectionModel().select(0);
-            }
-        });
-        this.saveChangesQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                // TODO: Provide Action
-            }
-        });
-        this.deleteExistingQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                // TODO: Provide Action
-            }
-        });
-        this.clearQuestionFieldsButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                questionTypeController.clearInputFields();
-            }
-        });
-
-        // Questionnaire Title Field
-        questionnaireTitleField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                deleteButton.setDisable(!(questionnaireTitleField.getText().length() > 0));
-                draftQuestionnaire.setTitle(questionnaireTitleField.getText());
-            }
-        });
-
-        // Setup Left Menu List
-        this.questionnairePointerListView.setCellFactory(new Callback<ListView<QuestionnairePointer>, ListCell<QuestionnairePointer>>() {
-            @Override
-            public ListCell<QuestionnairePointer> call(ListView<QuestionnairePointer> p) {
-                return new ListCell<QuestionnairePointer>() {
-                    @Override
-                    protected void updateItem(QuestionnairePointer pointer, boolean aBool) {
-                        super.updateItem(pointer, aBool);
-                        if (pointer != null) {
-                            setText(pointer.getTitle());
-                        }
-                    }
-                };
-            }
-        });
-        this.questionnairePointerListView.getSelectionModel().selectedItemProperty().addListener(
-                new ChangeListener<QuestionnairePointer>() {
-                    @Override
-                    public void changed(ObservableValue<? extends QuestionnairePointer> observableValue, QuestionnairePointer old_pointer, QuestionnairePointer new_pointer) {
-                        if (new_pointer != null) {
-                            setupViewForEditingExistingQuestionnaire();
-                        }
-                    }
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
+                clearTreeViewSelection();
+                if (newNumber.intValue() > 1) {
+                    setupViewForAddingQuestion();
+                    setQuestionTypeView(newNumber.intValue());
+                } else {
+                    setQuestionEditingViewVisible(false);
                 }
-        );
+            }
+        });
 
+        // Setup the Question Tree View
         this.questionTreeView.setCellFactory(new Callback<TreeView<Question>, TreeCell<Question>>() {
             @Override
             public TreeCell<Question> call(TreeView<Question> questionTreeView) {
@@ -243,26 +180,17 @@ public class QuestionnaireBuilderController implements Initializable {
             }
         });
 
-        // Setup the questionTypeChooser Control
-        this.questionTypeChooser.setItems(FXCollections.observableArrayList(questionTypeOptions));
-        this.questionTypeChooser.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
-                clearTreeViewSelection();
-                if (newNumber.intValue() > 1) {
-                    setupViewForAddingQuestion();
-                    setQuestionTypeView(newNumber.intValue());
-                } else {
-                    setQuestionEditingViewVisible(false);
-                }
-            }
-        });
         this.questionTypeChooser.getSelectionModel().select(0);
 
+        TreeItem<Question> rootItem = new TreeItem<>(null);
+        rootItem.setExpanded(true);
+        this.questionTreeView.setRoot(rootItem);
         this.questionTreeView.setShowRoot(false);
 
+        this.questionnairePointerListView.setItems(visibleQuestionnairePointers);
+
         // When the questionnaire view is first started nothing is being edited so do not show editing controls
-        setQuestionnaireEditingViewVisible(false);
+        endEditing();
         // Same goes for the question editing view
         setQuestionEditingViewVisible(false);
 
@@ -270,12 +198,91 @@ public class QuestionnaireBuilderController implements Initializable {
         fetchDraftQuestionnaires();
     }
 
+    // GUI Initialisation
+
+    public void setupButtonsAndActions() {
+        // Setup QuestionToolbar buttons
+        this.saveNewQuestionButton = new Button("Save New");
+        this.cancelNewQuestionButton = new Button("Cancel");
+        this.saveChangesQuestionButton = new Button("Save Changes");
+        this.deleteExistingQuestionButton = new Button("Delete");
+        this.clearQuestionFieldsButton = new Button("Clear");
+
+        // Set Actions for QuestionToolbar buttons
+
+        // Actions specific to new questions
+        this.saveNewQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                saveNewQuestion();
+            }
+        });
+        this.cancelNewQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                questionTypeChooser.getSelectionModel().select(0);
+                questionToolbar.getItems().clear();
+            }
+        });
+
+        // Actions specific to existing questions
+        this.saveChangesQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                // TODO: Provide Action
+            }
+        });
+        this.deleteExistingQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                // TODO: Provide Action
+            }
+        });
+
+        this.clearQuestionFieldsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                questionTypeController.clearInputFields();
+            }
+        });
+    }
+
+    public void setupQuestionnairePointerListView() {
+        this.questionnairePointerListView.setCellFactory(new Callback<ListView<QuestionnairePointer>, ListCell<QuestionnairePointer>>() {
+            @Override
+            public ListCell<QuestionnairePointer> call(ListView<QuestionnairePointer> p) {
+                return new ListCell<QuestionnairePointer>() {
+                    @Override
+                    protected void updateItem(QuestionnairePointer pointer, boolean aBool) {
+                        super.updateItem(pointer, aBool);
+                        if (pointer != null) {
+                            setText(pointer.getTitle());
+                        }
+                    }
+                };
+            }
+        });
+        this.questionnairePointerListView.getSelectionModel().selectedItemProperty().addListener(
+                new ChangeListener<QuestionnairePointer>() {
+                    @Override
+                    public void changed(ObservableValue<? extends QuestionnairePointer> observableValue, QuestionnairePointer old_pointer, QuestionnairePointer new_pointer) {
+                        if (new_pointer != null) {
+                            setupViewForEditingExistingQuestionnaire();
+                        } else {
+                            endEditing();
+                        }
+                    }
+                }
+        );
+    }
+
     // Left Menu Methods
 
-    // Fetching Menu data [QuestionnairePointer(s)]
     public void fetchDraftQuestionnaires() {
         try {
-            this.allQuestionnairePointers.setAll(DataLayer.getQuestionnairePointersForState(0));
+            this.offScreenQuestionnairePointers.clear();
+            this.visibleQuestionnairePointers.clear();
+            this.visibleQuestionnairePointers.addAll(DataLayer.getQuestionnairePointersForState(0));
             searchInputChangedAction();
         } catch (SQLException | NoQuestionnaireException e) {
             e.printStackTrace();
@@ -284,66 +291,127 @@ public class QuestionnaireBuilderController implements Initializable {
 
     public void searchInputChangedAction() {
         String searchTerm = questionnaireSearchField.getText();
-        questionnairePointerListView.getSelectionModel().clearSelection();
         if (searchTerm == null || searchTerm.equals("") ) {
-            questionnairePointerListView.setItems(allQuestionnairePointers);
+            visibleQuestionnairePointers.addAll(offScreenQuestionnairePointers);
+            offScreenQuestionnairePointers.clear();
         } else {
-            questionnairePointerListView.setItems(fuzzySearchQuestionnairePointerUsingSearchTerm(searchTerm));
+            fuzzySearchQuestionnairePointerUsingSearchTerm(searchTerm);
         }
     }
 
-    public ObservableList<QuestionnairePointer> fuzzySearchQuestionnairePointerUsingSearchTerm(String searchTerm) {
-        matchedQuestionnairePointers.clear();
+    public void fuzzySearchQuestionnairePointerUsingSearchTerm(String searchTerm) {
         searchTerm = searchTerm.trim().toLowerCase();
-        for (QuestionnairePointer pointer : allQuestionnairePointers) {
+        offScreenQuestionnairePointers.addAll(visibleQuestionnairePointers);
+        visibleQuestionnairePointers.clear();
+        ArrayList<QuestionnairePointer> pointers = new ArrayList<>();
+        for (QuestionnairePointer pointer : offScreenQuestionnairePointers) {
             if (pointer.getTitle().toLowerCase().startsWith(searchTerm) ||
                     pointer.getTitle().toLowerCase().contains(searchTerm)) {
-                matchedQuestionnairePointers.add(pointer);
+                pointers.add(pointer);
             }
         }
-        return matchedQuestionnairePointers;
+        for (QuestionnairePointer pointer : pointers) {
+            offScreenQuestionnairePointers.remove(pointer);
+        }
+        visibleQuestionnairePointers.setAll(pointers);
     }
 
     public void questionnaireListViewSelectNone() {
         this.questionnairePointerListView.getSelectionModel().clearSelection();
         this.questionnaireSearchField.requestFocus();
+        endEditing();
     }
 
+    // Questionnaire (Right View) Setup
+
     public void setupViewForBuildingNewQuestionnaire() {
-        questionTypeChooser.getSelectionModel().select(0);
+        // Setup Questionniare
         questionnairePointerListView.getSelectionModel().clearSelection();
-        setQuestionnaireEditingViewVisible(true);
         draftQuestionnaire = new Questionnaire("", 0);
-        questionnaireTitleField.setText("");
         isExistingQuestionnaire = false;
-        deleteButton.setDisable(true);
-        populateTree();
+        prepareForEditing();
     }
 
     public void setupViewForEditingExistingQuestionnaire() {
         try {
+            // Fetch Questionniare
             QuestionnairePointer pointer = questionnairePointerListView.getSelectionModel().getSelectedItem();
             draftQuestionnaire = DataLayer.getQuestionnaireWithPointer(pointer);
-            questionnaireTitleField.setText(draftQuestionnaire.getTitle());
-            // TODO: Setup Question Tree
-            System.out.println(draftQuestionnaire.toString());
-            questionTypeChooser.getSelectionModel().select(0);
-            setQuestionnaireEditingViewVisible(true);
             isExistingQuestionnaire = true;
-            deleteButton.setDisable(!(draftQuestionnaire.getTitle().length() > 0));
-            populateTree();
+            prepareForEditing();
         } catch (NoQuestionnaireException e) {
             e.printStackTrace();
         }
     }
 
-    // Questionnaire Construction View (Right View) Methods
+    // Questionnaire Data Methods
 
-    public void setQuestionnaireEditingViewVisible(boolean visible) {
+    public void saveQuestionnaire() {
+        try {
+            if (isExistingQuestionnaire) {
+                DataLayer.updateQuestionnare(draftQuestionnaire);
+            } else {
+                DataLayer.addQuestionnaire(draftQuestionnaire);
+                fetchDraftQuestionnaires();
+            }
+        } catch (SQLException | NoQuestionnaireException e) {
+            new AlertDialog((Stage)root.getScene().getWindow(), "There was an error saving the questionnaire. Try again.", AlertDialog.ICON_INFO).showAndWait();
+            e.printStackTrace();
+        }
+        endEditing();
+    }
+
+    public void deleteQuestionnaire() {
+        if (isExistingQuestionnaire) {
+            try {
+                DataLayer.removeQuestionnaire(draftQuestionnaire);
+                fetchDraftQuestionnaires();
+                endEditing();
+            } catch (SQLException | NoQuestionnaireException e) {
+                e.printStackTrace();
+            }
+        } else {
+            endEditing();
+        }
+    }
+
+    // Preparation for Questionnaire Context Transitions
+
+    public void prepareForEditing() {
+        setQuestionnaireEditingPaneVisible(true);
+        this.questionnaireTitleField.setText(draftQuestionnaire.getTitle());
+        this.saveDraftButton.setDisable(!isExistingQuestionnaire);
+        if (isExistingQuestionnaire) {
+            this.saveDraftButton.setText("Save Changes");
+            this.deleteButton.setText("Delete");
+        } else {
+            this.saveDraftButton.setText("Save Draft");
+            this.deleteButton.setText("Cancel");
+        }
+        populateTree();
+        this.questionTypeChooser.getSelectionModel().select(0);
+    }
+
+    public void endEditing() {
+        setQuestionnaireEditingPaneVisible(false);
+        this.questionnaireTitleField.setText("");
+        this.questionTreeView.getRoot().getChildren().clear();
+        this.questionTypeChooser.getSelectionModel().select(0);
+        this.draftQuestionnaire = null;
+        this.questionnairePointerListView.getSelectionModel().clearSelection();
+    }
+
+    public void setQuestionnaireEditingPaneVisible(boolean visible) {
         this.questionnaireStackPane.getChildren().clear();
         if (visible) {
-            this.questionnaireStackPane.getChildren().add(this.questionnaireEditingView);
+            this.questionnaireStackPane.getChildren().add(this.questionnaireSplitPane);
         }
+    }
+
+    public void titleFieldUpdated() {
+        boolean titleHasText = (questionnaireTitleField.getText().length() > 0);
+        saveDraftButton.setDisable(!titleHasText);
+        draftQuestionnaire.setTitle(questionnaireTitleField.getText());
     }
 
     // Question Editor Methods
@@ -371,9 +439,6 @@ public class QuestionnaireBuilderController implements Initializable {
     // Question Tree View Methods
 
     public void populateTree() {
-        TreeItem<Question> rootItem = new TreeItem<>(null);
-        rootItem.setExpanded(true);
-        questionTreeView.setRoot(rootItem);
         for (Question question : this.draftQuestionnaire.getQuestions()) {
             TreeItem<Question> leaf = new TreeItem<>(question);
             questionTreeView.getRoot().getChildren().add(leaf);
@@ -387,7 +452,7 @@ public class QuestionnaireBuilderController implements Initializable {
 
     // Question ToolBar Actions
 
-    public void saveConstructedQuestion() {
+    public void saveNewQuestion() {
         Question question = null;
         try {
             question = questionTypeController.getConstructedQuestion(IDHelper.generateRandomID(), requiredCheckBox.isSelected());
@@ -431,24 +496,6 @@ public class QuestionnaireBuilderController implements Initializable {
             }
         } else {
             questionStackPane.getChildren().clear();
-        }
-    }
-
-    public void saveQuestionnaire()
-    {
-        boolean success;
-        try
-        {
-            success = DataLayer.addQuestionnaire(draftQuestionnaire);
-        }
-        catch (SQLException e)
-        {
-            success = false;
-            e.printStackTrace();
-        }
-        if(!success)
-        {
-            new AlertDialog((Stage)root.getScene().getWindow(), "There was an error saving the questionnaire. Try again.", AlertDialog.ICON_INFO).showAndWait();
         }
     }
 

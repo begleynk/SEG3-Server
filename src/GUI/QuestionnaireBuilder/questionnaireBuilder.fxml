@@ -7,7 +7,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="547.0" prefWidth="725.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.QuestionnaireBuilder.QuestionnaireBuilderController">
   <children>
-    <SplitPane dividerPositions="0.28077455048409405" focusTraversable="true" prefHeight="454.0" prefWidth="692.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <SplitPane dividerPositions="0.28077455048409405" focusTraversable="true" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
         <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="200.0">
           <children>
@@ -28,9 +28,9 @@
             </ToolBar>
           </children>
         </AnchorPane>
-        <StackPane id="StackPane" fx:id="questionnaireStackPane">
+        <StackPane fx:id="questionnaireStackPane" prefHeight="150.0" prefWidth="200.0">
           <children>
-            <SplitPane fx:id="questionnaireEditingView" dividerPositions="0.4014732965009208" focusTraversable="true" orientation="VERTICAL" prefHeight="398.0" prefWidth="392.0">
+            <SplitPane fx:id="questionnaireSplitPane" dividerPositions="0.5009208103130756" focusTraversable="true" orientation="VERTICAL" prefHeight="398.0" prefWidth="392.0">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="222.00009999999747" prefWidth="482.0">
                   <children>
@@ -48,11 +48,11 @@
                         <ChoiceBox fx:id="questionTypeChooser" prefWidth="-1.0" />
                       </items>
                     </ToolBar>
-                    <Button id="deployButton" fx:id="deleteButton" mnemonicParsing="false" text="Delete" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="46.0" />
+                    <Button id="deployButton" fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteQuestionnaire" prefWidth="120.0" text="Delete" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
                     <Label text="Title:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="17.0" />
-                    <TextField fx:id="questionnaireTitleField" prefWidth="448.0" promptText="Questionnaire Title" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                    <TextField fx:id="questionnaireTitleField" onKeyReleased="#titleFieldUpdated" prefWidth="311.0000999999975" promptText="Questionnaire Title" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="151.0" AnchorPane.topAnchor="14.0" />
                     <Label layoutX="14.0" layoutY="48.0" text="Questions:" />
-                    <Button fx:id="saveDraftButton" mnemonicParsing="false" onAction="#saveQuestionnaire" prefWidth="-1.0" text="Save Draft" AnchorPane.rightAnchor="87.0" AnchorPane.topAnchor="46.0" />
+                    <Button fx:id="saveDraftButton" mnemonicParsing="false" onAction="#saveQuestionnaire" prefWidth="120.0" text="Save Changes" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="43.0" />
                   </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="268.0" prefWidth="515.0">

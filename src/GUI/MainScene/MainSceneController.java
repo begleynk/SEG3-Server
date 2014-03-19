@@ -27,15 +27,13 @@ public class MainSceneController implements Initializable {
     @FXML private ChoiceBox<Object> viewChooser;
     @FXML private ImageView mainLogo;
 
-
-
     private final Object[] menuOptions = {
             "Welcome",
             new Separator(),
             "Patients",
             new Separator(),
             "Questionnaire Builder",
-            "Questionnaire Archive",
+            "Questionnaire Deployment",
             "Distribute Questionnaires",
             new Separator(),
             "Connect Tablets",
@@ -48,7 +46,7 @@ public class MainSceneController implements Initializable {
             "/GUI/ManagePatients/patientControls.fxml",
             null, // Separator
             "/GUI/QuestionnaireBuilder/questionnaireBuilder.fxml",
-            "/GUI/QuestionnaireArchive/questionnaireArchive.fxml",
+            "/GUI/QuestionnaireDeployment/questionnaireDeployment.fxml",
             "/GUI/QuestionnaireDistribute/questionnaireDistribute.fxml",
             null, // Separator
             "/GUI/ConnectTablets/settingControls.fxml",
