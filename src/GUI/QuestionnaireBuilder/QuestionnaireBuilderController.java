@@ -115,84 +115,12 @@ public class QuestionnaireBuilderController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         setupButtonsAndActions();
-
         setupQuestionnairePointerListView();
-
-        // Setup the questionTypeChooser Control
-        this.questionTypeChooser.setItems(FXCollections.observableArrayList(questionTypeOptions));
-        this.questionTypeChooser.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
-                clearTreeViewSelection();
-                if (newNumber.intValue() > 1) {
-                    setupViewForAddingQuestion();
-                    setQuestionTypeView(newNumber.intValue());
-                } else {
-                    setQuestionEditingViewVisible(false);
-                }
-            }
-        });
-
-        // Setup the Question Tree View
-        this.questionTreeView.setCellFactory(new Callback<TreeView<Question>, TreeCell<Question>>() {
-            @Override
-            public TreeCell<Question> call(TreeView<Question> questionTreeView) {
-                return new TreeCell<Question>() {
-                    @Override
-                    protected void updateItem(Question question, boolean aBool) {
-                        super.updateItem(question, aBool);
-                        if (question != null) {
-                            setText("Title: " + question.getTitle() + "  Description: " + question.getDescription());
-                        }
-                    }
-                };
-            }
-        });
-        this.questionTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Question>>() {
-            @Override
-            public void changed(ObservableValue<? extends TreeItem<Question>> observableValue, TreeItem<Question> old_item, TreeItem<Question> new_item) {
-                if (new_item != null) {
-                    Question question = new_item.getValue();
-
-                    questionTypeChooser.getSelectionModel().select(0);
-                    setupViewForEditingQuestion();
-
-                    if (question.getClass() == TextQuestion.class) {
-                        System.out.println(new_item.getValue().getTitle() + " is a Free Text Question");
-                        setQuestionTypeView(0);
-                    }
-                    if (question.getClass() == SelectOneQuestion.class) {
-                        System.out.println(new_item.getValue().getTitle() + " is a Select One Question");
-                    }
-                    if (question.getClass() == SelectManyQuestion.class) {
-                        System.out.println(new_item.getValue().getTitle() + " is a Select Many Question");
-                    }
-                    if (question.getClass() == YesNoQuestion.class) {
-                        System.out.println(new_item.getValue().getTitle() + " is a Yes or No Question");
-                    }
-                    if (question.getClass() == RankQuestion.class) {
-                        System.out.println(new_item.getValue().getTitle() + " is a Rank Question");
-                    }
-                    if (question.getClass() == RangeQuestion.class) {
-                        System.out.println(new_item.getValue().getTitle() + " is a Range Question");
-                    }
-                }
-            }
-        });
-
-        this.questionTypeChooser.getSelectionModel().select(0);
-
-        TreeItem<Question> rootItem = new TreeItem<>(null);
-        rootItem.setExpanded(true);
-        this.questionTreeView.setRoot(rootItem);
-        this.questionTreeView.setShowRoot(false);
-
-        this.questionnairePointerListView.setItems(visibleQuestionnairePointers);
+        setupQuestionTreeView();
+        setupQuestionTypeChooser();
 
         // When the questionnaire view is first started nothing is being edited so do not show editing controls
         endEditing();
-        // Same goes for the question editing view
-        setQuestionEditingViewVisible(false);
 
         // Fetch the data for the left menu
         fetchDraftQuestionnaires();
@@ -274,6 +202,76 @@ public class QuestionnaireBuilderController implements Initializable {
                     }
                 }
         );
+
+        this.questionnairePointerListView.setItems(visibleQuestionnairePointers);
+    }
+
+    public void setupQuestionTreeView() {
+        TreeItem<Question> rootItem = new TreeItem<>(null);
+        rootItem.setExpanded(true);
+        this.questionTreeView.setRoot(rootItem);
+        this.questionTreeView.setShowRoot(false);
+        this.questionTreeView.setCellFactory(new Callback<TreeView<Question>, TreeCell<Question>>() {
+            @Override
+            public TreeCell<Question> call(TreeView<Question> questionTreeView) {
+                return new TreeCell<Question>() {
+                    @Override
+                    protected void updateItem(Question question, boolean aBool) {
+                        super.updateItem(question, aBool);
+                        if (question != null) {
+                            setText("Title: " + question.getTitle() + "  Description: " + question.getDescription());
+                        }
+                    }
+                };
+            }
+        });
+        this.questionTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Question>>() {
+            @Override
+            public void changed(ObservableValue<? extends TreeItem<Question>> observableValue, TreeItem<Question> old_item, TreeItem<Question> new_item) {
+                if (new_item != null) {
+                    Question question = new_item.getValue();
+
+                    questionTypeChooser.getSelectionModel().select(0);
+                    setupViewForEditingQuestion();
+
+                    if (question.getClass() == TextQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Free Text Question");
+                        setQuestionTypeView(0);
+                    }
+                    if (question.getClass() == SelectOneQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Select One Question");
+                    }
+                    if (question.getClass() == SelectManyQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Select Many Question");
+                    }
+                    if (question.getClass() == YesNoQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Yes or No Question");
+                    }
+                    if (question.getClass() == RankQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Rank Question");
+                    }
+                    if (question.getClass() == RangeQuestion.class) {
+                        System.out.println(new_item.getValue().getTitle() + " is a Range Question");
+                    }
+                }
+            }
+        });
+    }
+
+    public void setupQuestionTypeChooser() {
+        this.questionTypeChooser.setItems(FXCollections.observableArrayList(questionTypeOptions));
+        this.questionTypeChooser.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
+                clearTreeViewSelection();
+                if (newNumber.intValue() > 1) {
+                    setupViewForAddingQuestion();
+                    setQuestionTypeView(newNumber.intValue());
+                } else {
+                    setQuestionEditingViewVisible(false);
+                }
+            }
+        });
     }
 
     // Left Menu Methods
