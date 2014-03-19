@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Separator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
@@ -23,6 +25,21 @@ public class MainSceneController implements Initializable {
 
     @FXML private StackPane stackPane;
     @FXML private ChoiceBox<Object> viewChooser;
+    @FXML private ImageView mainLogo;
+
+
+    // load the image
+    //Image image = new Image("/GUI/Theme/MediQ_logo_with_text_1.png");
+
+/*
+
+    // load the image
+    Image image = new Image("flower.png");
+
+    // simple displays ImageView the image as is
+    ImageView iv1 = new ImageView();
+    iv1.setImage(image);
+*/
 
     private final Object[] menuOptions = {
             "Welcome",

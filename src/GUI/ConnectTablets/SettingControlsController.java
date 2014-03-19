@@ -16,10 +16,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import sun.rmi.runtime.Log;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
+import java.rmi.UnknownHostException;
 import java.sql.Connection;
 import java.util.ResourceBundle;
 
@@ -37,15 +40,21 @@ public class SettingControlsController implements Initializable
     @FXML private Label connectionData3;
     @FXML private Label connectionData4;
     @FXML private Label connectionData5;
+    @FXML private Label myIPaddress;
 
     @FXML private AnchorPane detailsPane;
     @FXML private Label noTabletSelectedLabel;
 
+    String myIP;
     private final ObservableList<SocketProcess> allConnections = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
+
+
+
+        //tablet connect
         allConnections.setAll(ConnectionHandler.getConnections());
 
         this.tabletList.setItems(allConnections);
@@ -78,6 +87,34 @@ public class SettingControlsController implements Initializable
                 showConnectionDetails(new_val);
             }
         });
+
+        //view IP:
+        viewMyIP();
+    }
+
+    public void viewMyIP()
+    {
+        //server IP
+        try
+        {
+          /*
+            InetAddress a = InetAddress.getLocalHost();
+            System.out.println(a);
+            myIP = a.getHostAddress();
+            System.out.println(myIP);
+            System.out.println(InetAddress.getLocalHost().getHostAddress().toString());
+          */
+            myIPaddress.setText("My IP Address: " + InetAddress.getLocalHost().getHostAddress().toString());
+
+        }
+        catch (java.net.UnknownHostException e)
+        {
+
+            e.printStackTrace();
+            System.out.println("Unknown Host: "+e);
+
+        }
+
     }
 
     public void disconnectAllTablets()

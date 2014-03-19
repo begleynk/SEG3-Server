@@ -1,12 +1,11 @@
 package Helpers;
-
 import ModelObjects.Questions.Question;
 import ModelObjects.Questions.Types.*;
 import com.github.julman99.gsonfire.GsonFireBuilder;
 import com.github.julman99.gsonfire.TypeSelector;
 import com.google.gson.*;
-import com.sun.xml.internal.rngom.parse.host.Base;
-import sun.jvm.hotspot.ci.ciReceiverTypeData;
+//import com.sun.xml.internal.rngom.parse.host.Base;
+//import sun.jvm.hotspot.ci.ciReceiverTypeData;
 
 /**
  * Created by Niklas Begley on 13/02/2014.

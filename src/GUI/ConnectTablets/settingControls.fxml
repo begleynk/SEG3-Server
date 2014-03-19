@@ -23,14 +23,14 @@
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
           <children>
-            <Label fx:id="noTabletSelectedLabel" text="No Tablet Selected" textFill="#808080" AnchorPane.bottomAnchor="191.0" AnchorPane.leftAnchor="141.0" AnchorPane.rightAnchor="140.0" AnchorPane.topAnchor="191.0">
+            <Label fx:id="noTabletSelectedLabel" text="No Tablet Selected" textFill="GREY" AnchorPane.bottomAnchor="191.0" AnchorPane.leftAnchor="141.0" AnchorPane.rightAnchor="140.0" AnchorPane.topAnchor="191.0">
               <font>
                 <Font size="13.0" />
               </font>
             </Label>
-            <AnchorPane fx:id="detailsPane" prefHeight="398.0" prefWidth="399.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="detailsPane" minHeight="367.0" prefHeight="367.0" prefWidth="399.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="31.0">
               <children>
-                <Button layoutX="14.0" layoutY="363.0" mnemonicParsing="false" onAction="#disconnectTablet" text="Disconnect" />
+                <Button layoutX="14.0" layoutY="332.0" mnemonicParsing="false" onAction="#disconnectTablet" text="Disconnect" />
                 <Label id="connectionData5" fx:id="connectionData1" prefWidth="296.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="63.0" />
                 <Label id="connectionData4" fx:id="connectionData2" prefWidth="296.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="120.0" />
                 <Label fx:id="connectionData3" prefWidth="282.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="181.0" />
@@ -41,6 +41,16 @@
                 <Label font="$x1" text="Connection Port" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="152.0" />
                 <Label font="$x1" text="Connected At" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="94.0" />
                 <Label font="$x1" text="IP Address" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="37.0" />
+                <Separator layoutY="0.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+              </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="31.000099999997474" prefWidth="399.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+              <children>
+                <Label fx:id="myIPaddress" layoutX="14.0" layoutY="9.0" prefWidth="183.0" text="My IP Address:">
+                  <font>
+                    <Font size="14.0" />
+                  </font>
+                </Label>
               </children>
             </AnchorPane>
           </children>

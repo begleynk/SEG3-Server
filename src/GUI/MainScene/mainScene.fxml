@@ -2,6 +2,7 @@
 
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -14,5 +15,6 @@
     </Label>
     <StackPane fx:id="stackPane" prefHeight="344.0" prefWidth="600.0" style="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0" />
     <ChoiceBox fx:id="viewChooser" prefWidth="217.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="22.0" />
+    <ImageView fx:id="mainLogo" fitHeight="33.0" fitWidth="44.0" layoutX="153.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" />
   </children>
 </AnchorPane>
