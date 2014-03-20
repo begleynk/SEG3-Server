@@ -432,6 +432,66 @@ public class DataLayer
      ADMIN METHODS
      *************************************************************/
 
-//    TODO: TO BE IMPLEMENTED
+    public static boolean addAdmin(Admin admin) throws SQLException
+    {
+        try
+        {
+            databaseAccessor.insertAdminRecord(admin);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error adding admin " + admin.getA_username());
+            throw e;
+        }
+        return true;
+    }
+
+    public static Admin updateAdmin(Admin admin) throws SQLException
+    {
+        try
+        {
+            databaseAccessor.updateAdminRecord(admin);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error updating admin " + admin.getA_username());
+            throw e;
+        }
+        return admin;
+    }
+
+    public static boolean removeAdmin(Admin admin) throws SQLException
+    {
+        try
+        {
+            databaseAccessor.removeAdmin(admin);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error removing admin " + admin.getA_username());
+            throw e;
+        }
+        return true;
+    }
+
+    public static ArrayList<Admin> getAllAdmins() throws SQLException
+    {
+        ArrayList<Admin> admins;
+        try
+        {
+            admins = databaseAccessor.getAllAdmins();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error getting all admins.");
+            throw e;
+        }
+        return admins;
+    }
+
 
 }

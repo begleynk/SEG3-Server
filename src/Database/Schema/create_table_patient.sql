@@ -6,4 +6,5 @@ CREATE TABLE IF NOT EXISTS 'Patient' (
     'P_date_of_birth' date NOT NULL,
     'P_postcode' varchar(8) NOT NULL,
     PRIMARY KEY ('P_NHS_number')
+
 );

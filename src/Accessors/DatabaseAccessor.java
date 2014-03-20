@@ -422,6 +422,53 @@ public class DatabaseAccessor {
     }
 
     /************************************************************
+     ADMIN METHODS
+     *************************************************************/
+
+    public ArrayList<Admin> getAllAdmins() throws SQLException
+    {
+        ArrayList<Admin> admins = new ArrayList<Admin>();
+        Statement statement = createStatement();
+        String query = "SELECT * FROM Admin";
+        ResultSet result = statement.executeQuery(query);
+        while(result.next())
+        {
+            Admin admin = new Admin(result.getString(1), result.getString(2));
+            admins.add(admin);
+        }
+        return admins;
+    }
+
+    public int updateAdminRecord(Admin admin) throws SQLException
+    {
+        Statement statement = createStatement();
+        String query = "UPDATE Admin SET " +
+                "A_username = '" + admin.getA_username() + "', " +
+                "A_password = '" + admin.getA_password() + "', ";
+        return statement.executeUpdate(query);
+    }
+
+    public Admin insertAdminRecord(Admin admin) throws SQLException
+    {
+        Statement statement = createStatement();
+        String query = "INSERT INTO Admin(A_username, A_password) VALUES('" +
+                admin.getA_username() + "','" +
+                admin.getA_password() + "','";
+        statement.execute(query);
+        return admin;
+    }
+
+    public boolean removeAdmin(Admin admin) throws SQLException
+    {
+        Statement statement = createStatement();
+        statement.execute("DELETE FROM Admin WHERE A_username = " + admin.getA_username()+ ";");
+        return true;
+    }
+
+
+
+
+    /************************************************************
      PRIVATE METHODS
      *************************************************************/
 
