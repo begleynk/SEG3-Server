@@ -1,6 +1,7 @@
 package Accessors;
 
 import Exceptions.NoQuestionnaireException;
+import Helpers.PasswordEncryptor;
 import ModelObjects.*;
 
 import java.sql.SQLException;
@@ -431,76 +432,46 @@ public class DataLayer
      ADMIN METHODS
      *************************************************************/
 
-    public static boolean addAdmin(Admin admin) throws SQLException
-    {
-        try
-        {
-            databaseAccessor.insertAdminRecord(admin);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            System.err.println("Error adding admin " + admin.getA_passcode());
-            throw e;
-        }
-        return true;
-    }
-
-    public static Admin updateAdmin(Admin admin) throws SQLException
-    {
-        try
-        {
-            databaseAccessor.updateAdminRecord(admin);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            System.err.println("Error updating admin " + admin.getA_passcode());
-            throw e;
-        }
-        return admin;
-    }
-
-    public static boolean removeAdmin(Admin admin) throws SQLException
-    {
-        try
-        {
-            databaseAccessor.removeAdmin(admin);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            System.err.println("Error removing admin " + admin.getA_passcode());
-            throw e;
-        }
-        return true;
-    }
-
-    public static ArrayList<Admin> getAllAdmins() throws SQLException
-    {
-        ArrayList<Admin> admins;
-        try
-        {
-            admins = databaseAccessor.getAllAdmins();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            System.err.println("Error getting all admins.");
-            throw e;
-        }
-        return admins;
-    }
-
-
-    public static boolean isAdminPasscodeSetToDefault() throws SQLException
-    {
-        return false;
-    }
-
     public static void setAdminPasscode(String passcode) throws SQLException
     {
+        String encrypted = PasswordEncryptor.generateSHA256(passcode);
+        databaseAccessor.clearAdminPasscode();
+        databaseAccessor.setAdminPasscode(encrypted);
+    }
 
+    public static boolean checkAdminPasscode(String passcode) throws SQLException
+    {
+        String hashed = PasswordEncryptor.generateSHA256(passcode);
+        String storedHash = databaseAccessor.getAdminPasscode();
+
+        if(hashed.equals(storedHash))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static boolean doesPasscodeExist() throws SQLException
+    {
+        try
+        {
+            if(databaseAccessor.getAdminPasscode() != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
 }

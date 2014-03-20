@@ -1,4 +1,5 @@
 package Database;
+import Accessors.DataLayer;
 import Helpers.OSHelper;
 
 import java.io.BufferedReader;
@@ -47,6 +48,12 @@ public class DatabaseInitializer
             statement.execute(getQueryFromFile("create_table_patient_log"));
             //System.out.println("Creating questionnaire_log table...");
             statement.execute(getQueryFromFile("create_table_questionnaire_log"));
+
+            if(!isAdminCreated())
+            {
+                DataLayer.setAdminPasscode("CHANGE_ME");
+            }
+
             System.out.println("All tables are created");
 
         }
@@ -95,5 +102,17 @@ public class DatabaseInitializer
             sb.append(queryString + "\n ");
         }
         return sb.toString();
+    }
+
+    private static boolean isAdminCreated()
+    {
+        try
+        {
+            return DataLayer.doesPasscodeExist();
+        }
+        catch(SQLException e)
+        {
+            return true;
+        }
     }
 }

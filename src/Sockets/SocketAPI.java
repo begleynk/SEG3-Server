@@ -124,6 +124,28 @@ public class SocketAPI {
                 return Encryptor.encryptAndFormat("{'error_code': 404 }");
             }
         }
+        else if (input.matches("(CheckPasscode:).*"))
+        {
+            /****************************************
+             CHECK PASSCODE
+             *****************************************/
+            try
+            {
+                String passcode = input.split(": ")[1];
+                if(DataLayer.checkAdminPasscode(passcode))
+                {
+                    return Encryptor.encryptAndFormat("{ 'result': true ");
+                }
+                else
+                {
+                    return Encryptor.encryptAndFormat("{ 'result': false ");
+                }
+            }
+            catch (SQLException e)
+            {
+                return Encryptor.encryptAndFormat("{'error_code': 1337 }");
+            }
+        }
         else if (input.equals("Close"))
         {
             /****************************************
