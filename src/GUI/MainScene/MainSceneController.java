@@ -38,7 +38,9 @@ public class MainSceneController implements Initializable {
             new Separator(),
             "Connect Tablets",
             new Separator(),
-            "Change Logs"
+            "Change Logs",
+            new Separator(),
+            "Export Answers"
     };
     private final String[] viewPaths = {
             "/GUI/Welcome/welcome.fxml",
@@ -52,7 +54,8 @@ public class MainSceneController implements Initializable {
             "/GUI/ConnectTablets/settingControls.fxml",
             null, // Separator
             "/GUI/ChangeLogs/changeLogs.fxml",
-             // null,
+            null,
+            "/GUI/ExportAnswer/exportAnswer.fxml"
     };
 
     @Override

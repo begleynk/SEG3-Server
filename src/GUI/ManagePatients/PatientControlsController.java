@@ -57,7 +57,7 @@ public class PatientControlsController implements Initializable {
     private final ObservableList<Patient> matchedPatients
             = FXCollections.observableArrayList();
 
-    // Right pane information labels
+    // Left pane information labels
     @FXML private Label nhsInformationLabel;
     @FXML private Label dobInformationLabel;
     @FXML private Label postcodeInformationLabel;

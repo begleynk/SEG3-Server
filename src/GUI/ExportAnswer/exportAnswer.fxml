@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="547.0" prefWidth="725.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.ExportAnswer.exportAnswerController">
+  <children>
+    <SplitPane dividerPositions="0.28077455048409405" focusTraversable="true" prefHeight="454.0" prefWidth="692.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="200.0">
+          <children>
+            <ListView id="questionListView" prefHeight="498.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0">
+              <contextMenu>
+                <ContextMenu>
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Select None" />
+                  </items>
+                </ContextMenu>
+              </contextMenu>
+            </ListView>
+            <TextField id="searchSingleQuestionnaire"  prefWidth="174.0" promptText="Questionnaire Search" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+          </children>
+        </AnchorPane>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="545.0000999999975" prefWidth="517.0000999999975">
+          <children>
+            <Label layoutX="32.0" layoutY="49.0" prefWidth="453.0" text="Questionnaire:">
+              <font>
+                <Font size="15.0" />
+              </font>
+            </Label>
+            <Button layoutX="148.0" layoutY="175.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="222.0" text="Export Answers" />
+            <Label layoutX="62.0" layoutY="82.0" text="people completed it.">
+              <font>
+                <Font size="13.0" fx:id="x1" />
+              </font>
+            </Label>
+            <Label font="$x1" layoutX="32.0" layoutY="82.0" text="20" />
+          </children>
+        </AnchorPane>
+      </items>
+    </SplitPane>
+  </children>
+</AnchorPane>
