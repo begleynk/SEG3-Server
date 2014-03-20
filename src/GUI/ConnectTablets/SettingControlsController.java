@@ -52,8 +52,6 @@ public class SettingControlsController implements Initializable
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
 
-
-
         //tablet connect
         allConnections.setAll(ConnectionHandler.getConnections());
 
@@ -153,6 +151,7 @@ public class SettingControlsController implements Initializable
         this.allConnections.setAll(ConnectionHandler.getConnections());
         this.tabletList.setItems(allConnections);
         setRightPaneVisible(false);
+        viewMyIP();
     }
 
     public void showConnectionDetails(SocketProcess connection)
