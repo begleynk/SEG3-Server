@@ -57,6 +57,13 @@ public class PatientControlsController implements Initializable {
     private final ObservableList<Patient> matchedPatients
             = FXCollections.observableArrayList();
 
+    // Right pane information labels
+    @FXML private Label nhsInformationLabel;
+    @FXML private Label fnameInformationLabel;
+    @FXML private Label mnameInformationLabel;
+    @FXML private Label lnameInformationLabel;
+    @FXML private Label dobInformationLabel;
+    @FXML private Label postcodeInformationLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
