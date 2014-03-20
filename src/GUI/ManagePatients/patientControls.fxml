@@ -3,11 +3,12 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.ManagePatients.PatientControlsController">
+<AnchorPane id="AnchorPane" fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="527.0" prefWidth="773.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.ManagePatients.PatientControlsController">
   <children>
-    <SplitPane dividerPositions="0.3394648829431438" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <SplitPane dividerPositions="0.26329442282749677" focusTraversable="true" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
         <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="200.0">
           <children>
@@ -30,38 +31,39 @@
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="424.0">
           <children>
-            <TextField id="firstName" fx:id="firstNameField" layoutX="109.0" layoutY="68.0" prefWidth="200.0" />
-            <Label layoutX="10.0" layoutY="71.0" text="First Name:" />
-            <Label layoutX="10.0" layoutY="134.0" text="Last Name:" />
-            <TextField id="lastName" fx:id="lastNameField" layoutX="109.0" layoutY="131.0" prefWidth="200.0" />
-            <Label layoutX="10.0" layoutY="165.0" text="Date of Birth:" />
-            <Label layoutX="10.0" layoutY="38.0" text="NHS Number:" />
-            <TextField id="nhsNumber" fx:id="nhsNumberField" layoutX="109.0" layoutY="35.0" prefWidth="200.0" />
-            <Label layoutX="10.0" layoutY="102.0" text="Middle Name:" />
-            <TextField id="lastName" fx:id="middleNameField" layoutX="109.0" layoutY="99.0" prefWidth="200.0" />
-            <Label layoutX="10.0" layoutY="196.0" text="Postcode:" />
-            <TextField id="dateOfBirth" fx:id="postcodeField" layoutX="109.0" layoutY="196.0" prefWidth="100.0" />
-            <TextField id="lastName" fx:id="dayDOBField" layoutX="109.0" layoutY="162.0" prefWidth="41.0" promptText="dd" />
-            <TextField id="lastName" fx:id="monthDOBField" layoutX="159.0" layoutY="162.0" prefWidth="41.0" promptText="mm" />
-            <TextField id="lastName" fx:id="yearDOBField" layoutX="209.0" layoutY="162.0" prefWidth="100.0" promptText="yyyy" />
+            <TextField id="firstName" fx:id="firstNameField" layoutX="14.0" layoutY="97.0" prefWidth="200.0" />
+            <Label layoutX="14.0" layoutY="73.0" text="First Name:" />
+            <Label layoutX="14.0" layoutY="179.0" text="Last Name:" />
+            <TextField id="lastName" fx:id="lastNameField" layoutX="14.0" layoutY="202.0" prefWidth="200.0" />
+            <Label layoutX="14.0" layoutY="232.0" text="Date of Birth:" />
+            <Label layoutX="14.0" layoutY="17.0" prefWidth="100.0" text="NHS Number:" />
+            <TextField id="nhsNumber" fx:id="nhsNumberField" layoutX="14.0" layoutY="41.0" prefWidth="200.0" />
+            <Label layoutX="14.0" layoutY="127.0" text="Middle Name:" />
+            <TextField id="lastName" fx:id="middleNameField" layoutX="14.0" layoutY="150.0" prefWidth="200.0" />
+            <Label layoutX="14.0" layoutY="285.0" text="Postcode:" />
+            <TextField id="dateOfBirth" fx:id="postcodeField" layoutX="14.0" layoutY="307.0" prefWidth="200.0" />
+            <TextField id="lastName" fx:id="dayDOBField" layoutX="14.0" layoutY="255.0" prefWidth="41.0" promptText="dd" />
+            <TextField id="lastName" fx:id="monthDOBField" layoutX="64.0" layoutY="255.0" prefWidth="41.0" promptText="mm" />
+            <TextField id="lastName" fx:id="yearDOBField" layoutX="114.0" layoutY="255.0" prefWidth="100.0" promptText="yyyy" />
             <ToolBar fx:id="rightPaneToolBar" prefHeight="31.0" prefWidth="392.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-            <Label layoutX="316.0" layoutY="38.0" prefWidth="30.0" text="*" />
-            <Label layoutX="316.0" layoutY="71.0" prefWidth="30.0" text="*" />
-            <Label layoutX="316.0" layoutY="134.0" prefWidth="30.0" text="*" />
-            <Label layoutX="316.0" layoutY="168.0" prefWidth="30.0" text="*" />
-            <Label layoutX="10.0" layoutY="231.0" prefWidth="200.0" text="* Required" />
-            <Label fx:id="postcodeInformationLabel" layoutX="218.0" layoutY="199.0" prefWidth="310.0" text="" />
-            <Label id="nhsLabel" fx:id="nhsInformationLabel" layoutX="328.0" layoutY="38.0" prefWidth="200.0" text="">
+            <Label layoutX="221.0" layoutY="44.0" prefWidth="16.0" text="*" />
+            <Label layoutX="221.0" layoutY="100.0" prefWidth="16.0" text="*" />
+            <Label layoutX="221.0" layoutY="205.0" prefWidth="16.0" text="*" />
+            <Label layoutX="221.0" layoutY="261.0" prefWidth="16.0" text="*" />
+            <Label layoutX="14.0" layoutY="343.0" prefWidth="200.0" text="* Required" />
+            <Label fx:id="postcodeInformationLabel" layoutX="233.0" layoutY="307.0" prefHeight="21.0" prefWidth="282.0" text="Enter UK postcode format">
+              <textFill>
+                <Color blue="0.750" green="0.750" red="0.750" fx:id="x1" />
+              </textFill>
+            </Label>
+            <Label id="nhsLabel" fx:id="nhsInformationLabel" layoutX="236.0" layoutY="41.0" prefHeight="21.0" prefWidth="282.0" text="Enter exactly 10 digits" textFill="$x1">
               <font>
                 <Font size="11.0" />
               </font>
             </Label>
-            <Label fx:id="fnameInformationLabel" layoutX="328.0" layoutY="71.0" prefWidth="200.0" text="" />
-            <Label fx:id="mnameInformationLabel" layoutX="328.0" layoutY="102.0" prefWidth="200.0" text="" />
-            <Label fx:id="lnameInformationLabel" layoutX="328.0" layoutY="134.0" prefWidth="200.0" text="" />
-            <Label fx:id="dobInformationLabel" layoutX="328.0" layoutY="165.0" prefWidth="200.0" text="" />
-            <Label layoutX="152.0" layoutY="165.0" text="-" />
-            <Label layoutX="202.0" layoutY="165.0" text="-" />
+            <Label fx:id="dobInformationLabel" layoutX="233.0" layoutY="255.0" prefHeight="21.0" prefWidth="282.0" text="Enter the date in for format dd - mm - yyyy" textFill="$x1" />
+            <Label layoutX="56.0" layoutY="258.0" text="-" />
+            <Label layoutX="106.0" layoutY="258.0" text="-" />
           </children>
         </AnchorPane>
       </items>

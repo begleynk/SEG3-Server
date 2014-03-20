@@ -59,9 +59,6 @@ public class PatientControlsController implements Initializable {
 
     // Right pane information labels
     @FXML private Label nhsInformationLabel;
-    @FXML private Label fnameInformationLabel;
-    @FXML private Label mnameInformationLabel;
-    @FXML private Label lnameInformationLabel;
     @FXML private Label dobInformationLabel;
     @FXML private Label postcodeInformationLabel;
 
@@ -140,6 +137,8 @@ public class PatientControlsController implements Initializable {
                 }
         });
 
+
+
         fetchAllPatients();
     }
 
@@ -215,15 +214,7 @@ public class PatientControlsController implements Initializable {
     }
 
     public void saveEditedPatient() {
-        boolean allFieldsFilled = true;
-        for (TextField aField : requiredFields) {
-            if (aField.getText().isEmpty()) {
-                allFieldsFilled = false;
-                Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "You cannot leave any required fields empty");
-                break;
-            }
-        }
-        if (allFieldsFilled) {
+        if (checkFieldValidation()) {
             String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
             Patient updatedPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
                     middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText());
@@ -252,18 +243,7 @@ public class PatientControlsController implements Initializable {
     // Creating New Patients
 
     public void saveNewPatient() {
-        boolean allFieldsFilled = true;
-        for (TextField aField : requiredFields) {
-            if (aField.getText().isEmpty()) {
-                allFieldsFilled = false;
-                Dialogs.showInformationDialog((Stage)root.getScene().getWindow(),
-                        "Not all of the required fields (highlighted *) are complete",
-                        "Please fill in all of the required fields",
-                        "");
-                break;
-            }
-        }
-        if (allFieldsFilled) {
+        if (checkFieldValidation()) {
             // Date Format : YYYY-MM-DD
             String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
             Patient newPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
@@ -277,6 +257,72 @@ public class PatientControlsController implements Initializable {
                 // TODO: This error needs to be handled in the GUI
             }
         }
+    }
+
+    // Validation Methods
+
+    public boolean checkRequiredFieldsAreCompleted() {
+        boolean allFieldsFilled = true;
+        for (TextField aField : requiredFields) {
+            if (aField.getText().isEmpty()) {
+                allFieldsFilled = false;
+                Dialogs.showInformationDialog((Stage)root.getScene().getWindow(),
+                        "Not all of the required fields (highlighted *) are complete",
+                        "Please fill in all of the required fields",
+                        "");
+                break;
+            }
+        }
+        return allFieldsFilled;
+    }
+
+    public boolean checkFieldValidation() {
+
+        if (!checkRequiredFieldsAreCompleted()) {
+            return false;
+        }
+
+        boolean allIsValid = true;
+        String errorMessage = "";
+
+        String nhsNumberString = nhsNumberField.getText();
+        if (nhsNumberString.length() != 10 || !nhsNumberString.matches("^\\d{10}$")) {
+            errorMessage += "NHSNumber needs to be exactly 10 digits \n";
+            allIsValid = false;
+        }
+
+        String day = dayDOBField.getText();
+        if (day.length() != 2 || !day.matches("^\\d{2}$")) {
+            errorMessage += "DoB day needs to be exactly 2 digits \n";
+            allIsValid = false;
+        }
+
+        String month = monthDOBField.getText();
+        if (month.length() != 2 || !month.matches("^\\d{2}$")) {
+            errorMessage += "DoB month needs to be exactly 2 digits \n";
+            allIsValid = false;
+        }
+
+        String year = yearDOBField.getText();
+        if (year.length() != 4 || !year.matches("^\\d{4}$")) {
+            errorMessage += "DoB year needs to be exactly 4 digits \n";
+            allIsValid = false;
+        }
+
+        String postcode = postcodeField.getText();
+        if (!postcode.matches("(GIR 0AA)|((([A-Z-[QVX]][0-9][0-9]?)|(([A-Z-[QVX]][A-Z-[IJZ]][0-9][0-9]?)|(([A-Z-[QVX]][0-9][A-HJKSTUW])|([A-Z-[QVX]][A-Z-[IJZ]][0-9][ABEHMNPRVWXY])))) [0-9][A-Z-[CIKMOV]]{2})")) {
+            errorMessage += "Postcode needs to be valid \n";
+            allIsValid = false;
+        }
+
+        if (!allIsValid) {
+            Dialogs.showInformationDialog((Stage)root.getScene().getWindow(),
+                    errorMessage,
+                    "Please check that the information you have entered is valid",
+                    "");
+        }
+
+        return allIsValid;
     }
 
     // Preparation for Context Transitions
