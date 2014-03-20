@@ -45,4 +45,11 @@ public class FreeTextController extends QuestionTypeController implements Initia
         return (titleField.getText().length() > 0 && descriptionField.getText().length() > 0);
     }
 
+    @Override
+    public void populateWithExistingQuestion(Question existingQuestion) {
+        TextQuestion textQuestion = (TextQuestion) existingQuestion;
+        titleField.setText(textQuestion.getTitle());
+        descriptionField.setText(textQuestion.getDescription());
+    }
+
 }

@@ -35,6 +35,27 @@ public abstract class Question {
         this.type = this.getClass().getSimpleName();
     }
 
+    public void updateContents(Question question) {
+        this.title = question.title;
+        this.description = question.description;
+        this.required = question.required;
+        if (hasDependentQuestions()) {
+            setDependentQuestionsRequired(this, question.required);
+        }
+    }
+
+    public void setDependentQuestionsRequired(Question question, boolean required) {
+        for (String key : question.dependentQuestions.keySet()) {
+            List<Question> questions = question.dependentQuestions.get(key);
+            for (Question subQuestion : questions) {
+                subQuestion.setRequired(required);
+                if (subQuestion.hasDependentQuestions()) {
+                    setDependentQuestionsRequired(question, required);
+                }
+            }
+        }
+    }
+
     /**
      * Provides access to the dependentQuestions Map
      *
@@ -88,6 +109,15 @@ public abstract class Question {
         dependentQuestions.put(condition, list);
     }
 
+    public void removeDependentQuestion(Question dependentQuestion) {
+        for (String key : getDependentQuestionsMap().keySet()) {
+            List<Question> questionList = getDependentQuestionsMap().get(key);
+            if (questionList.contains(dependentQuestion)) {
+                questionList.remove(dependentQuestion);
+            }
+        }
+    }
+
     /**
      * Adds a list of dependent questions and their condition
      * to a question.
@@ -112,6 +142,10 @@ public abstract class Question {
     public boolean isRequired()
     {
         return this.required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
     /**

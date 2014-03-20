@@ -1,7 +1,6 @@
 package GUI.ManagePatients;
 
 import Accessors.DataLayer;
-import Helpers.GUI.AlertDialog;
 import Helpers.GUI.FlexibleToolbarSpace;
 import ModelObjects.Patient;
 import javafx.beans.value.ChangeListener;
@@ -213,8 +212,7 @@ public class PatientControlsController implements Initializable {
         for (TextField aField : requiredFields) {
             if (aField.getText().isEmpty()) {
                 allFieldsFilled = false;
-                new AlertDialog((Stage)root.getScene().getWindow(), "You cannot leave any required fields empty",
-                        AlertDialog.ICON_INFO).showAndWait();
+                Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "You cannot leave any required fields empty");
                 break;
             }
         }
@@ -251,8 +249,10 @@ public class PatientControlsController implements Initializable {
         for (TextField aField : requiredFields) {
             if (aField.getText().isEmpty()) {
                 allFieldsFilled = false;
-                new AlertDialog((Stage)root.getScene().getWindow(), "Please fill in all of the required fields",
-                        AlertDialog.ICON_INFO).showAndWait();
+                Dialogs.showInformationDialog((Stage)root.getScene().getWindow(),
+                        "Not all of the required fields (highlighted *) are complete",
+                        "Please fill in all of the required fields",
+                        "");
                 break;
             }
         }

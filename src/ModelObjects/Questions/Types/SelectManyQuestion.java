@@ -30,6 +30,17 @@ public class SelectManyQuestion extends Question {
     }
 
     @Override
+    public void updateContents(Question question) {
+        super.updateContents(question);
+        SelectManyQuestion selectManyQuestion = (SelectManyQuestion) question;
+        this.answerOptions = selectManyQuestion.answerOptions;
+    }
+
+    public List<String> getAnswerOptions() {
+        return this.answerOptions;
+    }
+
+    @Override
     public String toString() {
         String string = super.toString();
         string += "  choices: ";

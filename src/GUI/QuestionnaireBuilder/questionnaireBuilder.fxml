@@ -43,7 +43,7 @@
                         </ContextMenu>
                       </contextMenu>
                     </TreeView>
-                    <ToolBar id="questionnaireToolbar" prefWidth="482.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="0.0">
+                    <ToolBar fx:id="questionnaireToolbar" prefWidth="482.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="0.0">
                       <items>
                         <ChoiceBox fx:id="questionTypeChooser" prefWidth="-1.0" />
                       </items>

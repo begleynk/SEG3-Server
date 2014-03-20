@@ -1,5 +1,7 @@
 package ModelObjects.Questions.Types;
 
+import ModelObjects.Questions.Question;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,11 @@ public class YesNoQuestion extends SelectOneQuestion {
     public YesNoQuestion(String id, String title, String description, boolean required)
     {
         super(id, title, description, required, answerOptions);
+    }
+
+    @Override
+    public void updateContents(Question question) {
+        super.updateContents(question);
     }
 
     @Override

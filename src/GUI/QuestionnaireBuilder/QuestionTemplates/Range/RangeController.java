@@ -53,4 +53,13 @@ public class RangeController extends QuestionTypeController implements Initializ
         return (titleField.getText().length() > 0 && descriptionField.getText().length() > 0
                 && lowerBoundField.getText().length() > 0 && upperBoundField.getText().length() > 0);
     }
+
+    @Override
+    public void populateWithExistingQuestion(Question existingQuestion) {
+        RangeQuestion rangeQuestion = (RangeQuestion) existingQuestion;
+        titleField.setText(rangeQuestion.getTitle());
+        descriptionField.setText(rangeQuestion.getDescription());
+        lowerBoundField.setText(rangeQuestion.getLowerBound() + "");
+        upperBoundField.setText(rangeQuestion.getUpperBound() + "");
+    }
 }

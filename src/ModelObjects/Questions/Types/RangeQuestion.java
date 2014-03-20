@@ -30,6 +30,14 @@ public class RangeQuestion extends Question {
         this.upperBound = upperBound;
     }
 
+    @Override
+    public void updateContents(Question question) {
+        super.updateContents(question);
+        RangeQuestion rangeQuestion = (RangeQuestion) question;
+        this.lowerBound = rangeQuestion.lowerBound;
+        this.upperBound = rangeQuestion.upperBound;
+    }
+
     public int getLowerBound () {
         return lowerBound;
     }

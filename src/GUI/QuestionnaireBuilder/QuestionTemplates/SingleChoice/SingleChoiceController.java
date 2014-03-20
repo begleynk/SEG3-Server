@@ -36,6 +36,7 @@ public class SingleChoiceController extends QuestionTypeController implements In
     public void addNewChoice() {
         if (newChoiceField.getText().length() > 0) {
             choicesListView.getItems().add(newChoiceField.getText());
+            newChoiceField.setText("");
         }
     }
 
@@ -73,5 +74,13 @@ public class SingleChoiceController extends QuestionTypeController implements In
     public boolean isQuestionDefined() {
         return (titleField.getText().length() > 0 && descriptionField.getText().length() > 0
                 && choicesListView.getItems().size() > 0);
+    }
+
+    @Override
+    public void populateWithExistingQuestion(Question existingQuestion) {
+        SelectOneQuestion selectOneQuestion = (SelectOneQuestion) existingQuestion;
+        titleField.setText(selectOneQuestion.getTitle());
+        descriptionField.setText(selectOneQuestion.getDescription());
+        choicesListView.getItems().addAll(selectOneQuestion.getAnswerOptions());
     }
 }

@@ -20,4 +20,6 @@ public abstract class QuestionTypeController {
     public abstract void clearInputFields();
 
     public abstract boolean isQuestionDefined();
+
+    public abstract void populateWithExistingQuestion(Question existingQuestion);
 }

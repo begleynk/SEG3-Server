@@ -45,4 +45,11 @@ public class YesNoChoiceController extends QuestionTypeController implements Ini
         return (titleField.getText().length() > 0 && descriptionField.getText().length() > 0);
     }
 
+    @Override
+    public void populateWithExistingQuestion(Question existingQuestion) {
+        YesNoQuestion yesNoQuestion = (YesNoQuestion) existingQuestion;
+        titleField.setText(yesNoQuestion.getTitle());
+        descriptionField.setText(yesNoQuestion.getDescription());
+    }
+
 }

@@ -30,6 +30,17 @@ public class SelectOneQuestion extends Question {
     }
 
     @Override
+    public void updateContents(Question question) {
+        super.updateContents(question);
+        SelectOneQuestion selectOneQuestion = (SelectOneQuestion) question;
+        this.answerOptions = selectOneQuestion.answerOptions;
+    }
+
+    public List<String> getAnswerOptions() {
+        return this.answerOptions;
+    }
+
+    @Override
     public String toString() {
         String string = super.toString();
         string += "  choices: ";

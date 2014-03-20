@@ -36,6 +36,7 @@ public class RankController extends QuestionTypeController implements Initializa
     public void addNewChoice() {
         if (newChoiceField.getText().length() > 0) {
             choicesListView.getItems().add(newChoiceField.getText());
+            newChoiceField.setText("");
         }
     }
 
@@ -73,5 +74,13 @@ public class RankController extends QuestionTypeController implements Initializa
     public boolean isQuestionDefined() {
         return (titleField.getText().length() > 0 && descriptionField.getText().length() > 0
                 && choicesListView.getItems().size() > 0);
+    }
+
+    @Override
+    public void populateWithExistingQuestion(Question existingQuestion) {
+        RankQuestion rankQuestion = (RankQuestion) existingQuestion;
+        titleField.setText(rankQuestion.getTitle());
+        descriptionField.setText(rankQuestion.getDescription());
+        choicesListView.getItems().addAll(rankQuestion.getAnswerOptions());
     }
 }

@@ -21,6 +21,11 @@ public class TextQuestion extends Question {
     }
 
     @Override
+    public void updateContents(Question question) {
+        super.updateContents(question);
+    }
+
+    @Override
     public String toString() {
         return super.toString();
     }

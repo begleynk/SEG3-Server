@@ -36,6 +36,7 @@ public class MultipleChoiceController extends QuestionTypeController implements 
     public void addNewChoice() {
         if (newChoiceField.getText().length() > 0) {
             choicesListView.getItems().add(newChoiceField.getText());
+            newChoiceField.setText("");
         }
     }
 
@@ -73,5 +74,13 @@ public class MultipleChoiceController extends QuestionTypeController implements 
     public boolean isQuestionDefined() {
         return (titleField.getText().length() > 0 && descriptionField.getText().length() > 0
                 && choicesListView.getItems().size() > 0);
+    }
+
+    @Override
+    public void populateWithExistingQuestion(Question existingQuestion) {
+        SelectManyQuestion selectManyQuestion = (SelectManyQuestion) existingQuestion;
+        titleField.setText(selectManyQuestion.getTitle());
+        descriptionField.setText(selectManyQuestion.getDescription());
+        choicesListView.getItems().addAll(selectManyQuestion.getAnswerOptions());
     }
 }
