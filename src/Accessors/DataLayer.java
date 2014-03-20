@@ -440,7 +440,7 @@ public class DataLayer
         catch (SQLException e)
         {
             e.printStackTrace();
-            System.err.println("Error adding admin " + admin.getA_username());
+            System.err.println("Error adding admin " + admin.getA_passcode());
             throw e;
         }
         return true;
@@ -455,7 +455,7 @@ public class DataLayer
         catch (SQLException e)
         {
             e.printStackTrace();
-            System.err.println("Error updating admin " + admin.getA_username());
+            System.err.println("Error updating admin " + admin.getA_passcode());
             throw e;
         }
         return admin;
@@ -470,7 +470,7 @@ public class DataLayer
         catch (SQLException e)
         {
             e.printStackTrace();
-            System.err.println("Error removing admin " + admin.getA_username());
+            System.err.println("Error removing admin " + admin.getA_passcode());
             throw e;
         }
         return true;

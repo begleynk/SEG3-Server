@@ -424,13 +424,13 @@ public class DatabaseAccessor {
 
     public ArrayList<Admin> getAllAdmins() throws SQLException
     {
-        ArrayList<Admin> admins = new ArrayList<Admin>();
+        ArrayList<Admin> admins = new ArrayList<>();
         Statement statement = createStatement();
         String query = "SELECT * FROM Admin";
         ResultSet result = statement.executeQuery(query);
         while(result.next())
         {
-            Admin admin = new Admin(result.getString(1), result.getString(2));
+            Admin admin = new Admin(result.getString(1));
             admins.add(admin);
         }
         return admins;
@@ -440,17 +440,15 @@ public class DatabaseAccessor {
     {
         Statement statement = createStatement();
         String query = "UPDATE Admin SET " +
-                "A_username = '" + admin.getA_username() + "', " +
-                "A_password = '" + admin.getA_password() + "', ";
+                "A_passcode = '" + admin.getA_passcode() + "', ";
         return statement.executeUpdate(query);
     }
 
     public Admin insertAdminRecord(Admin admin) throws SQLException
     {
         Statement statement = createStatement();
-        String query = "INSERT INTO Admin(A_username, A_password) VALUES('" +
-                admin.getA_username() + "','" +
-                admin.getA_password() + "','";
+        String query = "INSERT INTO Admin(A_passcode) VALUES('" +
+                admin.getA_passcode() + "','";
         statement.execute(query);
         return admin;
     }
@@ -458,7 +456,7 @@ public class DatabaseAccessor {
     public boolean removeAdmin(Admin admin) throws SQLException
     {
         Statement statement = createStatement();
-        statement.execute("DELETE FROM Admin WHERE A_username = " + admin.getA_username()+ ";");
+        statement.execute("DELETE FROM Admin WHERE A_passcode = " + admin.getA_passcode() + ";");
         return true;
     }
 
