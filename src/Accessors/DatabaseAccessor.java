@@ -47,7 +47,7 @@ public class DatabaseAccessor {
         String query = "SELECT * FROM Questionnaire;";
         PreparedStatement statement = connection.prepareStatement(query);
 
-        statement.execute(query);
+        statement.execute();
         ResultSet result = statement.getResultSet();
 
         ArrayList<QuestionnairePointer> pointerList = new ArrayList<>();
@@ -113,7 +113,7 @@ public class DatabaseAccessor {
         String query = "DELETE FROM Questionnaire WHERE Q_id= ? ;";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setInt(1, questionnaire.getId());
-        statement.execute(query);
+        statement.execute();
         return true;
     }
 
@@ -146,7 +146,7 @@ public class DatabaseAccessor {
         ArrayList<Patient> patients = new ArrayList<Patient>();
         String query = "SELECT * FROM Patient";
         PreparedStatement statement = connection.prepareStatement(query);
-        statement.execute(query);
+        statement.execute();
         ResultSet result = statement.getResultSet();
         while(result.next())
         {
@@ -161,7 +161,7 @@ public class DatabaseAccessor {
         ArrayList<TablePatient> patients = new ArrayList<TablePatient>();
         String query = "SELECT * FROM Patient";
         PreparedStatement statement = connection.prepareStatement(query);
-        statement.execute(query);
+        statement.execute();
         ResultSet result = statement.getResultSet();
         while(result.next())
         {
@@ -177,7 +177,7 @@ public class DatabaseAccessor {
         PreparedStatement statement = connection.prepareStatement(query);
 
         statement.setString(1, nhsNumber);
-        statement.execute(query);
+        statement.execute();
         ResultSet result = statement.getResultSet();
 
         if (result.next())
