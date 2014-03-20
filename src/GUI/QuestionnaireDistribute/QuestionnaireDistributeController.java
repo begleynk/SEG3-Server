@@ -40,7 +40,9 @@ public class QuestionnaireDistributeController implements Initializable {
     @FXML private TableColumn<TablePatient, String> nameColumn;
     @FXML private TableColumn<TablePatient, Boolean> checkBoxColumn;
 
+
     private QuestionnairePointer selectedQuestionnairePointer;
+    private ArrayList<QuestionnairePointer> selectedQuestionnairePointers;
 
     private ObservableList<QuestionnairePointer> visibleQuestionnairePointers
             = FXCollections.observableArrayList();
@@ -237,7 +239,7 @@ public class QuestionnaireDistributeController implements Initializable {
         visiblePatients.setAll(patients);
     }
 
-    // Assign Action
+    // Assign Action Methods
 
     public void assignAction() {
         if (selectedQuestionnairePointer != null) {
