@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 
 /**
  * Created by James Bellamy on 04/03/2014.
- *
+ * Collaboration with Faizan Joya 20/03/2014
  */
 public class PatientControlsController implements Initializable {
 
@@ -291,6 +291,27 @@ public class PatientControlsController implements Initializable {
             allIsValid = false;
         }
 
+        String firstNameString = firstNameField.getText();
+        if (firstNameString.length() < 2 || firstNameString.length() > 20){
+            errorMessage += "First name needs to be 2 to 20 characters long \n";
+            allIsValid = false;
+        }
+
+        String middleNameString = middleNameField.getText();
+        if (!middleNameString.matches("")){
+            if (middleNameString.length() < 2 || middleNameString.length() > 20){
+                errorMessage += "Middle name needs to be 2 to 20 characters long if any \n";
+                allIsValid = false;
+            }
+        }
+
+        String lastNameString = lastNameField.getText();
+        if (lastNameString.length() < 2 || lastNameString.length() > 20){
+            errorMessage += "Last name needs to be 2 to 20 characters long \n";
+            allIsValid = false;
+        }
+
+        // TODO: date of birth validation, nw Fez is on it!
         String day = dayDOBField.getText();
         if (day.length() != 2 || !day.matches("^\\d{2}$")) {
             errorMessage += "DoB day needs to be exactly 2 digits \n";
@@ -310,6 +331,7 @@ public class PatientControlsController implements Initializable {
         }
 
         String postcode = postcodeField.getText();
+        postcode = postcode.toUpperCase();
         if (!postcode.matches("(GIR 0AA)|((([A-Z-[QVX]][0-9][0-9]?)|(([A-Z-[QVX]][A-Z-[IJZ]][0-9][0-9]?)|(([A-Z-[QVX]][0-9][A-HJKSTUW])|([A-Z-[QVX]][A-Z-[IJZ]][0-9][ABEHMNPRVWXY])))) [0-9][A-Z-[CIKMOV]]{2})")) {
             errorMessage += "Postcode needs to be valid \n";
             allIsValid = false;
@@ -350,3 +372,5 @@ public class PatientControlsController implements Initializable {
         this.patientSearchField.requestFocus();
     }
 }
+
+
