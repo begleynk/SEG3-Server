@@ -124,11 +124,11 @@ public class DatabaseAccessor {
 
         String query = "UPDATE Questionnaire SET Q_state = ? WHERE Q_id = ?";
         PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, pointer.getState());
-        statement.setString(2, state);
-        statement.execute(query);
-        ResultSet result = statement.getResultSet();
-        if(result.rowUpdated())
+        statement.setString(1, state);
+        statement.setInt(2, pointer.getId());
+        int result = statement.executeUpdate();
+
+        if(result > 0)
         {
             return true;
         }
