@@ -283,30 +283,23 @@ public class QuestionnaireBuilderController implements Initializable {
                     setupViewForEditingQuestion();
                     Question question = new_item.getValue();
                     if (question.getClass() == TextQuestion.class) {
-                        //System.out.println(new_item.getValue().getTitle() + " is a Free Text Question");
                         setQuestionTypeView(2);
                     }
                     if (question.getClass() == SelectManyQuestion.class) {
-                        //System.out.println(new_item.getValue().getTitle() + " is a Select Many Question");
                         setQuestionTypeView(3);
                     }
                     if (question.getClass() == SelectOneQuestion.class) {
-                        //System.out.println(new_item.getValue().getTitle() + " is a Select One Question");
                         setQuestionTypeView(4);
                     }
                     if (question.getClass() == YesNoQuestion.class) {
-                        //System.out.println(new_item.getValue().getTitle() + " is a Yes or No Question");
                         setQuestionTypeView(5);
                     }
                     if (question.getClass() == RangeQuestion.class) {
-                        //System.out.println(new_item.getValue().getTitle() + " is a Range Question");
                         setQuestionTypeView(6);
                     }
                     if (question.getClass() == RankQuestion.class) {
-                        //System.out.println(new_item.getValue().getTitle() + " is a Rank Question");
                         setQuestionTypeView(7);
                     }
-
                     questionTypeController.populateWithExistingQuestion(question);
                     requiredCheckBox.setSelected(question.isRequired());
                 } else {
@@ -519,9 +512,7 @@ public class QuestionnaireBuilderController implements Initializable {
         }
         if (question != null) {
             draftQuestionnaire.addQuestion(question);
-            //System.out.println(draftQuestionnaire.toString());
             populateTree();
-
             // Called for convenience (not actually cancelling as already saved)
             cancelQuestionEdit();
             requiredCheckBox.setSelected(false);

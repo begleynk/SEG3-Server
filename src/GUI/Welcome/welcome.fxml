@@ -7,11 +7,11 @@
 
 <AnchorPane id="AnchorPane" fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.Welcome.welcomeController">
   <children>
-    <Label layoutX="269.0" layoutY="111.0" text="MediQ">
+    <Label layoutX="58.0" layoutY="170.0" prefWidth="484.0" text="Medi-fucking-Q Bitch">
       <font>
-        <Font size="20.0" />
+        <Font name="Helvetica Neue" size="50.0" />
       </font>
     </Label>
-    <Label layoutX="289.0" layoutY="146.0" text="sup?" />
+    <Button layoutX="234.0" layoutY="365.0" mnemonicParsing="false" text="Change Passcode" />
   </children>
 </AnchorPane>

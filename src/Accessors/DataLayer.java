@@ -2,7 +2,6 @@ package Accessors;
 
 import Exceptions.NoQuestionnaireException;
 import ModelObjects.*;
-import ModelObjects.Questions.Question;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -433,5 +432,15 @@ public class DataLayer
      *************************************************************/
 
 //    TODO: TO BE IMPLEMENTED
+
+    public static boolean isAdminPasscodeSetToDefault() throws SQLException
+    {
+        return false;
+    }
+
+    public static void setAdminPasscode(String passcode) throws SQLException
+    {
+
+    }
 
 }
