@@ -189,9 +189,8 @@ public class QuestionnaireBuilderController implements Initializable {
         this.deleteExistingQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                // TODO: Provide Action and popup to confirm that dependent questions will be removed too!
                 TreeItem<Question> questionTreeItem = questionTreeView.getSelectionModel().getSelectedItem();
-                Dialogs.DialogResponse response = Dialogs.DialogResponse.NO;
+                Dialogs.DialogResponse response;
                 if (questionTreeItem.getValue().hasDependentQuestions()) {
                     response = Dialogs.showConfirmDialog((Stage)root.getScene().getWindow(),
                         "Do you want to continue?",
