@@ -4,6 +4,7 @@ import Exceptions.NoQuestionnaireException;
 import Helpers.OSHelper;
 import ModelObjects.*;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -422,42 +423,48 @@ public class DatabaseAccessor {
      ADMIN METHODS
      *************************************************************/
 
-    public ArrayList<Admin> getAllAdmins() throws SQLException
+    public boolean setAdminPasscode(String passcode) throws SQLException
     {
-        ArrayList<Admin> admins = new ArrayList<>();
-        Statement statement = createStatement();
-        String query = "SELECT * FROM Admin";
-        ResultSet result = statement.executeQuery(query);
-        while(result.next())
+        String query = "INSERT INTO Admin(A_passcode) VALUES(?);";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, passcode);
+
+        statement.execute();
+        ResultSet keys = statement.getGeneratedKeys();
+
+        if(keys.next())
         {
-            Admin admin = new Admin(result.getString(1));
-            admins.add(admin);
+            return true;
         }
-        return admins;
+        else
+        {
+            return false;
+        }
     }
 
-    public int updateAdminRecord(Admin admin) throws SQLException
+    public boolean clearAdminPasscode() throws SQLException
     {
-        Statement statement = createStatement();
-        String query = "UPDATE Admin SET " +
-                "A_passcode = '" + admin.getA_passcode() + "', ";
-        return statement.executeUpdate(query);
-    }
-
-    public Admin insertAdminRecord(Admin admin) throws SQLException
-    {
-        Statement statement = createStatement();
-        String query = "INSERT INTO Admin(A_passcode) VALUES('" +
-                admin.getA_passcode() + "','";
-        statement.execute(query);
-        return admin;
-    }
-
-    public boolean removeAdmin(Admin admin) throws SQLException
-    {
-        Statement statement = createStatement();
-        statement.execute("DELETE FROM Admin WHERE A_passcode = " + admin.getA_passcode() + ";");
+        String query = "DELETE FROM Admin;";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.execute();
         return true;
+    }
+
+
+    public String getAdminPasscode() throws SQLException
+    {
+        String query = "SELECT * FROM Admin";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.execute();
+        ResultSet result = statement.getResultSet();
+        if(result.next())
+        {
+            return result.getString(1);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /************************************************************
