@@ -134,11 +134,11 @@ public class SocketAPI {
                 String passcode = input.split(": ")[1];
                 if(DataLayer.checkAdminPasscode(passcode))
                 {
-                    return Encryptor.encryptAndFormat("{ 'result': true ");
+                    return Encryptor.encryptAndFormat("{ 'result': true }");
                 }
                 else
                 {
-                    return Encryptor.encryptAndFormat("{ 'result': false ");
+                    return Encryptor.encryptAndFormat("{ 'result': false }");
                 }
             }
             catch (SQLException e)
