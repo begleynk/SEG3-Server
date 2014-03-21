@@ -15,7 +15,7 @@ public abstract class Question {
     protected String title;
     protected String description;
     protected boolean required;
-    protected String type;
+    protected int type;
     protected HashMap<String, List<Question>> dependentQuestions = new HashMap<>();
 
     /**
@@ -32,7 +32,7 @@ public abstract class Question {
         this.title = title;
         this.description = description;
         this.required = required;
-        this.type = this.getClass().getSimpleName();
+        this.type = getClassID(this.getClass().getSimpleName());
     }
 
     public void updateContents(Question question) {
@@ -172,5 +172,26 @@ public abstract class Question {
                 "  Title: " + this.title +
                 "  Description: " + this.description +
                 "  isRequired: " + ((this.required) ? "YES" : "NO");
+    }
+
+    private int getClassID(String className)
+    {
+        // Types: 0 = scale, 1 = choosemany, 2 = yes/no, 3 = text, 4 = chooseone, 5 = rank
+
+        if (className.equals("RangeQuestion")) {
+            return 0;
+        } else if (className.equals("SelectManyQuestion")) {
+            return 1;
+        } else if (className.equals("YesNoQuestion")) {
+            return 2;
+        } else if (className.equals("TextQuestion")) {
+            return 3;
+        } else if (className.equals("SelectOneQuestion")) {
+            return 4;
+        } else if (className.equals("RankQuestion")) {
+            return 5;
+        } else {
+            return -1;
+        }
     }
 }
