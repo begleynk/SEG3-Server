@@ -21,9 +21,7 @@ public class SocketAPI {
 
     public static String getResponseFor(String encoded)
     {
-        System.out.println(encoded);
         String input = Encryptor.decrypt(encoded);
-        System.out.println(input);
 
         /**
          *  API behaviour is defined here

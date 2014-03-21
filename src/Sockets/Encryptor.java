@@ -66,9 +66,7 @@ public class Encryptor
 
     public static String encryptAndFormat(String message)
     {
-        System.out.println("Encrypting: " + message);
         String response = encrypt(message) + "END";
-        System.out.println(response);
         return response;
     }
 
