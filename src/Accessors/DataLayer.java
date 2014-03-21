@@ -305,7 +305,7 @@ public class DataLayer
             throw e;
         }
     }
-    
+
     public static boolean linkPatientAndQuestionnaire(Patient patient, QuestionnairePointer questionnaire) throws SQLException
     {
         return databaseAccessor.linkPatientAndQuestionnairePointer(patient, questionnaire);
