@@ -217,7 +217,7 @@ public class PatientControlsController implements Initializable {
         if (checkFieldValidation()) {
             String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
             Patient updatedPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
-                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText());
+                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText().toUpperCase());
             try {
                 DataLayer.updatePatient(updatedPatient);
                 fetchAllPatients();
@@ -247,7 +247,7 @@ public class PatientControlsController implements Initializable {
             // Date Format : YYYY-MM-DD
             String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
             Patient newPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
-                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText());
+                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText().toUpperCase());
             try {
                 DataLayer.addPatient(newPatient);
                 fetchAllPatients();
@@ -297,14 +297,6 @@ public class PatientControlsController implements Initializable {
             allIsValid = false;
         }
 
-        String middleNameString = middleNameField.getText();
-        if (!middleNameString.matches("")){
-            if (middleNameString.length() < 2 || middleNameString.length() > 20){
-                errorMessage += "Middle name needs to be 2 to 20 characters long if any \n";
-                allIsValid = false;
-            }
-        }
-
         String lastNameString = lastNameField.getText();
         if (lastNameString.length() < 2 || lastNameString.length() > 20){
             errorMessage += "Last name needs to be 2 to 20 characters long \n";
@@ -332,7 +324,7 @@ public class PatientControlsController implements Initializable {
 
         String postcode = postcodeField.getText();
         postcode = postcode.toUpperCase();
-        if (!postcode.matches("(GIR 0AA)|((([A-Z-[QVX]][0-9][0-9]?)|(([A-Z-[QVX]][A-Z-[IJZ]][0-9][0-9]?)|(([A-Z-[QVX]][0-9][A-HJKSTUW])|([A-Z-[QVX]][A-Z-[IJZ]][0-9][ABEHMNPRVWXY])))) [0-9][A-Z-[CIKMOV]]{2})")) {
+        if (postcode != "" && !postcode.matches("(GIR 0AA)|((([A-Z-[QVX]][0-9][0-9]?)|(([A-Z-[QVX]][A-Z-[IJZ]][0-9][0-9]?)|(([A-Z-[QVX]][0-9][A-HJKSTUW])|([A-Z-[QVX]][A-Z-[IJZ]][0-9][ABEHMNPRVWXY])))) [0-9][A-Z-[CIKMOV]]{2})")) {
             errorMessage += "Postcode needs to be valid \n";
             allIsValid = false;
         }
