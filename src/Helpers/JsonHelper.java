@@ -40,20 +40,20 @@ public class JsonHelper {
         GsonFireBuilder builder = new GsonFireBuilder().registerTypeSelector(Question.class, new TypeSelector<Question>() {
             @Override
             public Class<? extends Question> getClassForElement(JsonElement readElement) {
-                String kind = readElement.getAsJsonObject().get("type").getAsString();
+                int kind = readElement.getAsJsonObject().get("type").getAsInt();
 
-                if (kind.equals("RangeQuestion")) {
+                if (kind == 0) {
                     return RangeQuestion.class;
-                } else if (kind.equals("RankQuestion")) {
-                    return RankQuestion.class;
-                } else if (kind.equals("SelectManyQuestion")) {
+                } else if (kind == 1) {
                     return SelectManyQuestion.class;
-                } else if (kind.equals("SelectOneQuestion")) {
-                    return SelectOneQuestion.class;
-                } else if (kind.equals("TextQuestion")) {
-                    return TextQuestion.class;
-                } else if (kind.equals("YesNoQuestion")) {
+                } else if (kind == 2) {
                     return YesNoQuestion.class;
+                } else if (kind == 3) {
+                    return TextQuestion.class;
+                } else if (kind == 4) {
+                    return SelectOneQuestion.class;
+                } else if (kind == 5) {
+                    return RankQuestion.class;
                 } else {
                     return null;
                 }
