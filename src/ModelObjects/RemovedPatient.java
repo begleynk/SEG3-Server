@@ -1,0 +1,103 @@
+package ModelObjects;
+
+/**
+ * Created by ahmetersahin on 21/03/2014.
+ */
+public class RemovedPatient
+{
+    private String nhsNumber;
+    private String first_name;
+    private String middle_name;
+    private String surname;
+    private String dateOfBirth;
+    private String postcode;
+
+    public RemovedPatient(String nhsNumber, String first_name, String middle_name, String surname, String dateOfBirth, String postcode)
+    {
+        this.nhsNumber = nhsNumber;
+        this.first_name = first_name;
+        this.middle_name = middle_name;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.postcode = postcode;
+    }
+
+
+    public String getNhsNumber()
+    {
+        return nhsNumber;
+    }
+
+    public void setNhsNumber(String nhsNumber)
+    {
+        this.nhsNumber = nhsNumber;
+    }
+
+    public String getFirst_name()
+    {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name)
+    {
+        this.first_name = first_name;
+    }
+
+    public String getMiddle_name()
+    {
+        return middle_name;
+    }
+
+    public void setMiddle_name(String middle_name)
+    {
+        this.middle_name = middle_name;
+    }
+
+    public String getSurname()
+    {
+        return surname;
+    }
+
+    public void setSurname(String surname)
+    {
+        this.surname = surname;
+    }
+
+    public String getDateOfBirth()
+    {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth)
+    {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getPostcode()
+    {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode)
+    {
+        this.postcode = postcode;
+    }
+
+    public String getFull_name() {
+        if (getMiddle_name().length() > 0) {
+            return getFirst_name() + " " + getMiddle_name() + " " + getSurname();
+        } else {
+            return getFirst_name() + " " + getSurname();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "NHSNumber: " + getNhsNumber() +
+                "  FirstName: " + getFirst_name() +
+                "  MiddleName: " + getMiddle_name() +
+                "  LastName: " + getSurname() +
+                "  DateOfBirth: " + getDateOfBirth() +
+                "  Postcode: " + getPostcode();
+    }
+}

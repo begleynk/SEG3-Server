@@ -48,6 +48,8 @@ public class DatabaseInitializer
             statement.execute(getQueryFromFile("create_table_patient_log"));
             //System.out.println("Creating questionnaire_log table...");
             statement.execute(getQueryFromFile("create_table_questionnaire_log"));
+            statement.execute(getQueryFromFile("create_table_removed_patient"));
+            statement.execute(getQueryFromFile("create_table_removed_patient_questionnaire"));
 
             if(!isAdminCreated())
             {
