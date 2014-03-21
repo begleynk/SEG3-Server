@@ -26,9 +26,19 @@ public class Main extends Application {
         intializeAppDirectories();
 
         // FOR TESTING:
-//        Questionnaire questionnaire = DataLayer.getQuestionnaireByID(3);
+//        Questionnaire questionnaire = DataLayer.getQuestionnaireByID(21);
 //        questionnaire.loadDummy();
 //        DataLayer.updateQuestionnare(questionnaire);
+
+        // TO Quickly delete questionnaires!!
+//        ArrayList<QuestionnairePointer> pointers = DataLayer.getQuestionnairePointers();
+//        ArrayList<Questionnaire> questionnaires = new ArrayList<>();
+//        for (QuestionnairePointer pointer : pointers) {
+//            questionnaires.add(DataLayer.getQuestionnaireByID(pointer.getId()));
+//        }
+//        for (Questionnaire questionnaire : questionnaires) {
+//            DataLayer.removeQuestionnaire(questionnaire);
+//        }
 
         // FOR TESTING:
 //        DataLayer.addQuestionnaire(new Questionnaire("Test 1", 1));

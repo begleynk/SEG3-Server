@@ -63,7 +63,12 @@ public class QuestionnaireBuilderController implements Initializable {
     @FXML private Button deleteButton;
     @FXML private Button saveDraftButton;
     @FXML private TreeView<Question> questionTreeView;
+
+    // Questionnaire Toolbar
     @FXML private ToolBar questionnaireToolbar;
+    @FXML private ChoiceBox<Question> dependableQuestionsChooser;
+    @FXML private ChoiceBox<String> dependableConditionsChooser;
+    @FXML private Button makeDependButton = new Button("Set");
 
     // Control for creating a question
     @FXML private ChoiceBox<Object> questionTypeChooser;
@@ -115,11 +120,15 @@ public class QuestionnaireBuilderController implements Initializable {
     private ObservableList<QuestionnairePointer> offScreenQuestionnairePointers
             = FXCollections.observableArrayList();
 
+    private ObservableList<Question> dependableQuestions
+            = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         setupButtonsAndActions();
         setupQuestionnairePointerListView();
+        setupQuestionnaireToolbar();
         setupQuestionTreeView();
         setupQuestionTypeChooser();
 
@@ -265,6 +274,13 @@ public class QuestionnaireBuilderController implements Initializable {
         this.questionnairePointerListView.setItems(visibleQuestionnairePointers);
     }
 
+    public void setupQuestionnaireToolbar() {
+        this.questionnaireToolbar.getItems().add(new FlexibleToolbarSpace());
+        this.dependableQuestionsChooser = new ChoiceBox<>();
+        this.dependableConditionsChooser = new ChoiceBox<>();
+        this.dependableQuestionsChooser.setItems(dependableQuestions);
+    }
+
     public void setupQuestionTreeView() {
         TreeItem<Question> rootItem = new TreeItem<>(null);
         rootItem.setExpanded(true);
@@ -310,6 +326,7 @@ public class QuestionnaireBuilderController implements Initializable {
                     }
                     questionTypeController.populateWithExistingQuestion(question);
                     requiredCheckBox.setSelected(question.isRequired());
+                    dependentQuestionSettingControlsEnabled(true);
                 } else {
                     setQuestionEditingViewVisible(false);
                 }
@@ -433,6 +450,18 @@ public class QuestionnaireBuilderController implements Initializable {
         }
     }
 
+    // Questionnaire Toolbar Methods
+
+    public void dependentQuestionSettingControlsEnabled(boolean enabled) {
+        this.dependableQuestionsChooser.setDisable(!enabled);
+        this.dependableConditionsChooser.setDisable(!enabled);
+        this.makeDependButton.setDisable(!enabled);
+        if (!enabled) {
+            dependableQuestionsChooser.getSelectionModel().clearSelection();
+            dependableConditionsChooser.getSelectionModel().clearSelection();
+        }
+    }
+
     // Questionnaire Data Methods
 
     public void saveQuestionnaire() {
@@ -473,12 +502,16 @@ public class QuestionnaireBuilderController implements Initializable {
     // Question Tree View Methods
 
     public void populateTree() {
+        dependableQuestions.clear();
         questionTreeView.getSelectionModel().clearSelection();
         questionTreeView.getRoot().getChildren().clear();
         for (Question question : this.draftQuestionnaire.getQuestions()) {
             TreeItem<Question> leaf = new TreeItem<>(question);
             questionTreeView.getRoot().getChildren().add(leaf);
             leaf.setExpanded(true);
+            if (question.getClass() == YesNoQuestion.class || question.getClass() == SelectOneQuestion.class) {
+                dependableQuestions.add(question);
+            }
             generateTreeItemChildren(leaf, question);
         }
         System.out.println(draftQuestionnaire.toString());
@@ -491,6 +524,9 @@ public class QuestionnaireBuilderController implements Initializable {
                 TreeItem<Question> subQuestionTreeItem = new TreeItem<>(subQuestion);
                 subQuestionTreeItem.setExpanded(true);
                 parent.getChildren().add(subQuestionTreeItem);
+                if (subQuestion.getClass() == YesNoQuestion.class || subQuestion.getClass() == SelectOneQuestion.class) {
+                    dependableQuestions.add(subQuestion);
+                }
                 if (subQuestion.hasDependentQuestions()) {
                     generateTreeItemChildren(subQuestionTreeItem, subQuestion);
                 }

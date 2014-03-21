@@ -19,6 +19,7 @@ import javafx.util.Callback;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -52,9 +53,9 @@ public class PatientControlsController implements Initializable {
             saveChangesButton, deselectPatientButton, deletePatientButton;
 
     // Left Pane Data
-    private final ObservableList<Patient> allPatients
+    private final ObservableList<Patient> visiblePatients
             = FXCollections.observableArrayList();
-    private final ObservableList<Patient> matchedPatients
+    private final ObservableList<Patient> offScreenPatients
             = FXCollections.observableArrayList();
 
     // Left pane information labels
@@ -136,7 +137,7 @@ public class PatientControlsController implements Initializable {
                     existingPatientSelected(new_val);
                 }
         });
-
+        patientListView.setItems(visiblePatients);
 
 
         fetchAllPatients();
@@ -161,36 +162,43 @@ public class PatientControlsController implements Initializable {
 
     public void fetchAllPatients() {
         try {
-            this.allPatients.setAll(DataLayer.getAllPatients());
+            this.offScreenPatients.clear();
+            this.visiblePatients.clear();
+            this.visiblePatients.setAll(DataLayer.getAllPatients());
             searchInputChangedAction();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public ObservableList<Patient> fuzzySearchPatientsUsingSearchTerm(String searchTerm) {
-        matchedPatients.clear();
+    public void fuzzySearchPatientsUsingSearchTerm(String searchTerm) {
         searchTerm = searchTerm.trim().toLowerCase();
-        for (Patient aPatient : allPatients) {
+        offScreenPatients.addAll(visiblePatients);
+        visiblePatients.clear();
+        ArrayList<Patient> patients = new ArrayList<>();
+        for (Patient aPatient : offScreenPatients) {
             if (aPatient.getNhsNumber().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getFirst_name().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getMiddle_name().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getSurname().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getDateOfBirth().toLowerCase().startsWith(searchTerm) ||
                     aPatient.getPostcode().toLowerCase().startsWith(searchTerm)) {
-                matchedPatients.add(aPatient);
+                patients.add(aPatient);
             }
         }
-        return matchedPatients;
+        for (Patient patient : patients) {
+            offScreenPatients.remove(patient);
+        }
+        visiblePatients.addAll(patients);
     }
 
     public void searchInputChangedAction() {
         String searchTerm = patientSearchField.getText();
-        patientListView.getSelectionModel().clearSelection();
         if (searchTerm == null || searchTerm.equals("") ) {
-            patientListView.setItems(allPatients);
+            visiblePatients.addAll(offScreenPatients);
+            offScreenPatients.clear();
         } else {
-            patientListView.setItems(fuzzySearchPatientsUsingSearchTerm(searchTerm));
+            fuzzySearchPatientsUsingSearchTerm(searchTerm);
         }
     }
 
@@ -224,7 +232,6 @@ public class PatientControlsController implements Initializable {
                 clearWorkspace();
             } catch (SQLException e) {
                 e.printStackTrace();
-                // TODO: This error needs to be handled in the GUI
             }
         }
     }
@@ -323,8 +330,8 @@ public class PatientControlsController implements Initializable {
         }
 
         String postcode = postcodeField.getText();
-        postcode = postcode.toUpperCase();
-        if (postcode != "" && !postcode.matches("(GIR 0AA)|((([A-Z-[QVX]][0-9][0-9]?)|(([A-Z-[QVX]][A-Z-[IJZ]][0-9][0-9]?)|(([A-Z-[QVX]][0-9][A-HJKSTUW])|([A-Z-[QVX]][A-Z-[IJZ]][0-9][ABEHMNPRVWXY])))) [0-9][A-Z-[CIKMOV]]{2})")) {
+        postcode = postcode.toUpperCase().trim();
+        if (!postcode.equals("") && !postcode.matches("(GIR 0AA)|((([A-Z-[QVX]][0-9][0-9]?)|(([A-Z-[QVX]][A-Z-[IJZ]][0-9][0-9]?)|(([A-Z-[QVX]][0-9][A-HJKSTUW])|([A-Z-[QVX]][A-Z-[IJZ]][0-9][ABEHMNPRVWXY])))) [0-9][A-Z-[CIKMOV]]{2})")) {
             errorMessage += "Postcode needs to be valid \n";
             allIsValid = false;
         }

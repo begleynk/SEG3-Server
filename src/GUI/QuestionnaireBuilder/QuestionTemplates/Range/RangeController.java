@@ -50,8 +50,11 @@ public class RangeController extends QuestionTypeController implements Initializ
 
     @Override
     public boolean isQuestionDefined() {
+        int lowerBound = Integer.parseInt(lowerBoundField.getText());
+        int upperBound = Integer.parseInt(upperBoundField.getText());
         return (titleField.getText().length() > 0 && descriptionField.getText().length() > 0
-                && lowerBoundField.getText().length() > 0 && upperBoundField.getText().length() > 0);
+                && lowerBoundField.getText().length() > 0 && upperBoundField.getText().length() > 0
+                && upperBound > lowerBound);
     }
 
     @Override

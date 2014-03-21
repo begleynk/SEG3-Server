@@ -12,16 +12,16 @@
       <items>
         <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="200.0">
           <children>
-            <ListView id="questionListView" prefHeight="498.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0">
+            <ListView id="questionListView" fx:id="questionnairePointerListView" prefHeight="498.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0">
               <contextMenu>
                 <ContextMenu>
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Select None" />
+                    <MenuItem mnemonicParsing="false" onAction="#questionnaireListViewSelectNone" text="Select None" />
                   </items>
                 </ContextMenu>
               </contextMenu>
             </ListView>
-            <TextField id="searchSingleQuestionnaire"  prefWidth="174.0" promptText="Questionnaire Search" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+            <TextField id="searchSingleQuestionnaire" fx:id="questionnaireSearchField" onKeyReleased="#searchInputChangedAction" prefWidth="174.0" promptText="Questionnaire Search" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="545.0000999999975" prefWidth="517.0000999999975">

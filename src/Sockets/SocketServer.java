@@ -2,7 +2,6 @@ package Sockets;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
 
 /**
  * Created by Niklas Begley on 10/02/2014.
@@ -46,7 +45,9 @@ public class SocketServer implements Runnable {
     {
         this.listening = false;
         try {
-            this.serverSocket.close();
+            if (this.serverSocket != null) {
+                this.serverSocket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
