@@ -221,8 +221,29 @@ public class DatabaseAccessor {
     {
         Statement statement = createStatement();
         statement.execute("DELETE FROM Patient WHERE P_NHS_number = " + patient.getNhsNumber() + ";");
+        insertRemovedPatientRecord(patient);
         return true;
     }
+
+    /************************************************************
+     REMOVE PATIENT METHODS
+     *************************************************************/
+
+    public  Patient insertRemovedPatientRecord(Patient patient) throws SQLException
+    {
+        Statement statement = createStatement();
+        String query = "INSERT INTO Removed_Patient(P_NHS_number, P_first_name, P_middle_name, P_surname, P_date_of_birth, P_postcode) VALUES('" +
+                patient.getNhsNumber() + "','" +
+                patient.getFirst_name() + "','" +
+                patient.getMiddle_name() + "','" +
+                patient.getSurname() + "','" +
+                patient.getDateOfBirth() + "','" +
+                patient.getPostcode() + "');";
+        statement.execute(query);
+        return patient;
+    }
+
+
 
     /************************************************************
      QUESTIONNAIRE_PATIENT METHODS
