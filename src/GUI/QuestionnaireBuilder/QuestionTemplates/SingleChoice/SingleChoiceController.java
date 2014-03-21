@@ -43,7 +43,6 @@ public class SingleChoiceController extends QuestionTypeController implements In
     public void removeSelectedChoices() {
         ArrayList<Integer> selected = new ArrayList<>(choicesListView.getSelectionModel().getSelectedIndices());
         Collections.reverse(selected);
-        System.out.println(selected);
         for (Integer integer : selected) {
             choicesListView.getItems().remove(integer.intValue());
         }

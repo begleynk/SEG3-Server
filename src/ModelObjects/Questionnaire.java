@@ -81,6 +81,8 @@ public class Questionnaire
      */
     public void loadDummy()
     {
+        questions.clear();
+
         //list of possible answers
         List<String> a = new LinkedList<String>();
         a.add("awesome");
@@ -94,26 +96,30 @@ public class Questionnaire
 
         //add also dependent questions
         YesNoQuestion y = new YesNoQuestion("2", "Are you good?", "Yes or No", true);
-        y.addDependentQuestion("Yes", new YesNoQuestion("3", "2.0 Feeling well?", "", true));
-        y.addDependentQuestion("Yes", new SelectOneQuestion("4", "2.1 Mood?", "", true, a));
-        y.addDependentQuestion("No", new SelectManyQuestion("5", "2.2 Mood? 2", "", false, a));
+        y.addDependentQuestion("Yes", new YesNoQuestion("3", "2.0 Feeling well?", "d", true));
+        y.addDependentQuestion("Yes", new SelectOneQuestion("4", "2.1 Mood?", "d", true, a));
+        y.addDependentQuestion("No", new SelectManyQuestion("5", "2.2 Mood? 2", "d", false, a));
         questions.add(y);
 
         //some more questions and dependent questions
-        SelectManyQuestion m = new SelectManyQuestion("6", "Pick your mood", "", true, a);
-        m.addDependentQuestion("awesome", new YesNoQuestion("7", "3.1 Is it raining?", "", false));
+        SelectOneQuestion m = new SelectOneQuestion("6", "Pick your mood", "d", true, a);
+        m.addDependentQuestion("awesome", new YesNoQuestion("7", "3.1 Is it raining?", "d", false));
 
-        YesNoQuestion ynq = new YesNoQuestion("8", "3.2 Is it freezing?", "", false);
-        ynq.addDependentQuestion("Yes", new YesNoQuestion("9", "3.1 Is it raining?", "", false));
+        SelectOneQuestion m2 = new SelectOneQuestion("6", "Pick your mood", "d", true, a);
+        m2.addDependentQuestion("awesome", new YesNoQuestion("7", "3.1 Is it raining?", "d", false));
+
+        m.addDependentQuestion(a.get(1), m2);
+
+        YesNoQuestion ynq = new YesNoQuestion("8", "3.2 Is it freezing?", "d", false);
+        ynq.addDependentQuestion("Yes", new YesNoQuestion("9", "3.1 Is it raining?", "d", false));
         m.addDependentQuestion("nothing special", ynq);
 
         questions.add(m);
-        questions.add(new SelectOneQuestion("10", "4. What is your current mood?", "", true, a));
-        RangeQuestion r = new RangeQuestion("11", "5. How good are you?", "", true, -10, 10);
-        r.addDependentQuestion("12", new YesNoQuestion("11", "5.1 Is it snowing?", "", false));
+        questions.add(new SelectOneQuestion("10", "4. What is your current mood?", "d", true, a));
+        RangeQuestion r = new RangeQuestion("11", "5. How good are you?", "d", true, -10, 10);
         questions.add(r);
 
-        questions.add(new RankQuestion("13", "Test", "", true, a));
+        questions.add(new RankQuestion("12", "Test", "d", true, a));
     }
 
     @Override

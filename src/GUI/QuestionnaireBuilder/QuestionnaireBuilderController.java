@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -171,15 +172,22 @@ public class QuestionnaireBuilderController implements Initializable {
                                 Dialogs.DialogOptions.YES_NO);
                     }
                     if (response.equals(Dialogs.DialogResponse.YES)) {
+
+                        question.updateContents(constructedQuestion);
+
                         if (question.getClass() == SelectOneQuestion.class) {
                             SelectOneQuestion selectOneQuestion = (SelectOneQuestion) question;
+                            ArrayList<String> keysToRemove = new ArrayList<>();
                             for (String key : question.getDependentQuestionsMap().keySet()) {
                                 if (!selectOneQuestion.getAnswerOptions().contains(key)) {
-                                    question.getDependentQuestionsMap().remove(key);
+                                    keysToRemove.add(key);
                                 }
                             }
+                            for (String key : keysToRemove) {
+                                question.getDependentQuestionsMap().remove(key);
+                            }
                         }
-                        question.updateContents(constructedQuestion);
+
                         populateTree();
                         setQuestionEditingViewVisible(false);
                     }
@@ -280,8 +288,8 @@ public class QuestionnaireBuilderController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends TreeItem<Question>> observableValue, TreeItem<Question> old_item, TreeItem<Question> new_item) {
                 if (new_item != null) {
-                    setupViewForEditingQuestion();
                     Question question = new_item.getValue();
+                    setupViewForEditingQuestion(new_item.getParent());
                     if (question.getClass() == TextQuestion.class) {
                         setQuestionTypeView(2);
                     }
@@ -465,13 +473,30 @@ public class QuestionnaireBuilderController implements Initializable {
     // Question Tree View Methods
 
     public void populateTree() {
+        questionTreeView.getSelectionModel().clearSelection();
         questionTreeView.getRoot().getChildren().clear();
         for (Question question : this.draftQuestionnaire.getQuestions()) {
             TreeItem<Question> leaf = new TreeItem<>(question);
             questionTreeView.getRoot().getChildren().add(leaf);
-            // TODO: recursive call to all dependent questions
+            leaf.setExpanded(true);
+            generateTreeItemChildren(leaf, question);
         }
         System.out.println(draftQuestionnaire.toString());
+    }
+
+    public void generateTreeItemChildren(TreeItem<Question> parent, Question question) {
+        for (String key : question.getDependentQuestionsMap().keySet()) {
+            List<Question> questions = question.getDependentQuestionsMap().get(key);
+            for (Question subQuestion : questions) {
+                TreeItem<Question> subQuestionTreeItem = new TreeItem<>(subQuestion);
+                subQuestionTreeItem.setExpanded(true);
+                parent.getChildren().add(subQuestionTreeItem);
+                if (subQuestion.hasDependentQuestions()) {
+                    generateTreeItemChildren(subQuestionTreeItem, subQuestion);
+                }
+            }
+        }
+
     }
 
     public void clearTreeViewSelection() {
@@ -483,12 +508,15 @@ public class QuestionnaireBuilderController implements Initializable {
     public void setupViewForAddingQuestion() {
         setQuestionEditingViewVisible(true);
         questionToolbar.getItems().setAll(saveNewQuestionButton, cancelQuestionEditButton, flexibleSpace, clearQuestionFieldsButton);
+        requiredCheckBox.setDisable(false);
+        requiredCheckBox.setSelected(false);
     }
 
-    public void setupViewForEditingQuestion() {
+    public void setupViewForEditingQuestion(TreeItem<Question> parent) {
         questionTypeChooser.getSelectionModel().select(0);
         setQuestionEditingViewVisible(true);
         questionToolbar.getItems().setAll(saveChangesQuestionButton, deleteExistingQuestionButton, cancelQuestionEditButton, flexibleSpace, clearQuestionFieldsButton);
+        requiredCheckBox.setDisable((!parent.equals(questionTreeView.getRoot())));
     }
 
     public void setQuestionEditingViewVisible(boolean visible) {

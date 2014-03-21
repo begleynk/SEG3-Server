@@ -25,11 +25,15 @@ public class Main extends Application {
         intializeAppDirectories();
 
         // FOR TESTING:
+//        Questionnaire questionnaire = DataLayer.getQuestionnaireByID(3);
+//        questionnaire.loadDummy();
+//        DataLayer.updateQuestionnare(questionnaire);
+
+        // FOR TESTING:
 //        DataLayer.addQuestionnaire(new Questionnaire("Test 1", 1));
 //        DataLayer.addQuestionnaire(new Questionnaire("Test 2", 1));
 //        DataLayer.addQuestionnaire(new Questionnaire("Test 3", 2));
 //        DataLayer.addQuestionnaire(new Questionnaire("Test 4", 2));
-//
 //        DataLayer.addQuestionnaire(new Questionnaire("Test 5", 0));
 
         // FOR TESTING:

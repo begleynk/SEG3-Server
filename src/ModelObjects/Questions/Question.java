@@ -50,7 +50,7 @@ public abstract class Question {
             for (Question subQuestion : questions) {
                 subQuestion.setRequired(required);
                 if (subQuestion.hasDependentQuestions()) {
-                    setDependentQuestionsRequired(question, required);
+                    setDependentQuestionsRequired(subQuestion, required);
                 }
             }
         }
@@ -62,7 +62,7 @@ public abstract class Question {
      * @return dependentQuestions
      */
     public HashMap<String, List<Question>> getDependentQuestionsMap() {
-        return dependentQuestions;
+        return this.dependentQuestions;
     }
 
     /**
@@ -71,7 +71,7 @@ public abstract class Question {
      * @return TRUE if dependent questions exist, FALSE otherwise.
      */
     public boolean hasDependentQuestions() {
-        Set<String> keys = dependentQuestions.keySet();
+        Set<String> keys = this.dependentQuestions.keySet();
         if (keys.size() > 0) {
             return true;
         }
