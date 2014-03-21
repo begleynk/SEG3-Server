@@ -41,4 +41,14 @@ public class SocketServer implements Runnable {
     public void run() {
         this.start();
     }
+
+    public void stopListening()
+    {
+        this.listening = false;
+        try {
+            this.serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

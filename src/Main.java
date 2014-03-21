@@ -17,6 +17,7 @@ import java.io.IOException;
 public class Main extends Application {
 
     private SocketServer socketServer;
+    private Thread serverThread;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -45,8 +46,8 @@ public class Main extends Application {
 
         int socketPort = 4000;
         this.socketServer = new SocketServer(socketPort);
-        Thread socketThread = new Thread(this.socketServer);
-        socketThread.start();
+        this.serverThread = new Thread(this.socketServer, "Socket Server");
+        serverThread.start();
 
         try {
             Parent mainScreen = FXMLLoader.load(getClass().getResource("/GUI/MainScene/mainScene.fxml"));
@@ -64,8 +65,10 @@ public class Main extends Application {
 
     @Override
     public void stop() throws Exception {
-        super.stop();
+        socketServer.stopListening();
+        serverThread.interrupt();
         ConnectionHandler.closeAllConnections();
+        super.stop();
     }
 
     public static void main(String[] args) {
