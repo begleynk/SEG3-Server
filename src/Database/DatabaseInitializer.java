@@ -51,7 +51,7 @@ public class DatabaseInitializer
 
             if(!isAdminCreated())
             {
-                DataLayer.setAdminPasscode("CHANGE_ME");
+                DataLayer.setAdminPasscode("1234");
             }
 
             System.out.println("All tables are created");
