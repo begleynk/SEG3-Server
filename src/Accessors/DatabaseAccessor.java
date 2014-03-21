@@ -222,11 +222,15 @@ public class DatabaseAccessor {
         Statement statement = createStatement();
         statement.execute("DELETE FROM Patient WHERE P_NHS_number = " + patient.getNhsNumber() + ";");
         insertRemovedPatientRecord(patient);
+        linkRemovedPatientAndMultipleQuestionnairePointers(patient, getQuestionnairePointersForPatient(patient));
+        unlinkPatientAndMultipleQuestionnairePointers(patient, getQuestionnairePointersForPatient(patient));
+
+
         return true;
     }
 
     /************************************************************
-     REMOVE PATIENT METHODS
+     REMOVED_PATIENT METHOD
      *************************************************************/
 
     public  Patient insertRemovedPatientRecord(Patient patient) throws SQLException
@@ -243,6 +247,26 @@ public class DatabaseAccessor {
         return patient;
     }
 
+    /************************************************************
+     REMOVED_PATIENT_QUESTIONNAIRE METHOD
+     *************************************************************/
+
+    public boolean linkRemovedPatientAndMultipleQuestionnairePointers(Patient patient, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    {
+        for(QuestionnairePointer questionnairePointer : questionnaires){
+            if (questionnairePointer.getId() == 0 || patient.getNhsNumber().equals(""))
+            {
+                return false;
+            }
+            Statement statement = createStatement();
+            statement.execute("INSERT INTO Removed_Patient_Questionnaire (P_NHS_number, Q_id, Completed) VALUES ('" +
+                    patient.getNhsNumber() + "','" +
+                    questionnairePointer.getId() + "', '0');");
+
+        }
+        return true;
+
+    }
 
 
     /************************************************************
@@ -307,6 +331,23 @@ public class DatabaseAccessor {
                 questionnaire.getId() + "'");
         return true;
     }
+
+    public boolean unlinkPatientAndMultipleQuestionnairePointers(Patient patient, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    {
+        for(QuestionnairePointer questionnairePointer : questionnaires){
+            if (questionnairePointer.getId() == 0 || patient.getNhsNumber().equals(""))
+            {
+                return false;
+            }
+            Statement statement = createStatement();
+            statement.execute("DELETE FROM Patient_Questionnaire WHERE P_NHS_number = '" +
+                    patient.getNhsNumber() + "' AND Q_id = '" +
+                    questionnairePointer.getId() + "'");
+        }
+        return true;
+
+    }
+
 
     public boolean isPatientAssignedToQuestionnaire(Patient patient, QuestionnairePointer questionnaire) throws SQLException {
         if (questionnaire == null || questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))
