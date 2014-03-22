@@ -23,15 +23,21 @@ public class ChangeLogsController implements Initializable {
     // Container Panes
     @FXML private Accordion changeLogsAccordion;
 
-    // Questionnaire titled pane and list
+    // Patient titled pane and list
     @FXML private ListView<PatientLog> patientLogList;
     // Questionnaire titled pane and list
     @FXML private ListView<QuestionnaireLog> questionnaireLogList;
+    // Distribute Questionnaire titled pane and list
+    //@FXML private ListView<DistributeLog> distributeLogList;
+    @FXML private ListView distributeLogList;
+
 
     private ObservableList<PatientLog> allPatientsLog
             = FXCollections.observableArrayList();
     private ObservableList<QuestionnaireLog> allQuestionnairesLog
             = FXCollections.observableArrayList();
+    // private ObservableList<DistributeLog> allDistributeLog = FXCollections.observableArrayList();
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -52,6 +58,7 @@ public class ChangeLogsController implements Initializable {
         try {
             allPatientsLog.setAll(DataLayer.getAllPatientLogs());
             allQuestionnairesLog.setAll(DataLayer.getAllQuestionnaireLogs());
+            // allDistributeLog.setAll(DataLayer.getAllDistributeLogs());
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 package GUI.ConnectTablets;
 
+import Helpers.IPHelper;
 import ModelObjects.Patient;
 import Sockets.ConnectionHandler;
 import Sockets.SocketProcess;
@@ -95,21 +96,16 @@ public class SettingControlsController implements Initializable
         //server IP
         try
         {
-          /*
-            InetAddress a = InetAddress.getLocalHost();
-            System.out.println(a);
-            myIP = a.getHostAddress();
-            System.out.println(myIP);
-            System.out.println(InetAddress.getLocalHost().getHostAddress().toString());
-          */
-            myIPaddress.setText("My IP Address: " + InetAddress.getLocalHost().getHostAddress().toString());
+
+            myIPaddress.setText("My IP Address: " + IPHelper.getIP());
 
         }
-        catch (java.net.UnknownHostException e)
+        catch (Exception e)
         {
 
             e.printStackTrace();
-            System.out.println("Unknown Host: "+e);
+            System.out.println("Unknown Host: " + e);
+            myIPaddress.setText("IP address could not be found.");
 
         }
 

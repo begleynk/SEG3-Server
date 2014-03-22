@@ -3,6 +3,7 @@ package Accessors;
 import Exceptions.NoQuestionnaireException;
 import Helpers.OSHelper;
 import ModelObjects.*;
+import ModelObjects.Questions.Question;
 
 import javax.xml.transform.Result;
 import java.sql.*;
@@ -60,6 +61,25 @@ public class DatabaseAccessor {
         }
 
         return pointerList;
+    }
+
+    public QuestionnairePointer getQuestionnaireByID(int id) throws SQLException
+    {
+        String query = "SELECT * FROM Questionnaire WHERE Q_id = ?;";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+
+        statement.execute();
+        ResultSet result = statement.getResultSet();
+
+        if(result.next())
+        {
+            return new QuestionnairePointer(result.getInt(1), result.getString(2), result.getString(3));
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public ArrayList<QuestionnairePointer> getAllQuestionnairesForState(int state) throws SQLException
@@ -319,6 +339,40 @@ public class DatabaseAccessor {
         return true;
     }
 
+    public boolean linkPatientAndMultipleQuestionnairePointers (Patient patient, ArrayList<QuestionnairePointer> questionnaires) throws SQLException {
+        for(QuestionnairePointer questionnairePointer : questionnaires){
+            if (questionnairePointer.getId() == 0 || patient.getNhsNumber().equals(""))
+            {
+                return false;
+            }
+            Statement statement = createStatement();
+            statement.execute("INSERT INTO Patient_Questionnaire (P_NHS_number, Q_id, Completed) VALUES ('" +
+                    patient.getNhsNumber() + "','" +
+                    questionnairePointer.getId() + "', '0');");
+        }
+        return true;
+    }
+
+    /*public boolean linkMultiplePatientsAndMultipleQuestionnairePointers(ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    {
+        for(QuestionnairePointer questionnairePointer : questionnaires){
+            for(Patient patient : patients){
+
+                if (questionnairePointer.getId() == 0 || patient.getNhsNumber().equals(""))
+                {
+                    return false;
+                }
+                Statement statement = createStatement();
+                statement.execute("INSERT INTO Patient_Questionnaire (P_NHS_number, Q_id, Completed) VALUES ('" +
+                        patient.getNhsNumber() + "','" +
+                        questionnairePointer.getId() + "', '0');");
+
+            }
+        }
+        return true;
+    }
+    **/
+
     public boolean unlinkPatientAndQuestionnairePointer(Patient patient, QuestionnairePointer questionnaire) throws SQLException
     {
         if (questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))
@@ -348,6 +402,26 @@ public class DatabaseAccessor {
 
     }
 
+    /*public boolean unlinkMultiplePatientsAndMultipleQuestionnairePointers(ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    {
+        for(QuestionnairePointer questionnairePointer : questionnaires){
+            for(Patient patient : patients){
+
+                if (questionnairePointer.getId() == 0 || patient.getNhsNumber().equals(""))
+                {
+                    return false;
+                }
+                Statement statement = createStatement();
+                statement.execute("DELETE FROM Patient_Questionnaire WHERE P_NHS_number = '" +
+                        patient.getNhsNumber() + "' AND Q_id = '" +
+                        questionnairePointer.getId() + "'");
+            }
+        }
+        return true;
+    }
+    **/
+
+
 
     public boolean isPatientAssignedToQuestionnaire(Patient patient, QuestionnairePointer questionnaire) throws SQLException {
         if (questionnaire == null || questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))
@@ -361,6 +435,54 @@ public class DatabaseAccessor {
         if (result.next()) {
             return true;
         } else {
+            return false;
+        }
+    }
+
+    public boolean setPatientQuestionnaireAsCompleted(QuestionnairePointer questionnaire, Patient patient) throws SQLException
+    {
+        if(isPatientAssignedToQuestionnaire(patient, questionnaire))
+        {
+            String query = "UPDATE Patient_Questionnaire SET Completed = 1 WHERE Q_id = ? AND P_NHS_Number = ?;";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, questionnaire.getId());
+            statement.setString(1, patient.getNhsNumber());
+            int success = statement.executeUpdate();
+            if(success == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean setPatientQuestionnaireAsNotCompleted(QuestionnairePointer questionnaire, Patient patient) throws SQLException
+    {
+        if(isPatientAssignedToQuestionnaire(patient, questionnaire))
+        {
+            String query = "UPDATE Patient_Questionnaire SET Completed = 0 WHERE Q_id = ? AND P_NHS_Number = ?;";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, questionnaire.getId());
+            statement.setString(1, patient.getNhsNumber());
+            int success = statement.executeUpdate();
+            if(success == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
             return false;
         }
     }

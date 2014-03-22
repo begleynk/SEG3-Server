@@ -1,8 +1,11 @@
 package Sockets;
 
 import Accessors.DataLayer;
+import Exceptions.AnswerNotCompleteException;
 import Exceptions.NoQuestionnaireException;
 import Helpers.JsonHelper;
+import ModelObjects.AnswerSet;
+import ModelObjects.Answers.Answer;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
@@ -21,9 +24,7 @@ public class SocketAPI {
 
     public static String getResponseFor(String encoded)
     {
-        System.out.println(encoded);
         String input = Encryptor.decrypt(encoded);
-        System.out.println(input);
 
         /**
          *  API behaviour is defined here
@@ -146,6 +147,55 @@ public class SocketAPI {
                 return Encryptor.encryptAndFormat("{'error_code': 1337 }");
             }
         }
+        else if (input.matches("(SendAnswers: ).*"))
+        {
+            /****************************************
+             SEND ANSWERS
+             *****************************************/
+            try
+            {
+                String answerJSON = input.replaceFirst("SendAnswers: ", "");
+                // Clean up any linebreaks
+                answerJSON.replace("\n", "");
+                answerJSON.replace("\r", "");
+
+                Gson json = JsonHelper.getInstance();
+
+                AnswerSet answerSet =  json.fromJson(answerJSON, AnswerSet.class);
+
+                // Check the patient exists
+                if(DataLayer.getPatientByNSHNUmber(answerSet.getPatientNHS()) != null)
+                {
+                    Questionnaire questionnaire = DataLayer.getQuestionnaireByID(answerSet.getQuestionnaireID());
+
+                    if(questionnaire.getState() == "Deployed")
+                    {
+                        DataLayer.saveAnswer(answerSet);
+                        return Encryptor.encryptAndFormat("{ 'result': true }");
+                    }
+                    else
+                    {
+                        return Encryptor.encryptAndFormat("{'error_code': 457 }");
+                    }
+                }
+                else
+                {
+                    return Encryptor.encryptAndFormat("{'error_code': 666 }");
+                }
+            }
+            catch (NoQuestionnaireException e)
+            {
+                return Encryptor.encryptAndFormat("{'error_code': 404 }");
+            }
+            catch (SQLException e)
+            {
+                return Encryptor.encryptAndFormat("{'error_code': 1337 }");
+            }
+            catch (AnswerNotCompleteException e)
+            {
+                return Encryptor.encryptAndFormat("{'error_code': 456 }");
+            }
+        }
         else if (input.equals("Close"))
         {
             /****************************************
@@ -160,5 +210,4 @@ public class SocketAPI {
             return Encryptor.encryptAndFormat("WTF?");
         }
     }
-
 }

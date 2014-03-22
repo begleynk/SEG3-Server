@@ -3,14 +3,18 @@ package Accessors;
 import Exceptions.NoQuestionnaireException;
 import Helpers.JsonHelper;
 import Helpers.OSHelper;
+import ModelObjects.AnswerSet;
+import ModelObjects.Answers.Answer;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
 import com.google.gson.Gson;
+import org.omg.CosNaming._NamingContextExtStub;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -28,38 +32,6 @@ public class QuestionnaireAccessor {
             File directory = new File(path.toString());
             directory.mkdir();
         }
-    }
-
-    public LinkedList<Questionnaire> getQuestionnaires()
-    {
-        /*
-            NOT IN USE ANY MORE
-         */
-
-        LinkedList<Questionnaire> questionnaires = new LinkedList<Questionnaire>();
-
-        File root = new File(questionnaireStoragePath);
-        String[] subItems = root.list();
-
-        for(String item : subItems)
-        {
-            if (new File(questionnaireStoragePath + item).isDirectory())
-            {
-                try
-                {
-                    BufferedReader reader = new BufferedReader(new FileReader(questionnaireStoragePath + item + "/questionnaire.json"));
-                    Questionnaire q = json.fromJson(reader, Questionnaire.class);
-                    questionnaires.add(q);
-                }
-                catch (IOException error)
-                {
-                    // If this is hit, there is corruption in the repository.
-                    return null;
-                }
-            }
-        }
-
-        return questionnaires;
     }
 
     public Questionnaire getQuestionnaireById(int questionnaireId) throws NoQuestionnaireException
@@ -155,6 +127,72 @@ public class QuestionnaireAccessor {
         }
 
         return true;
+    }
+
+    public boolean saveAnswers(AnswerSet answers) throws NoQuestionnaireException
+    {
+        Path path = Paths.get(questionnaireStoragePath + answers.getQuestionnaireID());
+        File dir = new File(path.toString());
+
+        if (Files.exists(path))
+        {
+            System.out.println("Saving answers for patient " + answers.getPatientNHS() + " - questionnaire " + answers.getQuestionnaireID());
+
+            String raw = json.toJson(answers);
+
+            try
+            {
+                //write converted json data to a file named "*patientNHS#*.json"
+                FileWriter writer = new FileWriter(path.toString() + "/" + answers.getPatientNHS() +".json");
+                writer.write(raw);
+                writer.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+        else
+        {
+            throw new NoQuestionnaireException();
+        }
+        return true;
+    }
+
+    public ArrayList<AnswerSet> getAllAnswersForQuestionnaire(Questionnaire questionnaire) throws NoQuestionnaireException
+    {
+        String dasPath = "" + questionnaireStoragePath + questionnaire.getId();
+        Path path = Paths.get(dasPath);
+
+        if(Files.exists(path))
+        {
+            try
+            {
+                File folder = new File(dasPath);
+                ArrayList<AnswerSet> answers = new ArrayList<AnswerSet>();
+                for(File file : folder.listFiles())
+                {
+                    if(!file.getName().matches("/questionnaire/"))
+                    {
+                        BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));
+                        AnswerSet a = json.fromJson(reader, AnswerSet.class);
+                        answers.add(a);
+                    }
+                }
+                return answers;
+            }
+            catch (IOException error)
+            {
+                // If this is hit, there is corruption in the repository.
+                return null;
+            }
+        }
+        else
+        {
+            throw new NoQuestionnaireException();
+        }
     }
 
     public boolean resetRepository(int confirmationCode)

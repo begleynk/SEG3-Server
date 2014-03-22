@@ -1,5 +1,6 @@
 package Accessors;
 
+import Exceptions.AnswerNotCompleteException;
 import Exceptions.NoQuestionnaireException;
 import Helpers.PasswordEncryptor;
 import ModelObjects.*;
@@ -140,6 +141,18 @@ public class DataLayer
         try
         {
             return databaseAccessor.getAllQuestionnaires();
+        }
+        catch (SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    public static QuestionnairePointer getQuestionnairePointerByID(int ID) throws SQLException
+    {
+        try
+        {
+            return databaseAccessor.getQuestionnaireByID(ID);
         }
         catch (SQLException e)
         {
@@ -289,6 +302,82 @@ public class DataLayer
     }
 
     /************************************************************
+     ANSWER METHODS
+     *************************************************************/
+
+    public static boolean saveAnswer(AnswerSet answers) throws NoQuestionnaireException, AnswerNotCompleteException
+    {
+        try
+        {
+            QuestionnairePointer questionnairePointer = getQuestionnairePointerByID(answers.getQuestionnaireID());
+            Questionnaire questionnaire = getQuestionnaireByID(answers.getQuestionnaireID());
+            Patient patient = getPatientByNSHNUmber(answers.getPatientNHS());
+
+            if(answers.isComplete(questionnaire))
+            {
+                if(databaseAccessor.setPatientQuestionnaireAsCompleted(questionnairePointer, patient))
+                {
+                    if(questionnaireAccessor.saveAnswers(answers))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        // Roll back database if saving to disk did not succeed.
+                        databaseAccessor.setPatientQuestionnaireAsNotCompleted(questionnairePointer, patient);
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                throw new AnswerNotCompleteException();
+            }
+
+        }
+        catch(NoQuestionnaireException e)
+        {
+            System.err.print("Tried to save answers to a questionnaire that doesn't exist. Database is corrupted.");
+            throw e;
+        }
+        catch(SQLException e)
+        {
+            System.err.print("Database error. There may be invalid data in the database.");
+            return false;
+        }
+    }
+
+    public static ArrayList<AnswerSet> getAnswerSetsForQuestionnaire(Questionnaire questionnaire) throws NoQuestionnaireException
+    {
+        try
+        {
+            return questionnaireAccessor.getAllAnswersForQuestionnaire(questionnaire);
+        }
+        catch(NoQuestionnaireException e)
+        {
+            System.err.println("Tried to get answers for a questionnaire that does not exist");
+            throw e;
+        }
+    }
+
+    public static ArrayList<AnswerSet> getAnswerSetsForQuestionnaire(QuestionnairePointer questionnaire)
+    {
+        try
+        {
+            Questionnaire q = getQuestionnaireWithPointer(questionnaire);
+            return getAnswerSetsForQuestionnaire(q);
+        }
+        catch(NoQuestionnaireException e)
+        {
+            return null;
+        }
+    }
+
+    /************************************************************
      QUESTIONNAIRE_PATIENT METHODS
      *************************************************************/
 
@@ -314,6 +403,20 @@ public class DataLayer
     public static boolean unlinkPatientAndQuestionnaire(Patient patient, QuestionnairePointer questionnaire) throws SQLException
     {
         return databaseAccessor.unlinkPatientAndQuestionnairePointer(patient, questionnaire);
+    }
+
+    public static boolean unlinkPatientAndMultipleQuestionnaires(Patient patient, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    {
+        return databaseAccessor.unlinkPatientAndMultipleQuestionnairePointers(patient, questionnaires);
+    }
+
+    public static boolean linkPatientAndMultipleQuestionnaires (Patient patient, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    {
+        return databaseAccessor.linkPatientAndMultipleQuestionnairePointers(patient, questionnaires);
+    }
+
+    public static void getAllDistributeLogs (){
+        //
     }
 
     public static HashMap<String, Boolean> arePatientsAssignedToQuestionnaire(ArrayList<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
