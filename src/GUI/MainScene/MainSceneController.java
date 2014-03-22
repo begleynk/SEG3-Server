@@ -1,5 +1,6 @@
 package GUI.MainScene;
 
+import Helpers.GUI.PaneHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -10,7 +11,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class MainSceneController implements Initializable {
             "/GUI/ConnectTablets/settingControls.fxml",
             null, // Separator
             "/GUI/ChangeLogs/changeLogs.fxml",
-            null,
+            null, // Separator
             "/GUI/ExportAnswer/exportAnswer.fxml"
     };
 
@@ -66,16 +67,23 @@ public class MainSceneController implements Initializable {
         setLogo();
     }
 
+    public void setupMenu() {
+        viewChooser.setItems(FXCollections.observableArrayList(menuOptions));
+        viewChooser.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
+                setView(newNumber.intValue());
+            }
+        });
+    }
+
     public void setView(int viewIndex) {
+        stackPane.getChildren().clear();
         String viewPath = viewPaths[viewIndex];
         if (viewPath != null && viewPath.length() > 0) {
-            stackPane.getChildren().clear();
             try {
-                AnchorPane pane = FXMLLoader.load(getClass().getResource(viewPath));
-                AnchorPane.setTopAnchor(pane, 0.0);
-                AnchorPane.setBottomAnchor(pane, 0.0);
-                AnchorPane.setRightAnchor(pane, 0.0);
-                AnchorPane.setLeftAnchor(pane, 0.0);
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewPath));
+                Pane pane = PaneHelper.loadPaneForAnchorParentWithFXMLLoader(fxmlLoader);
                 stackPane.getChildren().add(0, pane);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -89,16 +97,6 @@ public class MainSceneController implements Initializable {
         //could also "file:/Gui/..."
         mainLogo.setImage(image);
         //mainLogo.relocate(200,200);
-
     }
 
-    public void setupMenu() {
-        viewChooser.setItems(FXCollections.observableArrayList(menuOptions));
-        viewChooser.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
-                setView(newNumber.intValue());
-            }
-        });
-    }
 }

@@ -36,7 +36,7 @@ public class AnswerSet {
             } else {
                 answer = new SingleAnswer();
             }
-            if (rootQuestion.hasDependentQuestions()) {
+            if (rootQuestion.hasDependantQuestions()) {
                 generateDependentAnswers(answer, rootQuestion);
             }
             answer.setAnswerID(rootQuestion.getID());
@@ -46,7 +46,7 @@ public class AnswerSet {
     }
 
     public void generateDependentAnswers (Answer answer, Question question) {
-        HashMap<String, List<Question>> conditionToQuestionMap = question.getDependentQuestionsMap();
+        HashMap<String, List<Question>> conditionToQuestionMap = question.getDependantQuestionsMap();
         Collection<String> conditionKeys = conditionToQuestionMap.keySet();
         for (String key : conditionKeys) {
             List<Question> questionList = conditionToQuestionMap.get(key);
@@ -58,7 +58,7 @@ public class AnswerSet {
                 } else {
                     dependentAnswer = new SingleAnswer();
                 }
-                if (dependentQuestion.hasDependentQuestions()) {
+                if (dependentQuestion.hasDependantQuestions()) {
                     generateDependentAnswers(dependentAnswer, dependentQuestion);
                 }
                 dependentAnswer.setAnswerID(dependentQuestion.getID());
