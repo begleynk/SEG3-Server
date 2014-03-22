@@ -30,9 +30,7 @@ public class SocketServer implements Runnable {
                 ConnectionHandler.addConnection(aProcess);
             }
         } catch (IOException e) {
-            System.out.println("Problem, yo.");
             System.out.println(e.getMessage());
-            System.out.println(e.hashCode());
         }
     }
 
@@ -41,8 +39,7 @@ public class SocketServer implements Runnable {
         this.start();
     }
 
-    public void stopListening()
-    {
+    public void stopListening() {
         this.listening = false;
         try {
             if (this.serverSocket != null) {

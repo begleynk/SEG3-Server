@@ -3,9 +3,11 @@ package Accessors;
 import Exceptions.NoQuestionnaireException;
 import Helpers.JsonHelper;
 import Helpers.OSHelper;
+import ModelObjects.AnswerSet;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
 import com.google.gson.Gson;
+import org.omg.CosNaming._NamingContextExtStub;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -154,6 +156,38 @@ public class QuestionnaireAccessor {
             throw new NoQuestionnaireException();
         }
 
+        return true;
+    }
+
+    public boolean saveAnswers(AnswerSet answers) throws NoQuestionnaireException
+    {
+        Path path = Paths.get(questionnaireStoragePath + answers.getQuestionnaireID());
+        File dir = new File(path.toString());
+
+        if (Files.exists(path))
+        {
+            System.out.println("Saving answers for patient " + answers.getPatientNHS() + " - questionnaire " + answers.getQuestionnaireID());
+
+            String raw = json.toJson(answers);
+
+            try
+            {
+                //write converted json data to a file named "*patientNHS#*.json"
+                FileWriter writer = new FileWriter(path.toString() + "/" + answers.getPatientNHS() +".json");
+                writer.write(raw);
+                writer.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+        else
+        {
+            throw new NoQuestionnaireException();
+        }
         return true;
     }
 

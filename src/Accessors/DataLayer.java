@@ -1,5 +1,6 @@
 package Accessors;
 
+import Exceptions.AnswerNotCompleteException;
 import Exceptions.NoQuestionnaireException;
 import Helpers.PasswordEncryptor;
 import ModelObjects.*;
@@ -147,6 +148,18 @@ public class DataLayer
         }
     }
 
+    public static QuestionnairePointer getQuestionnairePointerByID(int ID) throws SQLException
+    {
+        try
+        {
+            return databaseAccessor.getQuestionnaireByID(ID);
+        }
+        catch (SQLException e)
+        {
+            throw e;
+        }
+    }
+
     public static ArrayList<QuestionnairePointer> getQuestionnairePointersForState(int state) throws SQLException, NoQuestionnaireException
     {
         try
@@ -286,6 +299,56 @@ public class DataLayer
         }
         pointer.setState(states[2]);
         return pointer;
+    }
+
+    /************************************************************
+     ANSWER METHODS
+     *************************************************************/
+
+    public static boolean saveAnswer(AnswerSet answers) throws NoQuestionnaireException, AnswerNotCompleteException
+    {
+        try
+        {
+            QuestionnairePointer questionnairePointer = getQuestionnairePointerByID(answers.getQuestionnaireID());
+            Questionnaire questionnaire = getQuestionnaireByID(answers.getQuestionnaireID());
+            Patient patient = getPatientByNSHNUmber(answers.getPatientNHS());
+
+            if(answers.isComplete(questionnaire))
+            {
+                if(databaseAccessor.setPatientQuestionnaireAsCompleted(questionnairePointer, patient))
+                {
+                    if(questionnaireAccessor.saveAnswers(answers))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        // Roll back database if saving to disk did not succeed.
+                        databaseAccessor.setPatientQuestionnaireAsNotCompleted(questionnairePointer, patient);
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                throw new AnswerNotCompleteException();
+            }
+
+        }
+        catch(NoQuestionnaireException e)
+        {
+            System.err.print("Tried to save answers to a questionnaire that doesn't exist. Database is corrupted.");
+            throw e;
+        }
+        catch(SQLException e)
+        {
+            System.err.print("Database error. There may be invalid data in the database.");
+            return false;
+        }
     }
 
     /************************************************************
