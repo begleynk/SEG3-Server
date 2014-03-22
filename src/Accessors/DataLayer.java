@@ -379,6 +379,20 @@ public class DataLayer
         return databaseAccessor.unlinkPatientAndQuestionnairePointer(patient, questionnaire);
     }
 
+    public static boolean unlinkMultiplePatientsAndMultipleQuestionnaires(ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    {
+        return databaseAccessor.unlinkMultiplePatientsAndMultipleQuestionnairePointers(patients, questionnaires);
+    }
+
+    public static boolean linkMultiplePatientsAndMultipleQuestionnaire (ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    {
+        return databaseAccessor.linkMultiplePatientsAndMultipleQuestionnairePointers(patients, questionnaires);
+    }
+
+    public static void getAllDistributeLogs (){
+        //
+    }
+
     public static HashMap<String, Boolean> arePatientsAssignedToQuestionnaire(ArrayList<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
     {
         HashMap<String, Boolean> patientIsAssigned = new HashMap<>();

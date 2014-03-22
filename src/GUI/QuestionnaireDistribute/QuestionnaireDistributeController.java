@@ -74,6 +74,7 @@ public class QuestionnaireDistributeController implements Initializable {
                 };
             }
         });
+        this.questionnairePointerListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.questionnairePointerListView.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<QuestionnairePointer>() {
                     @Override
@@ -242,10 +243,12 @@ public class QuestionnaireDistributeController implements Initializable {
     // Assign Action Methods
 
     public void assignAction() {
-        if (selectedQuestionnairePointer != null) {
+        if (selectedQuestionnairePointers != null) {
             searchPatientField.setText("");
             patientSearchInputChangedAction();
+
             for (TablePatient patient : visiblePatients) {
+
                 if (patient.getOrignal_assignment() && !patient.getProperty_is_assigned())
                 {
                     // Remove assignment
@@ -266,9 +269,15 @@ public class QuestionnaireDistributeController implements Initializable {
                         e.printStackTrace();
                     }
                 }
+
             }
+
         }
     }
+
+    /* for (QuestionnairePointer questionnairePointer : selectedQuestionnairePointers) {
+
+                **/
 
     public static class TableCellCheckBox<S, T> extends TableCell<S, T> {
         private final CheckBox checkBox;

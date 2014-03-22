@@ -338,6 +338,25 @@ public class DatabaseAccessor {
         return true;
     }
 
+    public boolean linkMultiplePatientsAndMultipleQuestionnairePointers(ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    {
+        for(QuestionnairePointer questionnairePointer : questionnaires){
+            for(Patient patient : patients){
+
+                if (questionnairePointer.getId() == 0 || patient.getNhsNumber().equals(""))
+                {
+                    return false;
+                }
+                Statement statement = createStatement();
+                statement.execute("INSERT INTO Patient_Questionnaire (P_NHS_number, Q_id, Completed) VALUES ('" +
+                        patient.getNhsNumber() + "','" +
+                        questionnairePointer.getId() + "', '0');");
+
+            }
+        }
+        return true;
+    }
+
     public boolean unlinkPatientAndQuestionnairePointer(Patient patient, QuestionnairePointer questionnaire) throws SQLException
     {
         if (questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))
@@ -366,6 +385,25 @@ public class DatabaseAccessor {
         return true;
 
     }
+
+    public boolean unlinkMultiplePatientsAndMultipleQuestionnairePointers(ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    {
+        for(QuestionnairePointer questionnairePointer : questionnaires){
+            for(Patient patient : patients){
+
+                if (questionnairePointer.getId() == 0 || patient.getNhsNumber().equals(""))
+                {
+                    return false;
+                }
+                Statement statement = createStatement();
+                statement.execute("DELETE FROM Patient_Questionnaire WHERE P_NHS_number = '" +
+                        patient.getNhsNumber() + "' AND Q_id = '" +
+                        questionnairePointer.getId() + "'");
+            }
+        }
+        return true;
+    }
+
 
 
     public boolean isPatientAssignedToQuestionnaire(Patient patient, QuestionnairePointer questionnaire) throws SQLException {
