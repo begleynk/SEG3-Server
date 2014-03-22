@@ -604,6 +604,59 @@ public class DatabaseAccessor {
     }
 
     /************************************************************
+     PATIENT_QUESTIONNAIRE LOG METHODS
+     *************************************************************/
+
+    public ArrayList<PatientQuestionnaireLog> getAllPatientQuestionnaireLogs() throws SQLException
+    {
+        ArrayList<PatientQuestionnaireLog> patientQuestionnaireLogs = new ArrayList<PatientQuestionnaireLog>();
+        Statement statement = createStatement();
+        String query = "SELECT * FROM Patient_Questionnaire_Log";
+        ResultSet result = statement.executeQuery(query);
+        while(result.next())
+        {
+            PatientQuestionnaireLog patientQuestionnaireLog = new PatientQuestionnaireLog(result.getInt(1), result.getString(2), result.getString(3),
+                    result.getString(4),result.getString(5),result.getString(6),
+                    result.getString(7), result.getString(8), result.getString(9));
+            patientQuestionnaireLogs.add(patientQuestionnaireLog);
+        }
+        return patientQuestionnaireLogs;
+    }
+
+    public void populatePatientQuestionnaireLogsUpdate() throws SQLException
+    {
+        Statement statement = createStatement();
+        statement.execute("CREATE TRIGGER IF NOT EXISTS update_Patient_Questionnaire_Log AFTER UPDATE  ON Patient_Questionnaire\n" +
+                "BEGIN\n" +
+                "  INSERT INTO Patient_Questionnaire_Log  (P_NHS_number_OLD, P_NHS_number_NEW ,Q_id_OLD, Q_id_NEW,\n" +
+                "                            Completed_OLD, Completed_NEW, SQL_action, Time_enter)\n" +
+                "      values (old.P_NHS_number, new.P_NHS_number, old.Q_id,new.Q_id,\n" +
+                "                  old.Completed, new.Completed, 'UPDATE', DATETIME('NOW') );\n" +
+                "END");
+    }
+
+    public void populatePatientQuestionnaireLogsInsert() throws SQLException
+    {
+        Statement statement = createStatement();
+        statement.execute("CREATE TRIGGER IF NOT EXISTS insert_Patient_Questionnaire_Log AFTER INSERT  ON Patient_Questionnaire\n" +
+                "BEGIN\n" +
+                "  INSERT INTO Patient_Questionnaire_Log  (P_NHS_number_NEW, Q_id_NEW, Completed_NEW,\n" +
+                "                            SQL_action, Time_enter)\n" +
+                "      values (new.P_NHS_number, new.Q_id, new.Completed, 'INSERT', DATETIME('NOW') );\n" +
+                "END");
+    }
+
+    public void populatePatientQuestionnaireLogsDelete() throws SQLException
+    {
+        Statement statement = createStatement();
+        statement.execute("CREATE TRIGGER IF NOT EXISTS delete_Patient_Questionnaire_Log DELETE  ON Patient_Questionnaire\n" +
+                "BEGIN\n" +
+                "  INSERT INTO Patient_Questionnaire_Log  (P_NHS_Number_OLD, Q_id_OLD, Completed_OLD, SQL_action, Time_enter)\n" +
+                "      values (old.P_NHS_number, old.Q_id, old.Completed, 'DELETE', DATETIME('NOW') );\n" +
+                "END");
+    }
+
+    /************************************************************
      ADMIN METHODS
      *************************************************************/
 

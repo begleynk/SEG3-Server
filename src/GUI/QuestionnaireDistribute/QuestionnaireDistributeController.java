@@ -243,7 +243,7 @@ public class QuestionnaireDistributeController implements Initializable {
     // Assign Action Methods
 
     public void assignAction() {
-        if (selectedQuestionnairePointers != null) {
+        if (selectedQuestionnairePointer != null) {
             searchPatientField.setText("");
             patientSearchInputChangedAction();
 

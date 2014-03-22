@@ -389,10 +389,6 @@ public class DataLayer
         return databaseAccessor.linkPatientAndMultipleQuestionnairePointers(patient, questionnaires);
     }
 
-    public static void getAllDistributeLogs (){
-        //
-    }
-
     public static HashMap<String, Boolean> arePatientsAssignedToQuestionnaire(ArrayList<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
     {
         HashMap<String, Boolean> patientIsAssigned = new HashMap<>();
@@ -460,6 +456,52 @@ public class DataLayer
     }
 
     /************************************************************
+     PATIENT_QUESTIONNAIRE_LOG METHODS
+     *************************************************************/
+
+    public static ArrayList<PatientQuestionnaireLog> getAllPatientQuestionnaireLogs() throws SQLException
+    {
+        return databaseAccessor.getAllPatientQuestionnaireLogs();
+    }
+
+    public static void populatePatientQuestionnaireLogsUpdate () throws SQLException
+    {
+        try {
+            databaseAccessor.populatePatientQuestionnaireLogsUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on update logs in Patient Questionnaire Log");
+            throw e;
+        }
+    }
+    public static void populatePatientQuestionnaireLogsInsert () throws SQLException
+    {
+        try {
+            databaseAccessor.populatePatientQuestionnaireLogsInsert();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on insert logs in Patient Questionnaire Log");
+            throw e;
+        }
+    }
+    public static void populatePatientQuestionnaireLogsDelete () throws SQLException
+    {
+        try {
+            databaseAccessor.populatePatientQuestionnaireLogsDelete();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            System.err.println("Error on delete logs in Questionnaire Log");
+            throw e;
+        }
+    }
+
+    /************************************************************
      QUESTIONNAIRE_LOG METHODS
      *************************************************************/
 
@@ -504,6 +546,7 @@ public class DataLayer
             throw e;
         }
     }
+
 
     /************************************************************
      ADMIN METHODS
