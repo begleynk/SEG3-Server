@@ -99,9 +99,16 @@ public class Exporter
         {
             for(Answer a : answerSet.getAnswers())
             {
+                boolean hasAnAnswer = false;
+
                 if(q.getID().equals(a.getID()))
                 {
                     answers[counter] = joinAnswers(a);
+                    hasAnAnswer = true;
+                }
+                if(!hasAnAnswer)
+                {
+                    answers[counter] = " - ";
                 }
             }
         }
