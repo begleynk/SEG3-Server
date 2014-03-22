@@ -379,14 +379,14 @@ public class DataLayer
         return databaseAccessor.unlinkPatientAndQuestionnairePointer(patient, questionnaire);
     }
 
-    public static boolean unlinkMultiplePatientsAndMultipleQuestionnaires(ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    public static boolean unlinkPatientAndMultipleQuestionnaires(Patient patient, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
     {
-        return databaseAccessor.unlinkMultiplePatientsAndMultipleQuestionnairePointers(patients, questionnaires);
+        return databaseAccessor.unlinkPatientAndMultipleQuestionnairePointers(patient, questionnaires);
     }
 
-    public static boolean linkMultiplePatientsAndMultipleQuestionnaire (ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    public static boolean linkPatientAndMultipleQuestionnaires (Patient patient, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
     {
-        return databaseAccessor.linkMultiplePatientsAndMultipleQuestionnairePointers(patients, questionnaires);
+        return databaseAccessor.linkPatientAndMultipleQuestionnairePointers(patient, questionnaires);
     }
 
     public static void getAllDistributeLogs (){

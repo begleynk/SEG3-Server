@@ -3,6 +3,7 @@ package Accessors;
 import Exceptions.NoQuestionnaireException;
 import Helpers.OSHelper;
 import ModelObjects.*;
+import ModelObjects.Questions.Question;
 
 import javax.xml.transform.Result;
 import java.sql.*;
@@ -338,7 +339,21 @@ public class DatabaseAccessor {
         return true;
     }
 
-    public boolean linkMultiplePatientsAndMultipleQuestionnairePointers(ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    public boolean linkPatientAndMultipleQuestionnairePointers (Patient patient, ArrayList<QuestionnairePointer> questionnaires) throws SQLException {
+        for(QuestionnairePointer questionnairePointer : questionnaires){
+            if (questionnairePointer.getId() == 0 || patient.getNhsNumber().equals(""))
+            {
+                return false;
+            }
+            Statement statement = createStatement();
+            statement.execute("INSERT INTO Patient_Questionnaire (P_NHS_number, Q_id, Completed) VALUES ('" +
+                    patient.getNhsNumber() + "','" +
+                    questionnairePointer.getId() + "', '0');");
+        }
+        return true;
+    }
+
+    /*public boolean linkMultiplePatientsAndMultipleQuestionnairePointers(ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
     {
         for(QuestionnairePointer questionnairePointer : questionnaires){
             for(Patient patient : patients){
@@ -356,6 +371,7 @@ public class DatabaseAccessor {
         }
         return true;
     }
+    **/
 
     public boolean unlinkPatientAndQuestionnairePointer(Patient patient, QuestionnairePointer questionnaire) throws SQLException
     {
@@ -386,7 +402,7 @@ public class DatabaseAccessor {
 
     }
 
-    public boolean unlinkMultiplePatientsAndMultipleQuestionnairePointers(ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
+    /*public boolean unlinkMultiplePatientsAndMultipleQuestionnairePointers(ArrayList<Patient> patients, ArrayList<QuestionnairePointer> questionnaires) throws SQLException
     {
         for(QuestionnairePointer questionnairePointer : questionnaires){
             for(Patient patient : patients){
@@ -403,6 +419,7 @@ public class DatabaseAccessor {
         }
         return true;
     }
+    **/
 
 
 
