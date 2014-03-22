@@ -304,6 +304,13 @@ public class PatientControlsController implements Initializable {
             allIsValid = false;
         }
 
+        String middleNameString = middleNameField.getText();
+
+        if (!middleNameString.matches("") && (middleNameString.length() < 2 || middleNameString.length() > 20)){
+            errorMessage += "Middle name needs to be 2 to 20 characters long if any \n";
+            allIsValid = false;
+        }
+
         String lastNameString = lastNameField.getText();
         if (lastNameString.length() < 2 || lastNameString.length() > 20){
             errorMessage += "Last name needs to be 2 to 20 characters long \n";
