@@ -351,6 +351,32 @@ public class DataLayer
         }
     }
 
+    public static ArrayList<AnswerSet> getAnswerSetsForQuestionnaire(Questionnaire questionnaire) throws NoQuestionnaireException
+    {
+        try
+        {
+            return questionnaireAccessor.getAllAnswersForQuestionnaire(questionnaire);
+        }
+        catch(NoQuestionnaireException e)
+        {
+            System.err.println("Tried to get answers for a questionnaire that does not exist");
+            throw e;
+        }
+    }
+
+    public static ArrayList<AnswerSet> getAnswerSetsForQuestionnaire(QuestionnairePointer questionnaire)
+    {
+        try
+        {
+            Questionnaire q = getQuestionnaireWithPointer(questionnaire);
+            return getAnswerSetsForQuestionnaire(q);
+        }
+        catch(NoQuestionnaireException e)
+        {
+            return null;
+        }
+    }
+
     /************************************************************
      QUESTIONNAIRE_PATIENT METHODS
      *************************************************************/
