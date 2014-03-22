@@ -51,8 +51,8 @@ public class AnswerSet
                         answerFound = true;
                     }
                 }
-                if (dependentQuestion.hasDependentQuestions()) {
-                    generateDependentAnswers(dependentAnswer, dependentQuestion);
+                if (answerFound) {
+                    return false;
                 }
             }
         }
