@@ -23,6 +23,22 @@ public class DateCheckHelper {
             return false;
         }
     }
+
+    public static String checkDMY(String d, String m, String y){
+        String to_return="";
+        if (d.length() != 2 || !d.matches("^\\d{2}$")) {
+            to_return += "DoB day needs to be exactly 2 digits \n";
+        }
+
+        if (m.length() != 2 || !m.matches("^\\d{2}$")) {
+            to_return += "DoB month needs to be exactly 2 digits \n";
+        }
+
+        if (y.length() != 4 || !y.matches("^\\d{4}$")) {
+            to_return += "DoB year needs to be exactly 4 digits \n";
+        }
+        return to_return;
+    }
 }
 
 

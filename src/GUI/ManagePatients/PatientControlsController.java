@@ -321,10 +321,10 @@ public class PatientControlsController implements Initializable {
         String day = dayDOBField.getText().trim();
         String month = monthDOBField.getText().trim();
         String year = yearDOBField.getText().trim();
-        if (!DateCheckHelper.isDateValid(day, month, year)){
+        if (!DateCheckHelper.isDateValid(day, month, year) || Integer.parseInt(year) < 1885){
             errorMessage += "Please enter a valid date of birth. \n" +
                     "If date of birth is 1 January 2001 then enter 01-01-2001 \n";
-            errorMessage = errorMessage.concat(checkDMY(day, month, year));
+            errorMessage = errorMessage.concat(DateCheckHelper.checkDMY(day, month, year));
             allIsValid = false;
         }
 
@@ -368,22 +368,6 @@ public class PatientControlsController implements Initializable {
     public void patientListViewSelectNone() {
         this.patientListView.getSelectionModel().clearSelection();
         this.patientSearchField.requestFocus();
-    }
-
-    public String checkDMY(String d, String m, String y){
-        String to_return="";
-        if (d.length() != 2 || !d.matches("^\\d{2}$")) {
-            to_return += "DoB day needs to be exactly 2 digits \n";
-        }
-
-        if (m.length() != 2 || !m.matches("^\\d{2}$")) {
-            to_return += "DoB month needs to be exactly 2 digits \n";
-        }
-
-        if (y.length() != 4 || !y.matches("^\\d{4}$")) {
-            to_return += "DoB year needs to be exactly 4 digits \n";
-        }
-        return to_return;
     }
 
 }
