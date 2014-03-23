@@ -117,10 +117,7 @@ public class WelcomeSceneController implements Initializable {
                     && confirmNewPasscode != null && !confirmNewPasscode.equals("")) {
                 if (newPasscode.equals(confirmNewPasscode)) {
                     if (newPasscode.matches("^\\d{4,12}$")) {
-                        if (DataLayer.checkAdminPasscode(newPasscode)) {
-                            Dialogs.showInformationDialog(stage, "Please choose a different Passcode to the one you are currently using.");
-                            passcodeNotDefault = false;
-                        } else {
+                        if (!DataLayer.checkAdminPasscode(newPasscode)) {
                             try {
                                 DataLayer.setAdminPasscode(newPasscode);
                             } catch (SQLException e) {
@@ -129,6 +126,9 @@ public class WelcomeSceneController implements Initializable {
                             // Should be successful every time
                             passcodeNotDefault = !DataLayer.isPasscodeSetToDefault();
                             clearInputFields();
+                        } else {
+                            Dialogs.showInformationDialog(stage, "Please choose a different Passcode to the one you are currently using.");
+                            passcodeNotDefault = false;
                         }
                     } else {
                         Dialogs.showInformationDialog(stage, "Passcodes must be all numbers, and be between 4 and 12 numbers long.");
@@ -162,17 +162,18 @@ public class WelcomeSceneController implements Initializable {
                 if (DataLayer.checkAdminPasscode(oldPasscode)) {
                     if (newPasscode.equals(confirmNewPasscode)) {
                         if (newPasscode.matches("^\\d{4,12}$")) {
-                            if (oldPasscode.equals(newPasscode)) {
+                            if (!oldPasscode.equals(newPasscode)) {
+                                if (!newPasscode.equals("1234")) {
+                                    DataLayer.setAdminPasscode(newPasscode);
+                                    passcodeSetToNew = true;
+                                    clearInputFields();
+                                } else {
+                                    Dialogs.showInformationDialog(stage, "You cannot use 1234. It is the default code provided and is too easy to guess.");
+                                    passcodeSetToNew = false;
+                                }
+                            } else {
                                 Dialogs.showInformationDialog(stage, "Please choose a different Passcode to the one you are currently using.");
                                 passcodeSetToNew = false;
-                            } else {
-                                try {
-                                    DataLayer.setAdminPasscode(newPasscode);
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
-                                passcodeSetToNew = true;
-                                clearInputFields();
                             }
                         } else {
                             Dialogs.showInformationDialog(stage, "The Passcode must be all numbers, and be between 4 and 12 numbers long.");
