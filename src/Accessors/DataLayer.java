@@ -137,7 +137,7 @@ public class DataLayer
      QUESTIONNAIRE METHODS
      *************************************************************/
 
-    public static ArrayList<QuestionnairePointer> getQuestionnairePointers() throws SQLException, NoQuestionnaireException
+    public static ArrayList<QuestionnairePointer> getQuestionnairePointers() throws SQLException
     {
         try
         {
