@@ -36,6 +36,14 @@ public class QuestionnaireDeploymentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        setupListViews();
+
+        fetchDeployedQuestionnaires();
+        fetchArchivedQuestionnaires();
+        fetchDraftQuestionnaires();
+    }
+
+    public void setupListViews() {
         Callback<ListView<QuestionnairePointer>, ListCell<QuestionnairePointer>> callback = new Callback<ListView<QuestionnairePointer>, ListCell<QuestionnairePointer>>() {
             @Override
             public ListCell<QuestionnairePointer> call(ListView<QuestionnairePointer> p) {
@@ -62,10 +70,6 @@ public class QuestionnaireDeploymentController implements Initializable {
         this.deployedListView.setItems(deployedQuestionnaires);
         this.archivedListView.setItems(archivedQuestionnaires);
         this.draftListView.setItems(draftQuestionnaires);
-
-        fetchDeployedQuestionnaires();
-        fetchArchivedQuestionnaires();
-        fetchDraftQuestionnaires();
     }
 
     // Fetching Data from Database

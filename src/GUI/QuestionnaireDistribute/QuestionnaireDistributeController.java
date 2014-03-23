@@ -39,7 +39,6 @@ public class QuestionnaireDistributeController implements Initializable {
     @FXML private TableColumn<TablePatient, String> nameColumn;
     @FXML private TableColumn<TablePatient, Boolean> checkBoxColumn;
 
-
     private QuestionnairePointer selectedQuestionnairePointer;
     //private ArrayList<QuestionnairePointer> selectedQuestionnairePointers;
 
