@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
  * Created by Faizan Joya on 05/03/14.
  * 
  */
-public class WelcomeController implements Initializable {
+public class WelcomeSceneController implements Initializable {
 
     private Stage stage;
 

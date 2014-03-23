@@ -1,6 +1,6 @@
 package GUI.MainScene;
 
-import GUI.Welcome.WelcomeController;
+import GUI.Welcome.WelcomeSceneController;
 import Helpers.GUI.PaneHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -96,8 +96,8 @@ public class MainSceneController implements Initializable {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewPath));
                 Pane pane = PaneHelper.loadPaneForAnchorParentWithFXMLLoader(fxmlLoader);
                 stackPane.getChildren().add(0, pane);
-                if (fxmlLoader.getController().getClass() == WelcomeController.class) {
-                    WelcomeController welcomeController = fxmlLoader.getController();
+                if (fxmlLoader.getController().getClass() == WelcomeSceneController.class) {
+                    WelcomeSceneController welcomeController = fxmlLoader.getController();
                     welcomeController.setStage(stage);
                 }
             } catch (IOException e) {
