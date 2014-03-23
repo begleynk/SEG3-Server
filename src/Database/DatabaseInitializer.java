@@ -96,7 +96,7 @@ public class DatabaseInitializer
     private static String getQueryFromFile(String filename) throws FileNotFoundException, IOException
     {
         BufferedReader in = new BufferedReader(new FileReader("src/Database/Schema/" + filename + ".sql"));
-        String queryString = "";
+        String queryString;
 
         StringBuffer sb = new StringBuffer();
         while ((queryString = in.readLine()) != null)

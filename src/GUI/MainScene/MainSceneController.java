@@ -1,5 +1,6 @@
 package GUI.MainScene;
 
+import GUI.Welcome.WelcomeController;
 import Helpers.GUI.PaneHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -7,12 +8,14 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,6 +26,10 @@ import java.util.ResourceBundle;
  *
  */
 public class MainSceneController implements Initializable {
+
+    private Stage stage;
+
+    @FXML private Parent root;
 
     @FXML private StackPane stackPane;
 
@@ -62,10 +69,13 @@ public class MainSceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.setView(0);
-        this.setupMenu();
-        this.viewChooser.getSelectionModel().select(0);
+        setupMenu();
         setLogo();
+        this.viewChooser.getSelectionModel().select(0);
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     public void setupMenu() {
@@ -86,6 +96,10 @@ public class MainSceneController implements Initializable {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewPath));
                 Pane pane = PaneHelper.loadPaneForAnchorParentWithFXMLLoader(fxmlLoader);
                 stackPane.getChildren().add(0, pane);
+                if (fxmlLoader.getController().getClass() == WelcomeController.class) {
+                    WelcomeController welcomeController = fxmlLoader.getController();
+                    welcomeController.setStage(stage);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

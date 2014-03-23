@@ -559,18 +559,11 @@ public class DataLayer
         }
     }
 
-    public static boolean doesPasscodeExist() throws SQLException
+    public static boolean isPasscodeSetToDefault() throws SQLException
     {
         try
         {
-            if(databaseAccessor.getAdminPasscode() != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return DataLayer.checkAdminPasscode("1234");
         }
         catch(SQLException e)
         {
@@ -579,4 +572,16 @@ public class DataLayer
         }
     }
 
+    public static boolean doesPasscodeExist() throws SQLException
+    {
+        try
+        {
+            return (databaseAccessor.getAdminPasscode() != null);
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
