@@ -2,6 +2,7 @@ package ModelObjects;
 
 import ModelObjects.Answers.Answer;
 import ModelObjects.Questions.Question;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.*;
 
@@ -11,7 +12,9 @@ import java.util.*;
  */
 public class AnswerSet
 {
+    @SerializedName(value = "questionnaire_id")
     private int questionnaireID;
+    @SerializedName(value = "patient_id")
     private String patientNHS;
     private ArrayList<Answer> answers;
 

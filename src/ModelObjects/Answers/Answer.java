@@ -9,7 +9,6 @@ import java.util.*;
 public class Answer {
 
     protected String id;
-
     // Sometimes one answer may include multiple selections. Hence the 
     protected ArrayList<String> answers;
 

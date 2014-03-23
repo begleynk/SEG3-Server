@@ -163,12 +163,15 @@ public class SocketAPI {
 
                 AnswerSet answerSet =  json.fromJson(answerJSON, AnswerSet.class);
 
+                System.out.println(answerSet.getPatientNHS());
+                System.out.println(answerSet.getQuestionnaireID());
+
                 // Check the patient exists
                 if(DataLayer.getPatientByNSHNUmber(answerSet.getPatientNHS()) != null)
                 {
                     Questionnaire questionnaire = DataLayer.getQuestionnaireByID(answerSet.getQuestionnaireID());
 
-                    if(questionnaire.getState() == "Deployed")
+                    if(questionnaire.getState().equals("Deployed"))
                     {
                         DataLayer.saveAnswer(answerSet);
                         return Encryptor.encryptAndFormat("{ 'result': true }");
