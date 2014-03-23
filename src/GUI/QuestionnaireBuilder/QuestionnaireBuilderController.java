@@ -4,6 +4,7 @@ import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
 import GUI.QuestionnaireBuilder.QuestionTemplates.QuestionTypeController;
 import Helpers.GUI.FlexibleToolbarSpace;
+import Helpers.GUI.PaneHelper;
 import Helpers.IDHelper;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
@@ -18,10 +19,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.fxml.JavaFXBuilderFactory;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -66,9 +68,10 @@ public class QuestionnaireBuilderController implements Initializable {
 
     // Questionnaire Toolbar
     @FXML private ToolBar questionnaireToolbar;
-    @FXML private ChoiceBox<Question> dependableQuestionsChooser;
-    @FXML private ChoiceBox<String> dependableConditionsChooser;
-    @FXML private Button makeDependButton = new Button("Set");
+    @FXML private Button makeDependButton;// = new Button("Make Depend");
+    @FXML private Button makeBaseButton;
+    private ChoiceBox<String> dependableQuestionsChooser = new ChoiceBox<>();
+    private ComboBox<String> dependableConditionsChooser = new ComboBox<>();
 
     // Control for creating a question
     @FXML private ChoiceBox<Object> questionTypeChooser;
@@ -122,10 +125,13 @@ public class QuestionnaireBuilderController implements Initializable {
 
     private ObservableList<Question> dependableQuestions
             = FXCollections.observableArrayList();
+    private ObservableList<String> dependableQuestionOptions
+            = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        // Setup GUI Controls
         setupButtonsAndActions();
         setupQuestionnairePointerListView();
         setupQuestionnaireToolbar();
@@ -133,7 +139,7 @@ public class QuestionnaireBuilderController implements Initializable {
         setupQuestionTypeChooser();
 
         // When the questionnaire view is first started nothing is being edited so do not show editing controls
-        endEditing();
+        endEditingQuestionnaire();
 
         // Fetch the data for the left menu
         fetchDraftQuestionnaires();
@@ -150,90 +156,28 @@ public class QuestionnaireBuilderController implements Initializable {
                 saveNewQuestion();
             }
         });
-        this.cancelQuestionEditButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                cancelQuestionEdit();
-            }
-        });
 
         // Actions specific to existing questions
         this.saveChangesQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                Question question = questionTreeView.getSelectionModel().getSelectedItem().getValue();
-                Dialogs.DialogResponse response = Dialogs.DialogResponse.YES;
-                Question constructedQuestion = null;
-                try {
-                    constructedQuestion = questionTypeController.getConstructedQuestion(IDHelper.generateRandomID(), requiredCheckBox.isSelected());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (constructedQuestion == null) {
-                    Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "Please fill out all of the input fields before saving.");
-                } else {
-
-                    if (question.getClass() == SelectOneQuestion.class) {
-                        response = Dialogs.showConfirmDialog((Stage)root.getScene().getWindow(),
-                                "Do you want to continue?",
-                                "If you have removed choices, some of the dependent questions may be deleted.",
-                                "",
-                                Dialogs.DialogOptions.YES_NO);
-                    }
-                    if (response.equals(Dialogs.DialogResponse.YES)) {
-
-                        question.updateContents(constructedQuestion);
-
-                        if (question.getClass() == SelectOneQuestion.class) {
-                            SelectOneQuestion selectOneQuestion = (SelectOneQuestion) question;
-                            ArrayList<String> keysToRemove = new ArrayList<>();
-                            for (String key : question.getDependentQuestionsMap().keySet()) {
-                                if (!selectOneQuestion.getAnswerOptions().contains(key)) {
-                                    keysToRemove.add(key);
-                                }
-                            }
-                            for (String key : keysToRemove) {
-                                question.getDependentQuestionsMap().remove(key);
-                            }
-                        }
-
-                        populateTree();
-                        setQuestionEditingViewVisible(false);
-                    }
-                }
+                saveQuestionChanges();
             }
         });
         this.deleteExistingQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                TreeItem<Question> questionTreeItem = questionTreeView.getSelectionModel().getSelectedItem();
-                Dialogs.DialogResponse response;
-                if (questionTreeItem.getValue().hasDependentQuestions()) {
-                    response = Dialogs.showConfirmDialog((Stage)root.getScene().getWindow(),
-                        "Do you want to continue?",
-                        "Deleting this question will also delete all of it's dependent questions.",
-                        "",
-                        Dialogs.DialogOptions.YES_NO);
-                } else {
-                    response = Dialogs.showConfirmDialog((Stage)root.getScene().getWindow(),
-                            "Do you want to continue?",
-                            "You cannot undo this action.",
-                            "",
-                            Dialogs.DialogOptions.YES_NO);
-                }
-                if (response.equals(Dialogs.DialogResponse.YES)) {
-                    if (questionTreeItem.getParent().equals(questionTreeView.getRoot())) {
-                        draftQuestionnaire.getQuestions().remove(questionTreeItem.getValue());
-                    } else {
-                        TreeItem<Question> parent = questionTreeItem.getParent();
-                        parent.getValue().removeDependentQuestion(questionTreeItem.getValue());
-                    }
-                    populateTree();
-                    setQuestionEditingViewVisible(false);
-                }
+                deleteQuestion();
             }
         });
 
+        // Actions applicable to both cases
+        this.cancelQuestionEditButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                endEditingQuestion();
+            }
+        });
         this.clearQuestionFieldsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -265,7 +209,7 @@ public class QuestionnaireBuilderController implements Initializable {
                         if (new_pointer != null) {
                             setupViewForEditingExistingQuestionnaire();
                         } else {
-                            endEditing();
+                            endEditingQuestionnaire();
                         }
                     }
                 }
@@ -275,10 +219,19 @@ public class QuestionnaireBuilderController implements Initializable {
     }
 
     public void setupQuestionnaireToolbar() {
-        this.questionnaireToolbar.getItems().add(new FlexibleToolbarSpace());
-        this.dependableQuestionsChooser = new ChoiceBox<>();
-        this.dependableConditionsChooser = new ChoiceBox<>();
-        this.dependableQuestionsChooser.setItems(dependableQuestions);
+        this.questionnaireToolbar.getItems().add(1, new FlexibleToolbarSpace());
+        this.dependableQuestionsChooser.setItems(dependableQuestionOptions);
+        this.dependableQuestionsChooser.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldIndex, Number newIndex) {
+                dependableConditionsChooser.getItems().clear();
+                if (newIndex.intValue() >= 0) {
+                    SelectOneQuestion dependableQuestion = (SelectOneQuestion) dependableQuestions.get(newIndex.intValue());
+                    ObservableList<String> items = FXCollections.observableArrayList(dependableQuestion.getAnswerOptions());
+                    dependableConditionsChooser.setItems(items);
+                }
+            }
+        });
     }
 
     public void setupQuestionTreeView() {
@@ -294,7 +247,9 @@ public class QuestionnaireBuilderController implements Initializable {
                     protected void updateItem(Question question, boolean aBool) {
                         super.updateItem(question, aBool);
                         if (question != null) {
-                            setText("Title: " + question.getTitle() + "  Description: " + question.getDescription());
+                            setText("Title: " + question.getTitle() +
+                                    "   Required: " + ((question.isRequired()) ? "Yes" : "No") +
+                                    (question.getCondition().equals("") ? "" : "   Condition: " + question.getCondition()));
                         }
                     }
                 };
@@ -302,34 +257,8 @@ public class QuestionnaireBuilderController implements Initializable {
         });
         this.questionTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Question>>() {
             @Override
-            public void changed(ObservableValue<? extends TreeItem<Question>> observableValue, TreeItem<Question> old_item, TreeItem<Question> new_item) {
-                if (new_item != null) {
-                    Question question = new_item.getValue();
-                    setupViewForEditingQuestion(new_item.getParent());
-                    if (question.getClass() == TextQuestion.class) {
-                        setQuestionTypeView(2);
-                    }
-                    if (question.getClass() == SelectManyQuestion.class) {
-                        setQuestionTypeView(3);
-                    }
-                    if (question.getClass() == SelectOneQuestion.class) {
-                        setQuestionTypeView(4);
-                    }
-                    if (question.getClass() == YesNoQuestion.class) {
-                        setQuestionTypeView(5);
-                    }
-                    if (question.getClass() == RangeQuestion.class) {
-                        setQuestionTypeView(6);
-                    }
-                    if (question.getClass() == RankQuestion.class) {
-                        setQuestionTypeView(7);
-                    }
-                    questionTypeController.populateWithExistingQuestion(question);
-                    requiredCheckBox.setSelected(question.isRequired());
-                    dependentQuestionSettingControlsEnabled(true);
-                } else {
-                    setQuestionEditingViewVisible(false);
-                }
+            public void changed(ObservableValue<? extends TreeItem<Question>> observableValue, TreeItem<Question> old_item, TreeItem<Question> newItem) {
+            existingQuestionSelected(newItem);
             }
         });
     }
@@ -344,7 +273,7 @@ public class QuestionnaireBuilderController implements Initializable {
                     setupViewForAddingQuestion();
                     setQuestionTypeView(newNumber.intValue());
                 } else {
-                    setQuestionEditingViewVisible(false);
+                    setQuestionControlsVisible(false);
                 }
             }
         });
@@ -394,73 +323,7 @@ public class QuestionnaireBuilderController implements Initializable {
     public void questionnaireListViewSelectNone() {
         this.questionnairePointerListView.getSelectionModel().clearSelection();
         this.questionnaireSearchField.requestFocus();
-        endEditing();
-    }
-
-    // Preparation for Questionnaire Context Transitions
-
-    public void prepareForEditing() {
-        setQuestionnaireEditingPaneVisible(true);
-        this.questionnaireTitleField.setText(draftQuestionnaire.getTitle());
-        this.saveDraftButton.setDisable(!isExistingQuestionnaire);
-        if (isExistingQuestionnaire) {
-            this.saveDraftButton.setText("Save Changes");
-            this.deleteButton.setText("Delete");
-        } else {
-            this.saveDraftButton.setText("Save Draft");
-            this.deleteButton.setText("Cancel");
-        }
-        populateTree();
-        this.questionTypeChooser.getSelectionModel().select(0);
-        setQuestionEditingViewVisible(false);
-    }
-
-    public void endEditing() {
-        setQuestionnaireEditingPaneVisible(false);
-        this.questionnaireTitleField.setText("");
-        this.questionTreeView.getRoot().getChildren().clear();
-        this.questionTypeChooser.getSelectionModel().select(0);
-        this.draftQuestionnaire = null;
-        this.questionnairePointerListView.getSelectionModel().clearSelection();
-    }
-
-    public void setQuestionnaireEditingPaneVisible(boolean visible) {
-        this.questionnaireStackPane.getChildren().clear();
-        if (visible) {
-            this.questionnaireStackPane.getChildren().add(this.questionnaireSplitPane);
-        }
-    }
-
-    public void setupViewForBuildingNewQuestionnaire() {
-        // Setup Questionniare
-        questionnairePointerListView.getSelectionModel().clearSelection();
-        draftQuestionnaire = new Questionnaire("", 0);
-        isExistingQuestionnaire = false;
-        prepareForEditing();
-    }
-
-    public void setupViewForEditingExistingQuestionnaire() {
-        try {
-            // Fetch Questionniare
-            QuestionnairePointer pointer = questionnairePointerListView.getSelectionModel().getSelectedItem();
-            draftQuestionnaire = DataLayer.getQuestionnaireWithPointer(pointer);
-            isExistingQuestionnaire = true;
-            prepareForEditing();
-        } catch (NoQuestionnaireException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Questionnaire Toolbar Methods
-
-    public void dependentQuestionSettingControlsEnabled(boolean enabled) {
-        this.dependableQuestionsChooser.setDisable(!enabled);
-        this.dependableConditionsChooser.setDisable(!enabled);
-        this.makeDependButton.setDisable(!enabled);
-        if (!enabled) {
-            dependableQuestionsChooser.getSelectionModel().clearSelection();
-            dependableConditionsChooser.getSelectionModel().clearSelection();
-        }
+        endEditingQuestionnaire();
     }
 
     // Questionnaire Data Methods
@@ -477,7 +340,7 @@ public class QuestionnaireBuilderController implements Initializable {
             Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "There was an error saving the questionnaire. Try again.");
             e.printStackTrace();
         }
-        endEditing();
+        endEditingQuestionnaire();
     }
 
     public void deleteQuestionnaire() {
@@ -485,12 +348,12 @@ public class QuestionnaireBuilderController implements Initializable {
             try {
                 DataLayer.removeQuestionnaire(draftQuestionnaire);
                 fetchDraftQuestionnaires();
-                endEditing();
+                endEditingQuestionnaire();
             } catch (SQLException | NoQuestionnaireException e) {
                 e.printStackTrace();
             }
         } else {
-            endEditing();
+            endEditingQuestionnaire();
         }
     }
 
@@ -500,13 +363,200 @@ public class QuestionnaireBuilderController implements Initializable {
         draftQuestionnaire.setTitle(questionnaireTitleField.getText());
     }
 
+    // Questionnaire Toolbar Methods
+
+    public void makeDependantQuestionDialog() {
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(0, 10, 0, 10));
+
+        grid.add(new Label("Select a question"), 0, 0);
+        grid.add(dependableQuestionsChooser, 1, 0);
+        grid.add(new Label("Select a choice from that question to depend on"), 0, 1);
+        grid.add(dependableConditionsChooser, 1, 1);
+
+        Callback<Void, Void> myCallback = new Callback<Void, Void>() {
+            @Override
+            public Void call(Void param) {
+                return null;
+            }
+        };
+
+        Dialogs.DialogResponse response = Dialogs.showCustomDialog((Stage) root.getScene().getWindow(), grid,
+                "Setting Dependant Question", "Choose a question for the question you are editing to depend upon.", Dialogs.DialogOptions.OK_CANCEL, myCallback);
+        if (response.equals(Dialogs.DialogResponse.OK)) {
+            Question dependableQuestion = dependableQuestions.get(dependableQuestionsChooser.getSelectionModel().getSelectedIndex());
+            String dependableCondition = dependableConditionsChooser.getSelectionModel().getSelectedItem();
+            if (dependableQuestion != null && dependableCondition != null) {
+                TreeItem<Question> treeItem = questionTreeView.getSelectionModel().getSelectedItem();
+                Question selectedQuestion  = treeItem.getValue();
+
+                // Remove it from where it originated
+                if (treeItem.getParent().equals(questionTreeView.getRoot())) {
+                    draftQuestionnaire.getQuestions().remove(selectedQuestion);
+                } else {
+                    Question parentQuestion = treeItem.getParent().getValue();
+                    parentQuestion.removeDependantQuestion(selectedQuestion);
+                }
+
+                // Place it where you have set it to go
+                dependableQuestion.addDependentQuestion(dependableCondition, selectedQuestion);
+                selectedQuestion.setCondition(dependableCondition);
+                // Display the changes
+                populateTree();
+            }
+        }
+    }
+
+    public void makeBaseQuestion() {
+        TreeItem<Question> treeItem = questionTreeView.getSelectionModel().getSelectedItem();
+        Question selectedQuestion  = treeItem.getValue();
+        // Remove it from where it originated
+        treeItem.getParent().getValue().removeDependantQuestion(selectedQuestion);
+        // Place it where you have set it to go
+        draftQuestionnaire.getQuestions().add(selectedQuestion);
+        selectedQuestion.setCondition("");
+        // Display the changes
+        populateTree();
+    }
+
+    public void dependantQuestionSettingControlsEnabled(boolean enabled) {
+        this.makeDependButton.setDisable(!enabled);
+        if (!enabled) {
+            dependableQuestionsChooser.getSelectionModel().select(0);
+            dependableConditionsChooser.getItems().clear();
+        }
+    }
+
+    public void generateDependableQuestionOptions() {
+        dependableQuestionOptions.clear();
+        for (Question question : dependableQuestions) {
+            String title = question.getTitle();
+            dependableQuestionOptions.add("Question: " + title);
+        }
+        dependableQuestionsChooser.getSelectionModel().select(0);
+    }
+
+    // Question ToolBar Actions
+
+    public void saveNewQuestion() {
+        Question question = getQuestionFromController();
+        if (question != null) {
+            // The new question is added as a root question (i.e not dependant)
+            draftQuestionnaire.addQuestion(question);
+            // General Cleanup
+            endEditingQuestion();
+            // The tree needs to be updated
+            populateTree();
+        } else {
+            // If question is null, it has not been fully completed
+            Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "Please fill out all of the input fields before saving.");
+        }
+    }
+
+    public void saveQuestionChanges() {
+        Dialogs.DialogResponse response = Dialogs.DialogResponse.YES;
+
+        Question question = questionTreeView.getSelectionModel().getSelectedItem().getValue();
+        Question editedQuestion = getQuestionFromController();
+
+        if (editedQuestion == null) {
+            Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "Please fill out all of the input fields before saving.");
+        } else {
+
+            if (question.getClass() == SelectOneQuestion.class) {
+                response = Dialogs.showConfirmDialog((Stage)root.getScene().getWindow(),
+                        "Do you want to continue?",
+                        "If you have removed choices, some of the dependant questions may be deleted.",
+                        "",
+                        Dialogs.DialogOptions.YES_NO);
+            }
+
+            if (response.equals(Dialogs.DialogResponse.YES)) {
+                // Update question with new edited values
+                question.updateContents(editedQuestion);
+                // Remove dependant questions if necessary for SelectOneQuestion(s)
+                if (question.getClass() == SelectOneQuestion.class) {
+                    SelectOneQuestion selectOneQuestion = (SelectOneQuestion) question;
+                    ArrayList<String> keysToRemove = new ArrayList<>();
+                    for (String key : question.getDependantQuestionsMap().keySet()) {
+                        if (!selectOneQuestion.getAnswerOptions().contains(key)) {
+                            keysToRemove.add(key);
+                        }
+                    }
+                    for (String key : keysToRemove) {
+                        question.getDependantQuestionsMap().remove(key);
+                    }
+                }
+                populateTree();
+                endEditingQuestion();
+            }
+        }
+    }
+
+    public void deleteQuestion() {
+        Dialogs.DialogResponse response;
+        TreeItem<Question> treeItem = questionTreeView.getSelectionModel().getSelectedItem();
+        Question question = treeItem.getValue();
+
+        String dialogMessage;
+        if (question.hasDependantQuestions()) {
+            dialogMessage = "Deleting this question will also delete all of it's dependant questions.";
+        } else {
+            dialogMessage = "You cannot undo this action.";
+        }
+        response = Dialogs.showConfirmDialog((Stage)root.getScene().getWindow(),
+                "Do you want to continue?",
+                dialogMessage,
+                "",
+                Dialogs.DialogOptions.YES_NO);
+
+        if (response.equals(Dialogs.DialogResponse.YES)) {
+            if (treeItem.getParent().equals(questionTreeView.getRoot())) {
+                // Remove from root question array
+                draftQuestionnaire.getQuestions().remove(question);
+            } else {
+                // Remove from parent's dependant questions array
+                treeItem.getParent().getValue().removeDependantQuestion(question);
+            }
+            populateTree();
+            endEditingQuestion();
+        }
+    }
+
+    public Question getQuestionFromController() {
+        try {
+            return questionTypeController.getConstructedQuestion(IDHelper.generateRandomID(), requiredCheckBox.isSelected());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // Question Tree View Methods
+
+    public void existingQuestionSelected(TreeItem<Question> newItem) {
+        if (newItem != null) {
+            // Clear new question type chooser
+            questionTypeChooser.getSelectionModel().select(0);
+            // Setup view for editing the question selected
+            setQuestionTypeViewForQuestion(newItem.getValue());
+            setupViewForEditingQuestion(newItem);
+            // Add existing question details to the controller's input fields
+            questionTypeController.populateWithExistingQuestion(newItem.getValue());
+        } else {
+            setQuestionControlsVisible(false);
+        }
+    }
 
     public void populateTree() {
         dependableQuestions.clear();
         questionTreeView.getSelectionModel().clearSelection();
         questionTreeView.getRoot().getChildren().clear();
         for (Question question : this.draftQuestionnaire.getQuestions()) {
+            question.setCondition("");
             TreeItem<Question> leaf = new TreeItem<>(question);
             questionTreeView.getRoot().getChildren().add(leaf);
             leaf.setExpanded(true);
@@ -515,20 +565,21 @@ public class QuestionnaireBuilderController implements Initializable {
             }
             generateTreeItemChildren(leaf, question);
         }
-        System.out.println(draftQuestionnaire.toString());
+        generateDependableQuestionOptions();
     }
 
     public void generateTreeItemChildren(TreeItem<Question> parent, Question question) {
-        for (String key : question.getDependentQuestionsMap().keySet()) {
-            List<Question> questions = question.getDependentQuestionsMap().get(key);
+        for (String key : question.getDependantQuestionsMap().keySet()) {
+            List<Question> questions = question.getDependantQuestionsMap().get(key);
             for (Question subQuestion : questions) {
+                subQuestion.setCondition(key);
                 TreeItem<Question> subQuestionTreeItem = new TreeItem<>(subQuestion);
                 subQuestionTreeItem.setExpanded(true);
                 parent.getChildren().add(subQuestionTreeItem);
                 if (subQuestion.getClass() == YesNoQuestion.class || subQuestion.getClass() == SelectOneQuestion.class) {
                     dependableQuestions.add(subQuestion);
                 }
-                if (subQuestion.hasDependentQuestions()) {
+                if (subQuestion.hasDependantQuestions()) {
                     generateTreeItemChildren(subQuestionTreeItem, subQuestion);
                 }
             }
@@ -540,88 +591,142 @@ public class QuestionnaireBuilderController implements Initializable {
         this.questionTreeView.getSelectionModel().clearSelection();
     }
 
-    // Question Editor Methods
+    // Questionnaire Context Transition Actions
 
-    public void setupViewForAddingQuestion() {
-        setQuestionEditingViewVisible(true);
-        questionToolbar.getItems().setAll(saveNewQuestionButton, cancelQuestionEditButton, flexibleSpace, clearQuestionFieldsButton);
-        requiredCheckBox.setDisable(false);
-        requiredCheckBox.setSelected(false);
+    public void setupViewForBuildingNewQuestionnaire() {
+        // Setup Questionniare
+        questionnairePointerListView.getSelectionModel().clearSelection();
+        draftQuestionnaire = new Questionnaire("", 0);
+        isExistingQuestionnaire = false;
+        prepareForEditingQuestionnaire();
     }
 
-    public void setupViewForEditingQuestion(TreeItem<Question> parent) {
-        questionTypeChooser.getSelectionModel().select(0);
-        setQuestionEditingViewVisible(true);
-        questionToolbar.getItems().setAll(saveChangesQuestionButton, deleteExistingQuestionButton, cancelQuestionEditButton, flexibleSpace, clearQuestionFieldsButton);
-        requiredCheckBox.setDisable((!parent.equals(questionTreeView.getRoot())));
-    }
-
-    public void setQuestionEditingViewVisible(boolean visible) {
-        this.questionToolbar.setVisible(visible);
-        this.requiredCheckBox.setVisible(visible);
-        this.questionTypeIdentifierLabel.setVisible(visible);
-        if (!visible) {
-            this.questionStackPane.getChildren().clear();
-            this.questionTypeController = null;
-        }
-    }
-
-    // Question ToolBar Actions
-
-    public void saveNewQuestion() {
-        Question question = null;
+    public void setupViewForEditingExistingQuestionnaire() {
         try {
-            question = questionTypeController.getConstructedQuestion(IDHelper.generateRandomID(), requiredCheckBox.isSelected());
-        } catch (Exception e) {
+            // Fetch Questionniare
+            QuestionnairePointer pointer = questionnairePointerListView.getSelectionModel().getSelectedItem();
+            draftQuestionnaire = DataLayer.getQuestionnaireWithPointer(pointer);
+            isExistingQuestionnaire = true;
+            prepareForEditingQuestionnaire();
+        } catch (NoQuestionnaireException e) {
             e.printStackTrace();
         }
-        if (question != null) {
-            draftQuestionnaire.addQuestion(question);
-            populateTree();
-            // Called for convenience (not actually cancelling as already saved)
-            cancelQuestionEdit();
-            requiredCheckBox.setSelected(false);
+    }
+
+    public void prepareForEditingQuestionnaire() {
+        setQuestionnairePaneVisible(true);
+        this.questionnaireTitleField.setText(draftQuestionnaire.getTitle());
+        this.saveDraftButton.setDisable(!isExistingQuestionnaire);
+        if (isExistingQuestionnaire) {
+            this.saveDraftButton.setText("Save Changes");
+            this.deleteButton.setText("Delete");
         } else {
-            Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "Please fill out all of the input fields before saving.");
+            this.saveDraftButton.setText("Save Draft");
+            this.deleteButton.setText("Cancel");
+        }
+        this.makeDependButton.setDisable(true);
+        this.makeBaseButton.setDisable(true);
+        populateTree();
+        // Initially hides question editing controls
+        this.questionTypeChooser.getSelectionModel().select(0);
+    }
+
+    public void endEditingQuestionnaire() {
+        setQuestionnairePaneVisible(false);
+        this.questionnaireTitleField.setText("");
+        this.questionTreeView.getRoot().getChildren().clear();
+        this.questionTypeChooser.getSelectionModel().select(0);
+        this.draftQuestionnaire = null;
+        this.questionnairePointerListView.getSelectionModel().clearSelection();
+    }
+
+    public void setQuestionnairePaneVisible(boolean visible) {
+        // Shows / Hides Questionnaire Editing view
+        this.questionnaireStackPane.getChildren().clear();
+        if (visible) {
+            this.questionnaireStackPane.getChildren().add(this.questionnaireSplitPane);
         }
     }
 
-    public void cancelQuestionEdit() {
-        questionTreeView.getSelectionModel().clearSelection();
-        questionTypeChooser.getSelectionModel().select(0);
-        questionToolbar.getItems().clear();
+    // Question Context Transition Actions
+
+    public void setupViewForAddingQuestion() {
+        setQuestionControlsVisible(true);
+        this.questionToolbar.getItems().setAll(saveNewQuestionButton, cancelQuestionEditButton, flexibleSpace, clearQuestionFieldsButton);
+        // Ensure that the required control is enabled
+        this.requiredCheckBox.setDisable(false);
+    }
+
+    public void setupViewForEditingQuestion(TreeItem<Question> item) {
+        setQuestionControlsVisible(true);
+        dependantQuestionSettingControlsEnabled(true);
+        this.questionToolbar.getItems().setAll(saveChangesQuestionButton, deleteExistingQuestionButton, cancelQuestionEditButton, flexibleSpace, clearQuestionFieldsButton);
+        // If a question's parent is root, you can edit the required value. Dependant questions cannot change this value.
+        this.makeBaseButton.setDisable(item.getParent().equals(questionTreeView.getRoot()));
+        this.requiredCheckBox.setDisable(!item.getParent().equals(questionTreeView.getRoot()));
+        this.requiredCheckBox.setSelected(item.getValue().isRequired());
+    }
+
+    public void endEditingQuestion() {
+        // Reset controls that start question editing
+        this.questionTypeChooser.getSelectionModel().select(0);
+        this.questionTreeView.getSelectionModel().clearSelection();
+        // Clear values in question controls
+        this.requiredCheckBox.setSelected(false);
+        this.questionTypeIdentifierLabel.setText("");
+        this.questionStackPane.getChildren().clear();
+        this.questionToolbar.getItems().clear();
+        // QuestionTypeController is no longer required
+        this.questionTypeController = null;
+        // Hide Question editing controls
+        setQuestionControlsVisible(false);
+        dependantQuestionSettingControlsEnabled(false);
+    }
+
+    public void setQuestionControlsVisible(boolean visible) {
+        this.requiredCheckBox.setVisible(visible);
+        this.questionTypeIdentifierLabel.setVisible(visible);
+        this.questionStackPane.setVisible(visible);
+        this.questionToolbar.setVisible(visible);
     }
 
     // Setting Question StackPane view
 
     public void setQuestionTypeView(int viewIndex) {
+        questionStackPane.getChildren().clear();
         String viewPath = questionViewPaths[viewIndex];
         if (viewPath != null && viewPath.length() > 0) {
-            questionStackPane.getChildren().clear();
             try {
-
-                URL viewPathURL = getClass().getResource(viewPath);
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(viewPathURL);
-                fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-
-                AnchorPane pane = (AnchorPane) fxmlLoader.load();
-
-                AnchorPane.setTopAnchor(pane, 0.0);
-                AnchorPane.setBottomAnchor(pane, 0.0);
-                AnchorPane.setRightAnchor(pane, 0.0);
-                AnchorPane.setLeftAnchor(pane, 0.0);
-
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewPath));
+                Pane pane = PaneHelper.loadPaneForAnchorParentWithFXMLLoader(fxmlLoader);
+                questionStackPane.getChildren().add(0, pane);
                 questionTypeController = fxmlLoader.getController();
                 questionTypeIdentifierLabel.setText(questionTypeController.getQuestionTypeIdentifier());
-
-                questionStackPane.getChildren().add(0, pane);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
-            questionStackPane.getChildren().clear();
+        }
+    }
+
+    public void setQuestionTypeViewForQuestion(Question question) {
+
+        if (question.getClass() == TextQuestion.class) {
+            setQuestionTypeView(2);
+        }
+        if (question.getClass() == SelectManyQuestion.class) {
+            setQuestionTypeView(3);
+        }
+        if (question.getClass() == SelectOneQuestion.class) {
+            setQuestionTypeView(4);
+        }
+        if (question.getClass() == YesNoQuestion.class) {
+            setQuestionTypeView(5);
+        }
+        if (question.getClass() == RangeQuestion.class) {
+            setQuestionTypeView(6);
+        }
+        if (question.getClass() == RankQuestion.class) {
+            setQuestionTypeView(7);
         }
     }
 

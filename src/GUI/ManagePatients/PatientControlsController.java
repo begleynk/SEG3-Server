@@ -1,6 +1,7 @@
 package GUI.ManagePatients;
 
 import Accessors.DataLayer;
+import Helpers.DateCheckHelper;
 import Helpers.GUI.FlexibleToolbarSpace;
 import ModelObjects.Patient;
 import javafx.beans.value.ChangeListener;
@@ -62,6 +63,7 @@ public class PatientControlsController implements Initializable {
     @FXML private Label nhsInformationLabel;
     @FXML private Label dobInformationLabel;
     @FXML private Label postcodeInformationLabel;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -223,9 +225,9 @@ public class PatientControlsController implements Initializable {
 
     public void saveEditedPatient() {
         if (checkFieldValidation()) {
-            String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
-            Patient updatedPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
-                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText().toUpperCase());
+            String dob = yearDOBField.getText().trim() + "-" + monthDOBField.getText().trim() + "-" + dayDOBField.getText().trim();
+            Patient updatedPatient = new Patient(nhsNumberField.getText(), firstNameField.getText().trim(),
+                    middleNameField.getText().trim(), lastNameField.getText().trim(), dob, postcodeField.getText().toUpperCase().trim());
             try {
                 DataLayer.updatePatient(updatedPatient);
                 fetchAllPatients();
@@ -252,9 +254,9 @@ public class PatientControlsController implements Initializable {
     public void saveNewPatient() {
         if (checkFieldValidation()) {
             // Date Format : YYYY-MM-DD
-            String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
-            Patient newPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
-                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText().toUpperCase());
+            String dob = yearDOBField.getText().trim() + "-" + monthDOBField.getText().trim() + "-" + dayDOBField.getText().trim();
+            Patient newPatient = new Patient(nhsNumberField.getText(), firstNameField.getText().trim(),
+                    middleNameField.getText().trim(), lastNameField.getText().trim(), dob, postcodeField.getText().toUpperCase().trim());
             try {
                 DataLayer.addPatient(newPatient);
                 fetchAllPatients();
@@ -298,41 +300,31 @@ public class PatientControlsController implements Initializable {
             allIsValid = false;
         }
 
-        String firstNameString = firstNameField.getText();
+        String firstNameString = firstNameField.getText().trim();
         if (firstNameString.length() < 2 || firstNameString.length() > 20){
             errorMessage += "First name needs to be 2 to 20 characters long \n";
             allIsValid = false;
         }
 
-        String middleNameString = middleNameField.getText();
-
-        if (!middleNameString.matches("") && (middleNameString.length() < 2 || middleNameString.length() > 20)){
-            errorMessage += "Middle name needs to be 2 to 20 characters long if any \n";
+        String middleNameString = middleNameField.getText().trim();
+        if (!middleNameString.equals("") && (middleNameString.length() < 2 || middleNameString.length() > 20)){
+            errorMessage += "Middle name needs to be 2 to 20 characters long if entered\n";
             allIsValid = false;
         }
 
-        String lastNameString = lastNameField.getText();
+        String lastNameString = lastNameField.getText().trim();
         if (lastNameString.length() < 2 || lastNameString.length() > 20){
             errorMessage += "Last name needs to be 2 to 20 characters long \n";
             allIsValid = false;
         }
 
-        // TODO: date of birth validation, nw Fez is on it!
-        String day = dayDOBField.getText();
-        if (day.length() != 2 || !day.matches("^\\d{2}$")) {
-            errorMessage += "DoB day needs to be exactly 2 digits \n";
-            allIsValid = false;
-        }
-
-        String month = monthDOBField.getText();
-        if (month.length() != 2 || !month.matches("^\\d{2}$")) {
-            errorMessage += "DoB month needs to be exactly 2 digits \n";
-            allIsValid = false;
-        }
-
-        String year = yearDOBField.getText();
-        if (year.length() != 4 || !year.matches("^\\d{4}$")) {
-            errorMessage += "DoB year needs to be exactly 4 digits \n";
+        String day = dayDOBField.getText().trim();
+        String month = monthDOBField.getText().trim();
+        String year = yearDOBField.getText().trim();
+        if (!DateCheckHelper.isDateValid(day, month, year) || Integer.parseInt(year) < 1885){
+            errorMessage += "Please enter a valid date of birth. \n" +
+                    "If date of birth is 1st January 2001 then enter 01-01-2001 \n";
+            errorMessage = errorMessage.concat(DateCheckHelper.checkDMY(day, month, year));
             allIsValid = false;
         }
 
@@ -377,6 +369,7 @@ public class PatientControlsController implements Initializable {
         this.patientListView.getSelectionModel().clearSelection();
         this.patientSearchField.requestFocus();
     }
+
 }
 
 

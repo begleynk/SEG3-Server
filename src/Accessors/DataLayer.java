@@ -14,6 +14,7 @@ import java.util.HashMap;
  *
  * This is the main communication layer between the data and the interfaces/public APIs.
  * Server GUIs and Socket APIs should only be calling methods from this class.
+ *
  */
 public class DataLayer
 {
@@ -415,10 +416,6 @@ public class DataLayer
         return databaseAccessor.linkPatientAndMultipleQuestionnairePointers(patient, questionnaires);
     }
 
-    public static void getAllDistributeLogs (){
-        //
-    }
-
     public static HashMap<String, Boolean> arePatientsAssignedToQuestionnaire(ArrayList<Patient> patients, QuestionnairePointer questionnaire) throws SQLException
     {
         HashMap<String, Boolean> patientIsAssigned = new HashMap<>();
@@ -448,7 +445,7 @@ public class DataLayer
         return databaseAccessor.getAllPatientLogs();
     }
 
-    public static void populatePatientLogsUpdate () throws SQLException
+    public static void populatePatientLogsUpdate() throws SQLException
     {
         try {
             databaseAccessor.populatePatientLogsUpdate();
@@ -460,7 +457,7 @@ public class DataLayer
             throw e;
         }
     }
-    public static void populatePatientLogsInsert () throws SQLException
+    public static void populatePatientLogsInsert() throws SQLException
     {
         try {
             databaseAccessor.populatePatientLogsInsert();
@@ -472,7 +469,7 @@ public class DataLayer
             throw e;
         }
     }
-    public static void populatePatientLogsDelete () throws SQLException
+    public static void populatePatientLogsDelete() throws SQLException
     {
         try {
             databaseAccessor.populatePatientLogsDelete();
@@ -494,7 +491,7 @@ public class DataLayer
         return databaseAccessor.getAllQuestionnaireLogs();
     }
 
-    public static void populateQuestionnaireLogsUpdate () throws SQLException
+    public static void populateQuestionnaireLogsUpdate() throws SQLException
     {
         try {
             databaseAccessor.populateQuestionnaireLogsUpdate();
@@ -506,7 +503,7 @@ public class DataLayer
             throw e;
         }
     }
-    public static void populateQuestionnaireLogsInsert () throws SQLException
+    public static void populateQuestionnaireLogsInsert() throws SQLException
     {
         try {
             databaseAccessor.populateQuestionnaireLogsInsert();
@@ -518,7 +515,7 @@ public class DataLayer
             throw e;
         }
     }
-    public static void populateQuestionnaireLogsDelete () throws SQLException
+    public static void populateQuestionnaireLogsDelete() throws SQLException
     {
         try {
             databaseAccessor.populateQuestionnaireLogsDelete();
@@ -529,6 +526,10 @@ public class DataLayer
             System.err.println("Error on delete logs in Questionnaire Log");
             throw e;
         }
+    }
+
+    public static void getAllDistributeLogs(){
+        //
     }
 
     /************************************************************

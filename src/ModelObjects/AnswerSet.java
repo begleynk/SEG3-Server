@@ -9,6 +9,7 @@ import java.util.*;
 /**
  * Created by James Bellamy on 08/03/2014.
  * But sadly completely changed by Niklas Begley on 21/03/2014...
+ * 
  */
 public class AnswerSet
 {
@@ -53,8 +54,7 @@ public class AnswerSet
                         answerFound = true;
                     }
                 }
-                if(answerFound == false)
-                {
+                if (answerFound) {
                     return false;
                 }
             }
