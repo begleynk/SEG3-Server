@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="527.0" prefWidth="773.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.ViewAnswers.ViewAnswersController">
+  <children>
+    <SplitPane dividerPositions="0.26329442282749677" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <AnchorPane maxWidth="200.0" minHeight="0.0" minWidth="200.0" prefHeight="160.0" prefWidth="100.0">
+          <children>
+            <ListView fx:id="questionnaireList" prefHeight="349.0" prefWidth="200.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-0.5" AnchorPane.rightAnchor="0.5" AnchorPane.topAnchor="50.0" />
+            <TextField fx:id="questionnaireSearchField" prefWidth="122.99990000000253" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+          </children>
+        </AnchorPane>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <children>
+            <StackPane prefHeight="398.0" prefWidth="442.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <children>
+                <Pane fx:id="answersPane" prefHeight="200.0" prefWidth="200.0">
+                  <children>
+                    <Label layoutX="217.0" layoutY="263.0" text="Answer Selected" />
+                  </children>
+                </Pane>
+                <Pane fx:id="noQuestionnaireSelectedPane" prefHeight="200.0" prefWidth="200.0">
+                  <children>
+                    <Label layoutX="217.0" layoutY="263.0" text="No Questionnaire Selected" />
+                  </children>
+                </Pane>
+                <Pane fx:id="questionnaireSelectedPane" prefHeight="200.0" prefWidth="200.0">
+                  <children>
+                    <Label layoutX="217.0" layoutY="263.0" text="Questionnaire Selected" />
+                  </children>
+                </Pane>
+              </children>
+            </StackPane>
+          </children>
+        </AnchorPane>
+      </items>
+    </SplitPane>
+  </children>
+</AnchorPane>

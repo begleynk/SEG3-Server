@@ -44,6 +44,7 @@ public class MainSceneController implements Initializable {
             "Questionnaire Builder",
             "Questionnaire Deployment",
             "Distribute Questionnaires",
+            "View Answers",
             new Separator(),
             "Connect Tablets",
             new Separator(),
@@ -59,6 +60,7 @@ public class MainSceneController implements Initializable {
             "/GUI/QuestionnaireBuilder/questionnaireBuilder.fxml",
             "/GUI/QuestionnaireDeployment/questionnaireDeployment.fxml",
             "/GUI/QuestionnaireDistribute/questionnaireDistribute.fxml",
+            "/GUI/ViewAnswers/viewAnswers.fxml",
             null, // Separator
             "/GUI/ConnectTablets/settingControls.fxml",
             null, // Separator
