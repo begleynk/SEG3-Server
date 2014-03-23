@@ -5,6 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane id="AnchorPane" fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="527.0" prefWidth="773.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.ViewAnswers.ViewAnswersController">
   <children>
@@ -20,21 +21,37 @@
           <children>
             <StackPane prefHeight="398.0" prefWidth="442.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <children>
-                <Pane fx:id="answersPane" prefHeight="200.0" prefWidth="200.0">
+                <AnchorPane fx:id="answersPane" prefHeight="200.0" prefWidth="200.0">
                   <children>
-                    <Label layoutX="217.0" layoutY="263.0" text="Answer Selected" />
+                    <Label layoutX="231.0" layoutY="255.0" text="Answer Selected" />
                   </children>
-                </Pane>
-                <Pane fx:id="noQuestionnaireSelectedPane" prefHeight="200.0" prefWidth="200.0">
+                </AnchorPane>
+                <AnchorPane fx:id="noQuestionnaireSelectedPane" prefHeight="200.0" prefWidth="200.0">
                   <children>
-                    <Label layoutX="217.0" layoutY="263.0" text="No Questionnaire Selected" />
+                    <Label layoutX="199.0" layoutY="255.0" text="No Questionnaire Selected" />
                   </children>
-                </Pane>
-                <Pane fx:id="questionnaireSelectedPane" prefHeight="200.0" prefWidth="200.0">
+                </AnchorPane>
+                <AnchorPane fx:id="questionnaireSelectedPane" prefHeight="200.0" prefWidth="200.0">
                   <children>
-                    <Label layoutX="217.0" layoutY="263.0" text="Questionnaire Selected" />
+                    <Label layoutX="17.0" layoutY="14.0" text="Title:" underline="false">
+                      <font>
+                        <Font name="System Bold" size="13.0" fx:id="x1" />
+                      </font>
+                    </Label>
+                    <Label fx:id="questionnaireTitleLabel" layoutX="17.0" layoutY="42.0" prefWidth="257.0" text="" />
+                    <Label font="$x1" layoutX="17.0" layoutY="70.0" text="Times answered:" underline="false" />
+                    <Label fx:id="numberOfSubmissions" layoutX="17.0" layoutY="98.0" prefWidth="135.0" text="" />
+                    <Label font="$x1" layoutX="323.0" layoutY="14.0" text="Questions:" underline="false" />
+                    <Label id="questionnaireTitleLabel" fx:id="numberOfQuestions" layoutX="323.0" layoutY="42.0" prefWidth="191.0" text="" />
+                    <TableView fx:id="answerTable" editable="false" mouseTransparent="false" prefHeight="262.5" prefWidth="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                      <columns>
+                        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="182.0" text="NHS #" fx:id="tableNSHcolumn" />
+                        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="129.0" text="First Name" fx:id="tableFirstNameColumn" />
+                        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="145.0" text="Last Name" fx:id="tableLastNameColumn" />
+                      </columns>
+                    </TableView>
                   </children>
-                </Pane>
+                </AnchorPane>
               </children>
             </StackPane>
           </children>

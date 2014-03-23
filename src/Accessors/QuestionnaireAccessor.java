@@ -174,7 +174,7 @@ public class QuestionnaireAccessor {
                 ArrayList<AnswerSet> answers = new ArrayList<AnswerSet>();
                 for(File file : folder.listFiles())
                 {
-                    if(!file.getName().matches("/questionnaire/"))
+                    if(!file.getName().startsWith("questionnaire"))
                     {
                         BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));
                         AnswerSet a = json.fromJson(reader, AnswerSet.class);
