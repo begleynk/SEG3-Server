@@ -31,11 +31,11 @@
             <AnchorPane fx:id="detailsPane" minHeight="367.0" prefHeight="367.0" prefWidth="399.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="31.0">
               <children>
                 <Button layoutX="14.0" layoutY="332.0" mnemonicParsing="false" onAction="#disconnectTablet" text="Disconnect" />
-                <Label id="connectionData5" fx:id="connectionData1" prefWidth="296.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="63.0" />
-                <Label id="connectionData4" fx:id="connectionData2" prefWidth="296.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="120.0" />
-                <Label fx:id="connectionData3" prefWidth="282.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="181.0" />
-                <Label id="connectionData2" fx:id="connectionData4" prefWidth="296.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="239.0" />
-                <Label id="connectionData1" fx:id="connectionData5" prefWidth="282.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="295.0" />
+                <Label id="connectionData5" fx:id="iNetAddressLabel" prefWidth="296.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="63.0" />
+                <Label id="connectionData4" fx:id="startTimeLabel" prefWidth="296.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="120.0" />
+                <Label fx:id="portNumberLabel" prefWidth="282.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="181.0" />
+                <Label id="connectionData2" fx:id="connectionNameLabel" prefWidth="296.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="239.0" />
+                <Label id="connectionData1" fx:id="connectionIdLabel" prefWidth="282.0" text="" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="295.0" />
                 <Label font="$x1" text="Thread ID" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="214.0" />
                 <Label font="$x1" text="Thread Name" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="271.0" />
                 <Label font="$x1" text="Connection Port" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="152.0" />
@@ -46,7 +46,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="31.000099999997474" prefWidth="399.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
               <children>
-                <Label fx:id="myIPaddress" prefWidth="371.0" text="My IP Address:" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="9.0">
+                <Label fx:id="myIPAddress" prefWidth="371.0" text="My IP Address:" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="9.0">
                   <font>
                     <Font size="14.0" />
                   </font>

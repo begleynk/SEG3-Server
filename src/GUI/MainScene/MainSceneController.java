@@ -25,8 +25,9 @@ import java.util.ResourceBundle;
 public class MainSceneController implements Initializable {
 
     @FXML private StackPane stackPane;
-    @FXML private ChoiceBox<Object> viewChooser;
+
     @FXML private ImageView mainLogo;
+    @FXML private ChoiceBox<Object> viewChooser;
 
     private final Object[] menuOptions = {
             "Welcome",
