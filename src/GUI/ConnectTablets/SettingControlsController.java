@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -27,6 +28,8 @@ import java.util.ResourceBundle;
 public class SettingControlsController implements Initializable
 {
 
+    @FXML private Parent root;
+
     @FXML private ListView<SocketProcess> tabletList;
 
     @FXML private Label iNetAddressLabel;
@@ -34,6 +37,7 @@ public class SettingControlsController implements Initializable
     @FXML private Label portNumberLabel;
     @FXML private Label connectionNameLabel;
     @FXML private Label connectionIdLabel;
+
     @FXML private Label myIPAddressLabel;
 
     @FXML private AnchorPane detailsPane;

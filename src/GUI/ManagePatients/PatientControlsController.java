@@ -47,11 +47,9 @@ public class PatientControlsController implements Initializable {
     @FXML private TextField postcodeField;
 
     // All Input Fields
-    private TextField[] dataInputFields = new TextField[]{nhsNumberField, firstNameField, middleNameField, lastNameField, dayDOBField,
-            monthDOBField, yearDOBField, postcodeField};
+    private TextField[] dataInputFields;
     // Subset of Input Fields that require input
-    private TextField[] requiredFields = new TextField[]{nhsNumberField, firstNameField, lastNameField, dayDOBField,
-            monthDOBField, yearDOBField};
+    private TextField[] requiredFields;
 
     // Input Field information labels
     @FXML private Label nhsInformationLabel;
@@ -77,6 +75,11 @@ public class PatientControlsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        dataInputFields = new TextField[]{nhsNumberField, firstNameField, middleNameField, lastNameField, dayDOBField,
+                monthDOBField, yearDOBField, postcodeField};
+        requiredFields = new TextField[]{nhsNumberField, firstNameField, lastNameField, dayDOBField,
+                monthDOBField, yearDOBField};
 
         setupButtonActions();
         setupPatientListView();
