@@ -2,7 +2,6 @@ package GUI.QuestionnaireDistribute;
 
 import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
-import ModelObjects.Patient;
 import ModelObjects.QuestionnairePointer;
 import ModelObjects.TablePatient;
 import javafx.beans.property.BooleanProperty;
@@ -40,9 +39,8 @@ public class QuestionnaireDistributeController implements Initializable {
     @FXML private TableColumn<TablePatient, String> nameColumn;
     @FXML private TableColumn<TablePatient, Boolean> checkBoxColumn;
 
-
     private QuestionnairePointer selectedQuestionnairePointer;
-    private ArrayList<QuestionnairePointer> selectedQuestionnairePointers;
+    //private ArrayList<QuestionnairePointer> selectedQuestionnairePointers;
 
     private ObservableList<QuestionnairePointer> visibleQuestionnairePointers
             = FXCollections.observableArrayList();
@@ -59,7 +57,16 @@ public class QuestionnaireDistributeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        // Setup Questionnaire Pointed ListView
+        setupQuestionnairePointerListView();
+        setupTableView();
+        setupTableColumns();
+
+        fetchDeployedQuestionnaires();
+        fetchAllPatients();
+    }
+
+    public void setupQuestionnairePointerListView() {
+        this.questionnairePointerListView.setItems(visibleQuestionnairePointers);
         this.questionnairePointerListView.setCellFactory(new Callback<ListView<QuestionnairePointer>, ListCell<QuestionnairePointer>>() {
             @Override
             public ListCell<QuestionnairePointer> call(ListView<QuestionnairePointer> p) {
@@ -74,7 +81,7 @@ public class QuestionnaireDistributeController implements Initializable {
                 };
             }
         });
-        this.questionnairePointerListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        //this.questionnairePointerListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.questionnairePointerListView.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<QuestionnairePointer>() {
                     @Override
@@ -130,7 +137,15 @@ public class QuestionnaireDistributeController implements Initializable {
                     }
                 }
         );
+    }
 
+    public void setupTableView() {
+        this.patientTableView.setEditable(true);
+        this.patientTableView.getColumns().remove(this.checkBoxColumn);
+        this.patientTableView.setItems(visiblePatients);
+    }
+
+    public void setupTableColumns() {
         this.nhsNumberColumn.setCellValueFactory(new PropertyValueFactory<TablePatient, String>("property_nhs_number"));
         this.nameColumn.setCellValueFactory(new PropertyValueFactory<TablePatient, String>("property_full_name"));
         this.checkBoxColumn.setCellValueFactory(new PropertyValueFactory<TablePatient, Boolean>("property_is_assigned"));
@@ -139,25 +154,15 @@ public class QuestionnaireDistributeController implements Initializable {
                 return new TableCellCheckBox<>();
             }
         });
-
-        this.patientTableView.setEditable(true);
-        this.patientTableView.getColumns().remove(this.checkBoxColumn);
-        this.patientTableView.setItems(visiblePatients);
-
-        this.questionnairePointerListView.setItems(visibleQuestionnairePointers);
-
-        fetchDeployedQuestionnaires();
-        fetchAllPatients();
     }
 
     // Questionnaire View Methods
 
-    // Fetching Menu data [QuestionnairePointer(s)]
     public void fetchDeployedQuestionnaires() {
+        // Fetching Menu data [QuestionnairePointer(s)]
         try {
             this.offScreenQuestionnairePointers.clear();
-            this.visibleQuestionnairePointers.clear();
-            this.visibleQuestionnairePointers.addAll(DataLayer.getQuestionnairePointersForState(1));
+            this.visibleQuestionnairePointers.setAll(DataLayer.getQuestionnairePointersForState(1));
             questionnaireSearchInputChangedAction();
         } catch (SQLException | NoQuestionnaireException e) {
             e.printStackTrace();
@@ -201,8 +206,7 @@ public class QuestionnaireDistributeController implements Initializable {
     public void fetchAllPatients() {
         try {
             this.offScreenPatients.clear();
-            this.visiblePatients.clear();
-            this.visiblePatients.addAll(DataLayer.getAllTablePatients());
+            this.visiblePatients.setAll(DataLayer.getAllTablePatients());
             patientSearchInputChangedAction();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -234,7 +238,7 @@ public class QuestionnaireDistributeController implements Initializable {
                 patients.add(aPatient);
             }
         }
-        for (Patient patient : patients) {
+        for (TablePatient patient : patients) {
             offScreenPatients.remove(patient);
         }
         visiblePatients.setAll(patients);
@@ -243,7 +247,7 @@ public class QuestionnaireDistributeController implements Initializable {
     // Assign Action Methods
 
     public void assignAction() {
-        if (selectedQuestionnairePointers != null) {
+        if (selectedQuestionnairePointer != null) {
             searchPatientField.setText("");
             patientSearchInputChangedAction();
 
@@ -274,10 +278,6 @@ public class QuestionnaireDistributeController implements Initializable {
 
         }
     }
-
-    /* for (QuestionnairePointer questionnairePointer : selectedQuestionnairePointers) {
-
-                **/
 
     public static class TableCellCheckBox<S, T> extends TableCell<S, T> {
         private final CheckBox checkBox;
