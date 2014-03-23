@@ -46,6 +46,7 @@ public class SocketAPI {
         }
         else if (input.matches("(FindPatient:).*"))
         {
+            System.out.println("Finding patient");
             /****************************************
              FIND PATIENT BY NHS NUMBER
              *****************************************/
@@ -72,6 +73,7 @@ public class SocketAPI {
         }
         else if (input.matches("(GetAllQuestionnairesForPatient:).*"))
         {
+            System.out.println("Getting questionnaires");
             /****************************************
              GET QUESTIONNAIRE FOR PATIENT
              *****************************************/
@@ -98,6 +100,7 @@ public class SocketAPI {
         }
         else if (input.matches("(GetQuestionnaireByID:).*"))
         {
+            System.out.println("Getting questionnaire by id");
             /****************************************
              GET QUESTIONNAIRE BY ID
              *****************************************/
@@ -127,6 +130,7 @@ public class SocketAPI {
         }
         else if (input.matches("(CheckPasscode:).*"))
         {
+            System.out.println("Checking passcode");
             /****************************************
              CHECK PASSCODE
              *****************************************/
@@ -149,6 +153,7 @@ public class SocketAPI {
         }
         else if (input.matches("(SendAnswers: ).*"))
         {
+            System.out.println("Sending answers");
             /****************************************
              SEND ANSWERS
              *****************************************/
@@ -173,8 +178,14 @@ public class SocketAPI {
 
                     if(questionnaire.getState().equals("Deployed"))
                     {
-                        DataLayer.saveAnswer(answerSet);
-                        return Encryptor.encryptAndFormat("{ 'result': true }");
+                        if(DataLayer.saveAnswer(answerSet))
+                        {
+                            return Encryptor.encryptAndFormat("{ 'result': true }");
+                        }
+                        else
+                        {
+                            return Encryptor.encryptAndFormat("{ 'result': false }");
+                        }
                     }
                     else
                     {
@@ -201,6 +212,7 @@ public class SocketAPI {
         }
         else if (input.equals("Close"))
         {
+            System.out.println("*** Closing ***");
             /****************************************
              * CLOSE CONNECTION
              * Do not encrypt the kill signal!

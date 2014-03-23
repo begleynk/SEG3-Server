@@ -54,7 +54,7 @@ public class AnswerSet
                         answerFound = true;
                     }
                 }
-                if (answerFound) {
+                if (!answerFound) {
                     return false;
                 }
             }

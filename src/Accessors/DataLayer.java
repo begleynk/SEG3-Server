@@ -331,6 +331,7 @@ public class DataLayer
                 }
                 else
                 {
+                    System.err.println("Could not mark questionnaire as completed");
                     return false;
                 }
             }
