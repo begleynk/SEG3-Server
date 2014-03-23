@@ -307,8 +307,8 @@ public class PatientControlsController implements Initializable {
         }
 
         String middleNameString = middleNameField.getText().trim();
-        if (!middleNameString.matches("") && (middleNameString.length() < 2 || middleNameString.length() > 20)){
-            errorMessage += "Middle name needs to be 2 to 20 characters long if any \n";
+        if (!middleNameString.equals("") && (middleNameString.length() < 2 || middleNameString.length() > 20)){
+            errorMessage += "Middle name needs to be 2 to 20 characters long if entered\n";
             allIsValid = false;
         }
 
@@ -323,7 +323,7 @@ public class PatientControlsController implements Initializable {
         String year = yearDOBField.getText().trim();
         if (!DateCheckHelper.isDateValid(day, month, year) || Integer.parseInt(year) < 1885){
             errorMessage += "Please enter a valid date of birth. \n" +
-                    "If date of birth is 1 January 2001 then enter 01-01-2001 \n";
+                    "If date of birth is 1st January 2001 then enter 01-01-2001 \n";
             errorMessage = errorMessage.concat(DateCheckHelper.checkDMY(day, month, year));
             allIsValid = false;
         }
