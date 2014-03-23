@@ -128,6 +128,7 @@ public class WelcomeSceneController implements Initializable {
                             }
                             // Should be successful every time
                             passcodeNotDefault = !DataLayer.isPasscodeSetToDefault();
+                            clearInputFields();
                         }
                     } else {
                         Dialogs.showInformationDialog(stage, "Passcodes must be all numbers, and be between 4 and 12 numbers long.");
@@ -171,6 +172,7 @@ public class WelcomeSceneController implements Initializable {
                                     e.printStackTrace();
                                 }
                                 passcodeSetToNew = true;
+                                clearInputFields();
                             }
                         } else {
                             Dialogs.showInformationDialog(stage, "The Passcode must be all numbers, and be between 4 and 12 numbers long.");
@@ -194,6 +196,12 @@ public class WelcomeSceneController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void clearInputFields() {
+        oldPasscodeField.setText("");
+        newPasscodeField.setText("");
+        confirmNewPasscodeField.setText("");
     }
 
 }
