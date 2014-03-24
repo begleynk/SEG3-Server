@@ -3,18 +3,13 @@ package GUI.ViewAnswers;
 import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
 import ModelObjects.AnswerSet;
-import ModelObjects.Answers.Answer;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
-import ModelObjects.Questions.Question;
-import Sockets.SocketProcess;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -25,8 +20,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import java.awt.event.KeyEvent;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,14 +33,18 @@ public class ViewAnswersController implements Initializable
 {
     @FXML private Parent root;
 
-    @FXML private ListView questionnaireList;
-    private final ObservableList<QuestionnairePointer> questionnaires = FXCollections.observableArrayList();
-
+    @FXML private ListView<QuestionnairePointer> questionnairePointerListView;
     @FXML private TextField questionnaireSearchField;
 
     @FXML private AnchorPane noQuestionnaireSelectedPane;
     @FXML private AnchorPane questionnaireSelectedPane;
     @FXML private AnchorPane answersPane;
+    private ArrayList<Pane> rightPanes = new ArrayList<>();
+
+    private ObservableList<QuestionnairePointer> visibleQuestionnairePointers
+            = FXCollections.observableArrayList();
+    private ObservableList<QuestionnairePointer> offScreenQuestionnairePointers
+            = FXCollections.observableArrayList();
 
     /*************************
      * Questionnaire View
@@ -61,26 +58,135 @@ public class ViewAnswersController implements Initializable
     @FXML private TableColumn<Patient, String> tableNSHcolumn;
     @FXML private TableColumn<Patient, String> tableFirstNameColumn;
     @FXML private TableColumn<Patient, String> tableLastNameColumn;
-    private final ObservableList<Patient> patientsThatHaveAnswered = FXCollections.observableArrayList();
 
-    private ArrayList<Pane> rightPanes = new ArrayList<>();
+    private final ObservableList<Patient> patientsThatHaveAnswered = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-        // Left Pane
-        setupQuestionnaireList();
-        setupSearchField();
-
-        // Questionnaire View
-        setupAnswerTable();
-
         // Keep track of all panels for later...
         rightPanes.add(noQuestionnaireSelectedPane);
         rightPanes.add(questionnaireSelectedPane);
         rightPanes.add(answersPane);
 
+        // Show Default Pane
         switchToPane(noQuestionnaireSelectedPane);
+
+        // Setup the Patient TableView
+        setupAnswerTable();
+
+        // Setup the ListView behaviours
+        setupQuestionnairePointerListView();
+
+        // Fetch the data for the left menu
+        fetchQuestionnairePointers();
+    }
+
+    public void setupQuestionnairePointerListView()
+    {
+        this.questionnairePointerListView.setCellFactory(new Callback<ListView<QuestionnairePointer>, ListCell<QuestionnairePointer>>() {
+            @Override
+            public ListCell<QuestionnairePointer> call(ListView<QuestionnairePointer> p) {
+                return new ListCell<QuestionnairePointer>() {
+                    @Override
+                    protected void updateItem(QuestionnairePointer pointer, boolean aBool) {
+                        super.updateItem(pointer, aBool);
+                        if (pointer != null) {
+                            setText(pointer.getTitle());
+                        }
+                    }
+                };
+            }
+        });
+        this.questionnairePointerListView.getSelectionModel().selectedItemProperty().addListener(
+                new ChangeListener<QuestionnairePointer>() {
+                    @Override
+                    public void changed(ObservableValue<? extends QuestionnairePointer> observableValue, QuestionnairePointer old_pointer, QuestionnairePointer new_pointer) {
+                        if (new_pointer != null) {
+                            try
+                            {
+                                showQuestionnaireDetails(DataLayer.getQuestionnaireWithPointer(new_pointer));
+                            }
+                            catch(NoQuestionnaireException e)
+                            {
+                                System.err.println("Tried to get a questionnaire that does not exist.");
+                            }
+                        } else {
+                            switchToPane(noQuestionnaireSelectedPane);
+                        }
+                    }
+                }
+        );
+        this.questionnairePointerListView.setItems(visibleQuestionnairePointers);
+    }
+
+    public void setupAnswerTable()
+    {
+        tableNSHcolumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("nhsNumber"));
+        tableFirstNameColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("first_name"));
+        tableLastNameColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("surname"));
+
+        answerTable.setItems(patientsThatHaveAnswered);
+    }
+
+    // Left Menu Methods
+
+    public void fetchQuestionnairePointers()
+    {
+        try {
+            this.offScreenQuestionnairePointers.clear();
+            this.visibleQuestionnairePointers.clear();
+            this.visibleQuestionnairePointers.addAll(DataLayer.getQuestionnairePointersForState(1));
+            this.visibleQuestionnairePointers.addAll(DataLayer.getQuestionnairePointersForState(2));
+            searchInputChangedAction();
+        } catch (SQLException | NoQuestionnaireException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void searchInputChangedAction()
+    {
+        String searchTerm = questionnaireSearchField.getText();
+        if (searchTerm == null || searchTerm.equals("") ) {
+            visibleQuestionnairePointers.addAll(offScreenQuestionnairePointers);
+            offScreenQuestionnairePointers.clear();
+        } else {
+            fuzzySearchQuestionnairePointerUsingSearchTerm(searchTerm);
+        }
+    }
+
+    public void fuzzySearchQuestionnairePointerUsingSearchTerm(String searchTerm)
+    {
+        searchTerm = searchTerm.trim().toLowerCase();
+        offScreenQuestionnairePointers.addAll(visibleQuestionnairePointers);
+        visibleQuestionnairePointers.clear();
+        ArrayList<QuestionnairePointer> pointers = new ArrayList<>();
+        for (QuestionnairePointer pointer : offScreenQuestionnairePointers) {
+            if (pointer.getTitle().toLowerCase().startsWith(searchTerm) ||
+                    pointer.getTitle().toLowerCase().contains(searchTerm)) {
+                pointers.add(pointer);
+            }
+        }
+        for (QuestionnairePointer pointer : pointers) {
+            offScreenQuestionnairePointers.remove(pointer);
+        }
+        visibleQuestionnairePointers.setAll(pointers);
+    }
+
+    public void questionnaireListViewSelectNone()
+    {
+        this.questionnairePointerListView.getSelectionModel().clearSelection();
+        this.questionnaireSearchField.requestFocus();
+    }
+
+    // Context Transition Actions
+
+    public void switchToPane(Pane pane)
+    {
+        for(Pane p : rightPanes)
+        {
+            p.setVisible((p == pane));
+        }
     }
 
     public void showQuestionnaireDetails(Questionnaire questionnaire)
@@ -99,138 +205,25 @@ public class ViewAnswersController implements Initializable
             numberOfQuestions.setText("" + questionnaire.getQuestions().size());
             questionnaireTitleLabel.setText(questionnaire.getTitle());
 
-            updateAnswerTable(allAnswers);
+            updatePatientAnswerTable(allAnswers);
         }
-        catch(NoQuestionnaireException e)
-        {
-            Dialogs.showErrorDialog((Stage)this.root.getScene().getWindow(), "There was an error getting the questionnaires. Please contact support.");
-            e.printStackTrace();
-        }
-        catch (SQLException e)
+        catch(NoQuestionnaireException | SQLException e)
         {
             Dialogs.showErrorDialog((Stage)this.root.getScene().getWindow(), "There was an error getting the questionnaires. Please contact support.");
             e.printStackTrace();
         }
     }
 
-    public void switchToPane(Pane pane)
+    // TableView Actions
+
+    public void updatePatientAnswerTable(ArrayList<AnswerSet> answerSets) throws SQLException
     {
-        for(Pane p : rightPanes)
-        {
-            if(p == pane)
-            {
-                p.setVisible(true);
-            }
-            else
-            {
-                p.setVisible(false);
-            }
-        }
-    }
-
-    public void searchQuestionnaires()
-    {
-        String query = questionnaireSearchField.getText();
-        ArrayList<QuestionnairePointer> questionnairesToShow = new ArrayList<>();
-
-        if(!query.equals("") || query == null)
-        {
-            for(QuestionnairePointer q : questionnaires)
-            {
-                if(q.getTitle().contains(query))
-                {
-                    questionnairesToShow.add(q);
-                }
-            }
-            questionnaires.setAll(questionnairesToShow);
-        }
-        else
-        {
-            updateQuestionnaires();
-        }
-    }
-
-
-    public void updateQuestionnaires()
-    {
-        try
-        {
-            ArrayList<QuestionnairePointer> tempQuestionnaires = DataLayer.getQuestionnairePointersForState(1);
-            tempQuestionnaires.addAll(DataLayer.getQuestionnairePointersForState(2));
-            this.questionnaires.setAll(tempQuestionnaires);
-        }
-        catch(SQLException | NoQuestionnaireException e)
-        {
-            Dialogs.showErrorDialog((Stage)this.root.getScene().getWindow(), "There was an error getting the questionnaires. Please contact support.");
-            e.printStackTrace();
-        }
-    }
-
-    public void updateAnswerTable(ArrayList<AnswerSet> answerSets) throws SQLException
-    {
-        for(AnswerSet set : answerSets)
+        patientsThatHaveAnswered.clear();
+        for (AnswerSet set : answerSets)
         {
             Patient patient = DataLayer.getPatientByNSHNUmber(set.getPatientNHS());
             patientsThatHaveAnswered.add(patient);
         }
     }
 
-    public void setupAnswerTable()
-    {
-        tableNSHcolumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("nhsNumber"));
-        tableFirstNameColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("first_name"));
-        tableLastNameColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("surname"));
-
-        answerTable.setItems(patientsThatHaveAnswered);
-    }
-
-    public void setupSearchField()
-    {
-        questionnaireSearchField.setOnKeyReleased(new EventHandler<javafx.scene.input.KeyEvent>() {
-            @Override
-            public void handle(javafx.scene.input.KeyEvent keyEvent) {
-                searchQuestionnaires();
-            }
-        });
-    }
-
-    public void setupQuestionnaireList()
-    {
-        this.questionnaireList.setCellFactory(new Callback<ListView<QuestionnairePointer>, ListCell<QuestionnairePointer>>()
-        {
-            @Override
-            public ListCell<QuestionnairePointer> call(ListView<QuestionnairePointer> p)
-            {
-                return new ListCell<QuestionnairePointer>()
-                {
-                    @Override
-                    protected void updateItem(QuestionnairePointer q, boolean bool)
-                    {
-                        super.updateItem(q, bool);
-                        if (q != null)
-                        {
-                            setText(q.getTitle());
-                        }
-                    }
-                };
-            }
-        });
-        this.questionnaireList.setItems(questionnaires);
-
-        this.questionnaireList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<QuestionnairePointer>() {
-            @Override
-            public void changed(ObservableValue<? extends QuestionnairePointer> questionnaire, QuestionnairePointer old_one, QuestionnairePointer selection) {
-                try
-                {
-                    Questionnaire q = DataLayer.getQuestionnaireWithPointer(selection);
-                    showQuestionnaireDetails(q);
-                }
-                catch(NoQuestionnaireException e)
-                {
-                    System.err.println("Tried to get a questionnaire that does not exist.");
-                }
-            }
-        });
-        updateQuestionnaires();
-    }
 }

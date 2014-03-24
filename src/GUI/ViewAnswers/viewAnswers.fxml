@@ -13,8 +13,16 @@
       <items>
         <AnchorPane maxWidth="200.0" minHeight="0.0" minWidth="200.0" prefHeight="160.0" prefWidth="100.0">
           <children>
-            <ListView fx:id="questionnaireList" prefHeight="349.0" prefWidth="200.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-0.5" AnchorPane.rightAnchor="0.5" AnchorPane.topAnchor="50.0" />
-            <TextField fx:id="questionnaireSearchField" prefWidth="122.99990000000253" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+            <ListView fx:id="questionnairePointerListView" prefHeight="349.0" prefWidth="200.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-0.5" AnchorPane.rightAnchor="0.5" AnchorPane.topAnchor="50.0">
+              <contextMenu>
+                <ContextMenu>
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#questionnaireListViewSelectNone" text="Select None" />
+                  </items>
+                </ContextMenu>
+              </contextMenu>
+            </ListView>
+            <TextField fx:id="questionnaireSearchField" onKeyReleased="#searchInputChangedAction" prefWidth="173.00009999999747" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">

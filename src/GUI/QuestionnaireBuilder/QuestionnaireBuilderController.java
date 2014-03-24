@@ -302,7 +302,6 @@ public class QuestionnaireBuilderController implements Initializable {
         }
     }
 
-
     public void fuzzySearchQuestionnairePointerUsingSearchTerm(String searchTerm) {
         searchTerm = searchTerm.trim().toLowerCase();
         offScreenQuestionnairePointers.addAll(visibleQuestionnairePointers);

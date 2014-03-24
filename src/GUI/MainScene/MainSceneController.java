@@ -44,12 +44,12 @@ public class MainSceneController implements Initializable {
             "Questionnaire Builder",
             "Questionnaire Deployment",
             "Distribute Questionnaires",
-            "View Answers",
             new Separator(),
             "Connect Tablets",
             new Separator(),
             "Change Logs",
             new Separator(),
+            "View Answers",
             "Export Answers"
     };
     private final String[] viewPaths = {
@@ -60,12 +60,12 @@ public class MainSceneController implements Initializable {
             "/GUI/QuestionnaireBuilder/questionnaireBuilder.fxml",
             "/GUI/QuestionnaireDeployment/questionnaireDeployment.fxml",
             "/GUI/QuestionnaireDistribute/questionnaireDistribute.fxml",
-            "/GUI/ViewAnswers/viewAnswers.fxml",
             null, // Separator
             "/GUI/ConnectTablets/settingControls.fxml",
             null, // Separator
             "/GUI/ChangeLogs/changeLogs.fxml",
             null, // Separator
+            "/GUI/ViewAnswers/viewAnswers.fxml",
             "/GUI/ExportAnswer/exportAnswer.fxml"
     };
 
