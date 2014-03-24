@@ -47,7 +47,7 @@ public class MainSceneController implements Initializable {
             new Separator(),
             "Connect Tablets",
             new Separator(),
-            "Change Logs",
+            "Logs",
             new Separator(),
             "View Answers",
             "Export Answers"
