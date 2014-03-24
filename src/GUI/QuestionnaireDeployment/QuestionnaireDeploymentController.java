@@ -7,11 +7,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.beans.EventHandler;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -70,7 +78,29 @@ public class QuestionnaireDeploymentController implements Initializable {
         this.deployedListView.setItems(deployedQuestionnaires);
         this.archivedListView.setItems(archivedQuestionnaires);
         this.draftListView.setItems(draftQuestionnaires);
+
+        this.draftListView.setOnMouseClicked(new javafx.event.EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                doubleClicked(mouseEvent);
+            }
+        });
     }
+
+   public void doubleClicked(MouseEvent mouseEvent) {
+      if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+          if(mouseEvent.getClickCount() == 2) {
+
+              System.out.println("Double clicked to view the questions on the selected Questionnaire!");
+              Group root = new Group();
+              Stage stage = new Stage();
+              Scene scene = new Scene(root, 500, 500, Color.WHITE);
+              stage.setTitle(draftListView.getSelectionModel().getSelectedItem().getTitle());
+              stage.setScene(scene);
+              stage.show();
+          }
+      }
+   }
 
     // Fetching Data from Database
 
@@ -138,4 +168,5 @@ public class QuestionnaireDeploymentController implements Initializable {
         fetchDeployedQuestionnaires();
         fetchDraftQuestionnaires();
     }
+
 }
