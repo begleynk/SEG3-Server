@@ -6,9 +6,11 @@ import Sockets.ConnectionHandler;
 import Sockets.SocketServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -70,7 +72,10 @@ public class Main extends Application {
             Scene scene = new Scene(mainScene, stage.getWidth(), stage.getHeight());
             stage.setMinWidth(1000);
             stage.setMinHeight(700);
-            stage.setFullScreen(true);
+            stage.centerOnScreen();
+            Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+            stage.setWidth(visualBounds.getWidth());
+            stage.setHeight(visualBounds.getHeight());
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
