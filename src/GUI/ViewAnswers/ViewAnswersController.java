@@ -2,6 +2,8 @@ package GUI.ViewAnswers;
 
 import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
+import ModelObjects.AnswerSet;
+import ModelObjects.Answers.Answer;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
@@ -16,10 +18,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Dialogs;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -44,21 +45,40 @@ public class ViewAnswersController implements Initializable
 
     @FXML private TextField questionnaireSearchField;
 
-    @FXML private Pane noQuestionnaireSelectedPane;
-    @FXML private Pane questionnaireSelectedPane;
-    @FXML private Pane answersPane;
+    @FXML private AnchorPane noQuestionnaireSelectedPane;
+    @FXML private AnchorPane questionnaireSelectedPane;
+    @FXML private AnchorPane answersPane;
 
-    private ArrayList<Pane> leftPanes = new ArrayList<>();
+    /*************************
+     * Questionnaire View
+     *************************/
+
+    @FXML private Label questionnaireTitleLabel;
+    @FXML private Label numberOfSubmissions;
+    @FXML private Label numberOfQuestions;
+
+    @FXML private TableView<Patient> answerTable;
+    @FXML private TableColumn<Patient, String> tableNSHcolumn;
+    @FXML private TableColumn<Patient, String> tableFirstNameColumn;
+    @FXML private TableColumn<Patient, String> tableLastNameColumn;
+    private final ObservableList<Patient> patientsThatHaveAnswered = FXCollections.observableArrayList();
+
+    private ArrayList<Pane> rightPanes = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
+        // Left Pane
         setupQuestionnaireList();
         setupSearchField();
 
-        leftPanes.add(noQuestionnaireSelectedPane);
-        leftPanes.add(questionnaireSelectedPane);
-        leftPanes.add(answersPane);
+        // Questionnaire View
+        setupAnswerTable();
+
+        // Keep track of all panels for later...
+        rightPanes.add(noQuestionnaireSelectedPane);
+        rightPanes.add(questionnaireSelectedPane);
+        rightPanes.add(answersPane);
 
         switchToPane(noQuestionnaireSelectedPane);
     }
@@ -71,12 +91,31 @@ public class ViewAnswersController implements Initializable
 
     public void setupQuestionnaireView(Questionnaire questionnaire)
     {
-        System.out.println(questionnaire.getTitle());
+        try
+        {
+            ArrayList<AnswerSet> allAnswers = DataLayer.getAnswerSetsForQuestionnaire(questionnaire);
+
+            numberOfSubmissions.setText("" + allAnswers.size());
+            numberOfQuestions.setText("" + questionnaire.getQuestions().size());
+            questionnaireTitleLabel.setText(questionnaire.getTitle());
+
+            updateAnswerTable(allAnswers);
+        }
+        catch(NoQuestionnaireException e)
+        {
+            Dialogs.showErrorDialog((Stage)this.root.getScene().getWindow(), "There was an error getting the questionnaires. Please contact support.");
+            e.printStackTrace();
+        }
+        catch (SQLException e)
+        {
+            Dialogs.showErrorDialog((Stage)this.root.getScene().getWindow(), "There was an error getting the questionnaires. Please contact support.");
+            e.printStackTrace();
+        }
     }
 
     public void switchToPane(Pane pane)
     {
-        for(Pane p : leftPanes)
+        for(Pane p : rightPanes)
         {
             if(p == pane)
             {
@@ -123,7 +162,26 @@ public class ViewAnswersController implements Initializable
         catch(SQLException | NoQuestionnaireException e)
         {
             Dialogs.showErrorDialog((Stage)this.root.getScene().getWindow(), "There was an error getting the questionnaires. Please contact support.");
+            e.printStackTrace();
         }
+    }
+
+    public void updateAnswerTable(ArrayList<AnswerSet> answerSets) throws SQLException
+    {
+        for(AnswerSet set : answerSets)
+        {
+            Patient patient = DataLayer.getPatientByNSHNUmber(set.getPatientNHS());
+            patientsThatHaveAnswered.add(patient);
+        }
+    }
+
+    public void setupAnswerTable()
+    {
+        tableNSHcolumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("nhsNumber"));
+        tableFirstNameColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("first_name"));
+        tableLastNameColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("surname"));
+
+        answerTable.setItems(patientsThatHaveAnswered);
     }
 
     public void setupSearchField()
