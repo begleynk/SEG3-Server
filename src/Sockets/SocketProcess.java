@@ -60,6 +60,19 @@ public class SocketProcess extends Thread {
         {
             System.out.println("Closed socket " + socket.getInetAddress());
         }
+        catch (NullPointerException e)
+        {
+            // Closes the connection if the tablet is unable to close the connection properly.
+            try
+            {
+                ConnectionHandler.closeConnection(this);
+            }
+            catch(IOException e1)
+            {
+                e1.printStackTrace();
+            }
+
+        }
         catch (IOException e)
         {
             e.printStackTrace();
