@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
- * Created by ahmet ersahin on 11/03/2014.
+ * Created by Ahmet Ersahin on 11/03/2014.
  *
  */
 public class ChangeLogsController implements Initializable {
@@ -39,7 +39,6 @@ public class ChangeLogsController implements Initializable {
             = FXCollections.observableArrayList();
     private ObservableList<PatientQuestionnaireLog> allDistributeLog
             = FXCollections.observableArrayList();
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

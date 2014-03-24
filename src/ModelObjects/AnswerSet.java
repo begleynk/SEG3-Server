@@ -2,16 +2,20 @@ package ModelObjects;
 
 import ModelObjects.Answers.Answer;
 import ModelObjects.Questions.Question;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.*;
 
 /**
  * Created by James Bellamy on 08/03/2014.
  * But sadly completely changed by Niklas Begley on 21/03/2014...
+ * 
  */
 public class AnswerSet
 {
+    @SerializedName(value = "questionnaire_id")
     private int questionnaireID;
+    @SerializedName(value = "patient_id")
     private String patientNHS;
     private ArrayList<Answer> answers;
 
@@ -50,8 +54,7 @@ public class AnswerSet
                         answerFound = true;
                     }
                 }
-                if(answerFound == false)
-                {
+                if (!answerFound) {
                     return false;
                 }
             }

@@ -57,7 +57,7 @@ public class Questionnaire
 
     public void setTitle(String title) {
         this.title = title;
-    };
+    }
 
     public void setState(String state)
     {
@@ -84,7 +84,7 @@ public class Questionnaire
         questions.clear();
 
         //list of possible answers
-        List<String> a = new LinkedList<String>();
+        List<String> a = new LinkedList<>();
         a.add("awesome");
         a.add("good");
         a.add("can be");
@@ -105,8 +105,8 @@ public class Questionnaire
         SelectOneQuestion m = new SelectOneQuestion("6", "Pick your mood", "d", true, a);
         m.addDependentQuestion("awesome", new YesNoQuestion("7", "3.1 Is it raining?", "d", false));
 
-        SelectOneQuestion m2 = new SelectOneQuestion("6", "Pick your mood", "d", true, a);
-        m2.addDependentQuestion("awesome", new YesNoQuestion("7", "3.1 Is it raining?", "d", false));
+        SelectOneQuestion m2 = new SelectOneQuestion("6", "Pick your mood 2", "d", true, a);
+        m2.addDependentQuestion("awesome", new YesNoQuestion("7", "3.1 Is it raining? 2", "d", false));
 
         m.addDependentQuestion(a.get(1), m2);
 

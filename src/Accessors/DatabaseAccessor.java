@@ -300,7 +300,7 @@ public class DatabaseAccessor {
                 "FROM Patient_Questionnaire " +
                 "INNER JOIN Questionnaire " +
                 "ON Patient_Questionnaire.Q_id = Questionnaire.Q_id  " +
-                "WHERE Q_state = 'Deployed' AND P_NHS_number ='" + patient.getNhsNumber() +"';";
+                "WHERE Completed = 0 AND Q_state = 'Deployed' AND P_NHS_number ='" + patient.getNhsNumber() +"';";
         System.out.println(query);
         ResultSet result = statement.executeQuery(query);
 
@@ -443,11 +443,14 @@ public class DatabaseAccessor {
     {
         if(isPatientAssignedToQuestionnaire(patient, questionnaire))
         {
+            System.out.println("Patient NHS: " + patient.getNhsNumber());
+            System.out.println("Questionnaire ID: " + questionnaire.getId());
             String query = "UPDATE Patient_Questionnaire SET Completed = 1 WHERE Q_id = ? AND P_NHS_Number = ?;";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, questionnaire.getId());
-            statement.setString(1, patient.getNhsNumber());
+            statement.setString(2, patient.getNhsNumber());
             int success = statement.executeUpdate();
+            System.out.println("Rows changed: " + success);
             if(success == 1)
             {
                 return true;
@@ -470,7 +473,7 @@ public class DatabaseAccessor {
             String query = "UPDATE Patient_Questionnaire SET Completed = 0 WHERE Q_id = ? AND P_NHS_Number = ?;";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, questionnaire.getId());
-            statement.setString(1, patient.getNhsNumber());
+            statement.setString(2, patient.getNhsNumber());
             int success = statement.executeUpdate();
             if(success == 1)
             {

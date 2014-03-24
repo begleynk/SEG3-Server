@@ -1,6 +1,7 @@
 package GUI.ManagePatients;
 
 import Accessors.DataLayer;
+import Helpers.DateCheckHelper;
 import Helpers.GUI.FlexibleToolbarSpace;
 import ModelObjects.Patient;
 import javafx.beans.value.ChangeListener;
@@ -24,7 +25,8 @@ import java.util.ResourceBundle;
 
 /**
  * Created by James Bellamy on 04/03/2014.
- * Collaboration with Faizan Joya 20/03/2014
+ * Collaboration with Faizan Joya 20/03/2014.
+ *
  */
 public class PatientControlsController implements Initializable {
 
@@ -43,14 +45,26 @@ public class PatientControlsController implements Initializable {
     @FXML private TextField monthDOBField;
     @FXML private TextField yearDOBField;
     @FXML private TextField postcodeField;
-    private TextField[] dataInputFields; // All Input Fields
-    private TextField[] requiredFields; // Subset of Input Fields that require input
+
+    // All Input Fields
+    private TextField[] dataInputFields;
+    // Subset of Input Fields that require input
+    private TextField[] requiredFields;
+
+    // Input Field information labels
+    @FXML private Label nhsInformationLabel;
+    @FXML private Label dobInformationLabel;
+    @FXML private Label postcodeInformationLabel;
 
     // Right Pane Toolbar Controls
     @FXML private ToolBar rightPaneToolBar;
     private static Region flexibleSpace = new FlexibleToolbarSpace();
-    private Button saveNewButton, clearFieldsButton, cancelNewPatientButton,
-            saveChangesButton, deselectPatientButton, deletePatientButton;
+    private Button saveNewButton = new Button("Save As New"),
+            cancelNewPatientButton = new Button("Cancel"),
+            saveChangesButton = new Button("Clear Fields"),
+            deletePatientButton = new Button("Delete Patient"),
+            deselectPatientButton = new Button("Deselect Patient"),
+            clearFieldsButton = new Button("Clear Fields");
 
     // Left Pane Data
     private final ObservableList<Patient> visiblePatients
@@ -58,27 +72,24 @@ public class PatientControlsController implements Initializable {
     private final ObservableList<Patient> offScreenPatients
             = FXCollections.observableArrayList();
 
-    // Left pane information labels
-    @FXML private Label nhsInformationLabel;
-    @FXML private Label dobInformationLabel;
-    @FXML private Label postcodeInformationLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.saveNewButton = new Button("Save As New");
-        this.saveChangesButton = new Button("Save Changes to Patient");
-        this.clearFieldsButton = new Button("Clear Fields");
-        this.cancelNewPatientButton = new Button("Cancel");
-        this.deletePatientButton = new Button("Delete Patient");
-        this.deselectPatientButton = new Button("Deselect Patient");
 
-        this.dataInputFields = new TextField[]{nhsNumberField, firstNameField, middleNameField, lastNameField, dayDOBField,
+        dataInputFields = new TextField[]{nhsNumberField, firstNameField, middleNameField, lastNameField, dayDOBField,
                 monthDOBField, yearDOBField, postcodeField};
-        this.requiredFields = new TextField[]{nhsNumberField, firstNameField, lastNameField, dayDOBField,
+        requiredFields = new TextField[]{nhsNumberField, firstNameField, lastNameField, dayDOBField,
                 monthDOBField, yearDOBField};
+
+        setupButtonActions();
+        setupPatientListView();
 
         setInputFieldsEnabled(false);
 
+        fetchAllPatients();
+    }
+
+    public void setupButtonActions() {
         this.saveNewButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -115,7 +126,10 @@ public class PatientControlsController implements Initializable {
                 patientListView.getSelectionModel().clearSelection();
             }
         });
+    }
 
+    public void setupPatientListView() {
+        patientListView.setItems(visiblePatients);
         patientListView.setCellFactory(new Callback<ListView<Patient>, ListCell<Patient>>() {
             @Override
             public ListCell<Patient> call(ListView<Patient> p) {
@@ -134,13 +148,9 @@ public class PatientControlsController implements Initializable {
         patientListView.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Patient>() {
                     public void changed(ObservableValue<? extends Patient> ov, Patient old_val, Patient new_val) {
-                    existingPatientSelected(new_val);
-                }
-        });
-        patientListView.setItems(visiblePatients);
-
-
-        fetchAllPatients();
+                        existingPatientSelected(new_val);
+                    }
+                });
     }
 
     // Main View Transitions
@@ -163,7 +173,6 @@ public class PatientControlsController implements Initializable {
     public void fetchAllPatients() {
         try {
             this.offScreenPatients.clear();
-            this.visiblePatients.clear();
             this.visiblePatients.setAll(DataLayer.getAllPatients());
             searchInputChangedAction();
         } catch (SQLException e) {
@@ -207,7 +216,7 @@ public class PatientControlsController implements Initializable {
     public void existingPatientSelected(Patient aPatient) {
         setupViewForEditingPatientAction();
         if (aPatient != null) {
-        String[] dob = aPatient.getDateOfBirth().split("-");
+            String[] dob = aPatient.getDateOfBirth().split("-");
             this.nhsNumberField.setText(aPatient.getNhsNumber());
             this.firstNameField.setText(aPatient.getFirst_name());
             this.middleNameField.setText(aPatient.getMiddle_name());
@@ -223,9 +232,9 @@ public class PatientControlsController implements Initializable {
 
     public void saveEditedPatient() {
         if (checkFieldValidation()) {
-            String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
-            Patient updatedPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
-                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText().toUpperCase());
+            String dob = yearDOBField.getText().trim() + "-" + monthDOBField.getText().trim() + "-" + dayDOBField.getText().trim();
+            Patient updatedPatient = new Patient(nhsNumberField.getText(), firstNameField.getText().trim(),
+                    middleNameField.getText().trim(), lastNameField.getText().trim(), dob, postcodeField.getText().toUpperCase().trim());
             try {
                 DataLayer.updatePatient(updatedPatient);
                 fetchAllPatients();
@@ -252,16 +261,15 @@ public class PatientControlsController implements Initializable {
     public void saveNewPatient() {
         if (checkFieldValidation()) {
             // Date Format : YYYY-MM-DD
-            String dob = yearDOBField.getText() + "-" + monthDOBField.getText() + "-" + dayDOBField.getText();
-            Patient newPatient = new Patient(nhsNumberField.getText(), firstNameField.getText(),
-                    middleNameField.getText(), lastNameField.getText(), dob, postcodeField.getText().toUpperCase());
+            String dob = yearDOBField.getText().trim() + "-" + monthDOBField.getText().trim() + "-" + dayDOBField.getText().trim();
+            Patient newPatient = new Patient(nhsNumberField.getText(), firstNameField.getText().trim(),
+                    middleNameField.getText().trim(), lastNameField.getText().trim(), dob, postcodeField.getText().toUpperCase().trim());
             try {
                 DataLayer.addPatient(newPatient);
                 fetchAllPatients();
                 clearWorkspace();
             } catch (SQLException e) {
                 e.printStackTrace();
-                // TODO: This error needs to be handled in the GUI
             }
         }
     }
@@ -298,41 +306,31 @@ public class PatientControlsController implements Initializable {
             allIsValid = false;
         }
 
-        String firstNameString = firstNameField.getText();
+        String firstNameString = firstNameField.getText().trim();
         if (firstNameString.length() < 2 || firstNameString.length() > 20){
             errorMessage += "First name needs to be 2 to 20 characters long \n";
             allIsValid = false;
         }
 
-        String middleNameString = middleNameField.getText();
-
-        if (!middleNameString.matches("") && (middleNameString.length() < 2 || middleNameString.length() > 20)){
-            errorMessage += "Middle name needs to be 2 to 20 characters long if any \n";
+        String middleNameString = middleNameField.getText().trim();
+        if (!middleNameString.equals("") && (middleNameString.length() < 2 || middleNameString.length() > 20)){
+            errorMessage += "Middle name needs to be 2 to 20 characters long if entered\n";
             allIsValid = false;
         }
 
-        String lastNameString = lastNameField.getText();
+        String lastNameString = lastNameField.getText().trim();
         if (lastNameString.length() < 2 || lastNameString.length() > 20){
             errorMessage += "Last name needs to be 2 to 20 characters long \n";
             allIsValid = false;
         }
 
-        // TODO: date of birth validation, nw Fez is on it!
-        String day = dayDOBField.getText();
-        if (day.length() != 2 || !day.matches("^\\d{2}$")) {
-            errorMessage += "DoB day needs to be exactly 2 digits \n";
-            allIsValid = false;
-        }
-
-        String month = monthDOBField.getText();
-        if (month.length() != 2 || !month.matches("^\\d{2}$")) {
-            errorMessage += "DoB month needs to be exactly 2 digits \n";
-            allIsValid = false;
-        }
-
-        String year = yearDOBField.getText();
-        if (year.length() != 4 || !year.matches("^\\d{4}$")) {
-            errorMessage += "DoB year needs to be exactly 4 digits \n";
+        String day = dayDOBField.getText().trim();
+        String month = monthDOBField.getText().trim();
+        String year = yearDOBField.getText().trim();
+        if (!DateCheckHelper.isDateValid(day, month, year) || Integer.parseInt(year) < 1885){
+            errorMessage += "Please enter a valid date of birth. \n" +
+                    "If date of birth is 1st January 2001 then enter 01-01-2001 \n";
+            errorMessage = errorMessage.concat(DateCheckHelper.checkDMY(day, month, year));
             allIsValid = false;
         }
 
@@ -377,6 +375,7 @@ public class PatientControlsController implements Initializable {
         this.patientListView.getSelectionModel().clearSelection();
         this.patientSearchField.requestFocus();
     }
+
 }
 
 

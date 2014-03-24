@@ -10,15 +10,15 @@ import ModelObjects.Questions.Question;
 import au.com.bytecode.opencsv.CSV;
 import au.com.bytecode.opencsv.CSVWriteProc;
 import au.com.bytecode.opencsv.CSVWriter;
-import org.omg.DynamicAny._DynSequenceStub;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by NiklasBegley on 22/03/2014.
+ * Created by Niklas Begley on 22/03/2014.
  *
  * Creates a CSV file of all the answers of a given questionnaire. Must be supplied a path when called.
+ *
  */
 public class Exporter
 {

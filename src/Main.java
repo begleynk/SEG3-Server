@@ -1,5 +1,7 @@
 import Database.DatabaseInitializer;
+import GUI.MainScene.MainSceneController;
 import Helpers.DataStorageHelper;
+import Helpers.GUI.PaneHelper;
 import Sockets.ConnectionHandler;
 import Sockets.SocketServer;
 import javafx.application.Application;
@@ -60,8 +62,11 @@ public class Main extends Application {
         serverThread.start();
 
         try {
-            Parent mainScreen = FXMLLoader.load(getClass().getResource("/GUI/MainScene/mainScene.fxml"));
-            Scene scene = new Scene(mainScreen, stage.getWidth(), stage.getHeight());
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GUI/MainScene/mainScene.fxml"));
+            Parent mainScene = PaneHelper.loadPaneForAnchorParentWithFXMLLoader(fxmlLoader);
+            MainSceneController mainSceneController = fxmlLoader.getController();
+            mainSceneController.setStage(stage);
+            Scene scene = new Scene(mainScene, stage.getWidth(), stage.getHeight());
             stage.setMinWidth(1000);
             stage.setMinHeight(700);
             stage.setScene(scene);

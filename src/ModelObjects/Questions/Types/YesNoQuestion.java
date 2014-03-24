@@ -37,11 +37,6 @@ public class YesNoQuestion extends SelectOneQuestion {
 
     @Override
     public String toString() {
-        String string = super.toString();
-        string += "  choices: ";
-        for (String choice : answerOptions) {
-            string += choice + ", ";
-        }
-        return string;
+        return super.toString();
     }
 }

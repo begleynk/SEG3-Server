@@ -1,5 +1,7 @@
 package ModelObjects.Answers;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.*;
 
 /**
@@ -8,9 +10,10 @@ import java.util.*;
  */
 public class Answer {
 
+    @SerializedName(value = "question_id")
     protected String id;
-
-    // Sometimes one answer may include multiple selections. Hence the 
+    // Sometimes one answer may include multiple selections. Hence the
+    @SerializedName(value = "answer")
     protected ArrayList<String> answers;
 
     public Answer(String id, ArrayList<String> answers)

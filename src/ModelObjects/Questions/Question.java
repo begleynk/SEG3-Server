@@ -18,6 +18,8 @@ public abstract class Question {
     protected int type;
     protected HashMap<String, List<Question>> dependentQuestions = new HashMap<>();
 
+    protected String condition = "";
+
     /**
      * Generic Question Constructor.
      *
@@ -39,7 +41,7 @@ public abstract class Question {
         this.title = question.title;
         this.description = question.description;
         this.required = question.required;
-        if (hasDependentQuestions()) {
+        if (hasDependantQuestions()) {
             setDependentQuestionsRequired(this, question.required);
         }
     }
@@ -49,7 +51,7 @@ public abstract class Question {
             List<Question> questions = question.dependentQuestions.get(key);
             for (Question subQuestion : questions) {
                 subQuestion.setRequired(required);
-                if (subQuestion.hasDependentQuestions()) {
+                if (subQuestion.hasDependantQuestions()) {
                     setDependentQuestionsRequired(subQuestion, required);
                 }
             }
@@ -61,7 +63,7 @@ public abstract class Question {
      *
      * @return dependentQuestions
      */
-    public HashMap<String, List<Question>> getDependentQuestionsMap() {
+    public HashMap<String, List<Question>> getDependantQuestionsMap() {
         return this.dependentQuestions;
     }
 
@@ -70,12 +72,9 @@ public abstract class Question {
      *
      * @return TRUE if dependent questions exist, FALSE otherwise.
      */
-    public boolean hasDependentQuestions() {
+    public boolean hasDependantQuestions() {
         Set<String> keys = this.dependentQuestions.keySet();
-        if (keys.size() > 0) {
-            return true;
-        }
-        return false;
+        return (keys.size() > 0);
     }
 
     /**
@@ -90,7 +89,7 @@ public abstract class Question {
         if (this.dependentQuestions.get(condition) != null) {
             return this.dependentQuestions.get(condition);
         }
-        return new LinkedList<Question>();
+        return new LinkedList<>();
     }
 
     /**
@@ -106,12 +105,16 @@ public abstract class Question {
     {
         List<Question> list = getDependentQuestions(condition);
         list.add(question);
+        question.setRequired(this.required);
+        if (hasDependantQuestions()) {
+            setDependentQuestionsRequired(question, this.required);
+        }
         dependentQuestions.put(condition, list);
     }
 
-    public void removeDependentQuestion(Question dependentQuestion) {
-        for (String key : getDependentQuestionsMap().keySet()) {
-            List<Question> questionList = getDependentQuestionsMap().get(key);
+    public void removeDependantQuestion(Question dependentQuestion) {
+        for (String key : getDependantQuestionsMap().keySet()) {
+            List<Question> questionList = getDependantQuestionsMap().get(key);
             if (questionList.contains(dependentQuestion)) {
                 questionList.remove(dependentQuestion);
             }
@@ -129,8 +132,8 @@ public abstract class Question {
      */
     public void addDependentQuestions(String condition, List<Question> questions)
     {
-        for (int i = 0; i < questions.size(); i++) {
-            addDependentQuestion(condition, questions.get(i));
+        for (Question question : questions) {
+            addDependentQuestion(condition, question);
         }
     }
 
@@ -166,6 +169,14 @@ public abstract class Question {
         return description;
     }
 
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
+
     @Override
     public String toString() {
         return "Id: " + this.id +
@@ -176,22 +187,23 @@ public abstract class Question {
 
     private int getClassID(String className)
     {
-        // Types: 0 = scale, 1 = choosemany, 2 = yes/no, 3 = text, 4 = chooseone, 5 = rank
+        // Types: 0 = scale, 1 = choose many, 2 = yes/no, 3 = text, 4 = choose one, 5 = rank
 
-        if (className.equals("RangeQuestion")) {
-            return 0;
-        } else if (className.equals("SelectManyQuestion")) {
-            return 1;
-        } else if (className.equals("YesNoQuestion")) {
-            return 2;
-        } else if (className.equals("TextQuestion")) {
-            return 3;
-        } else if (className.equals("SelectOneQuestion")) {
-            return 4;
-        } else if (className.equals("RankQuestion")) {
-            return 5;
-        } else {
-            return -1;
+        switch (className) {
+            case "RangeQuestion":
+                return 0;
+            case "SelectManyQuestion":
+                return 1;
+            case "YesNoQuestion":
+                return 2;
+            case "TextQuestion":
+                return 3;
+            case "SelectOneQuestion":
+                return 4;
+            case "RankQuestion":
+                return 5;
+            default:
+                return -1;
         }
     }
 }
