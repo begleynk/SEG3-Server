@@ -17,8 +17,8 @@
     </Label>
     <TextField fx:id="titleField" prefWidth="530.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="36.0" />
     <Label font="$x1" text="Description:" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="14.0" />
-    <TextArea fx:id="descriptionField" prefHeight="67.9998779296875" prefWidth="530.0" wrapText="true" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
     <TextField fx:id="newChoiceField" prefWidth="417.0" promptText="New Choice" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="127.0" />
+    <TextArea fx:id="descriptionField" prefHeight="67.9998779296875" prefWidth="530.0" wrapText="true" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
     <ListView fx:id="choicesListView" prefHeight="68.0" prefWidth="530.0" AnchorPane.bottomAnchor="151.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="95.0" />
     <Label font="$x1" text="Choices:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="68.0" />
     <Button mnemonicParsing="false" onAction="#removeSelectedChoices" prefWidth="-1.0" text="Remove Selected Choices" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="67.0" />

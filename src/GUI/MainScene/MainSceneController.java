@@ -109,12 +109,13 @@ public class MainSceneController implements Initializable {
     }
 
     public void setLogo(){
-        // load the image
-        Image image = new Image("/GUI/Theme/MediQ_logo_main.png");
-        //could also "file:/Gui/..."
+        // load the image,could also "file:/Gui/..."
+        Image image = new Image("/GUI/Theme/MediQ.png");
         mainLogo.setImage(image);
-       // System.out.println("smooth logo: " +mainLogo.isSmooth());
-        //mainLogo.relocate(200,200);
+        mainLogo.setFitWidth(100);
+        mainLogo.setPreserveRatio(true);
+        mainLogo.setSmooth(true);
+        mainLogo.setCache(true);
     }
 
 }
