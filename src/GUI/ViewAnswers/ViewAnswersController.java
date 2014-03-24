@@ -3,20 +3,29 @@ package GUI.ViewAnswers;
 import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
 import ModelObjects.AnswerSet;
+import ModelObjects.Answers.Answer;
+import ModelObjects.Answers.QuestionAnswerTableColumn;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
+import ModelObjects.Questions.Question;
+import com.sun.deploy.util.StringUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -50,6 +59,9 @@ public class ViewAnswersController implements Initializable
      * Questionnaire View
      *************************/
 
+    private ArrayList<AnswerSet> selectedQuestionnaireAnswerSets;
+    private Questionnaire selectedQuestionnaire;
+
     @FXML private Label questionnaireTitleLabel;
     @FXML private Label numberOfSubmissions;
     @FXML private Label numberOfQuestions;
@@ -59,7 +71,25 @@ public class ViewAnswersController implements Initializable
     @FXML private TableColumn<Patient, String> tableFirstNameColumn;
     @FXML private TableColumn<Patient, String> tableLastNameColumn;
 
+    @FXML private Button viewAnswerButton;
+
     private final ObservableList<Patient> patientsThatHaveAnswered = FXCollections.observableArrayList();
+
+    /*************************
+     * Answer View
+     *************************/
+
+    @FXML private Label answerViewNSH;
+    @FXML private Label answerViewQuestionnaireTitle;
+
+    @FXML private TableView<QuestionAnswerTableColumn> answerViewtable;
+    @FXML private TableColumn<QuestionAnswerTableColumn, String> requiredColumn;
+    @FXML private TableColumn<QuestionAnswerTableColumn, String> questionnaireTitleColumn;
+    @FXML private TableColumn<QuestionAnswerTableColumn, String> answerColumn;
+
+    private final ObservableList<QuestionAnswerTableColumn> displayAnswersList = FXCollections.observableArrayList();
+
+    @FXML private Button backButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
@@ -78,8 +108,67 @@ public class ViewAnswersController implements Initializable
         // Setup the ListView behaviours
         setupQuestionnairePointerListView();
 
+        // Setup buttons in layouts
+        setupButtons();
+
         // Fetch the data for the left menu
         fetchQuestionnairePointers();
+    }
+
+    public void updateViewAnswersTable(AnswerSet a, Questionnaire q)
+    {
+        displayAnswersList.setAll(QuestionAnswerTableColumn.createListFromQuestionsAndAnswers(q, a));
+        System.out.println(displayAnswersList.size());
+    }
+
+    public void setupViewAnswersTable()
+    {
+        this.answerColumn.setCellValueFactory(new PropertyValueFactory<QuestionAnswerTableColumn, String>("answers"));
+        this.questionnaireTitleColumn.setCellValueFactory(new PropertyValueFactory<QuestionAnswerTableColumn, String>("questionTitle"));
+        this.requiredColumn.setCellValueFactory(new PropertyValueFactory<QuestionAnswerTableColumn, String>("required"));
+        this.answerViewtable.setItems(displayAnswersList);
+    }
+
+    public void updateAnswerView(AnswerSet answerSet, Questionnaire q)
+    {
+        answerViewNSH.setText(answerSet.getPatientNHS());
+        answerViewQuestionnaireTitle.setText(q.getTitle());
+        updateViewAnswersTable(answerSet, q);
+    }
+
+    public void viewAnswer()
+    {
+        Patient selectedPatient = answerTable.getSelectionModel().getSelectedItem();
+        if(selectedPatient != null)
+        {
+            for(AnswerSet a : selectedQuestionnaireAnswerSets)
+            {
+                if(a.getPatientNHS().equals(selectedPatient.getNhsNumber()))
+                {
+                    setupViewAnswersTable();
+                    updateAnswerView(a, selectedQuestionnaire);
+                    switchToPane(answersPane);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void setupButtons()
+    {
+        this.viewAnswerButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                viewAnswer();
+            }
+        });
+
+        this.backButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                switchToPane(questionnaireSelectedPane);
+            }
+        });
     }
 
     public void setupQuestionnairePointerListView()
@@ -199,13 +288,14 @@ public class ViewAnswersController implements Initializable
     {
         try
         {
-            ArrayList<AnswerSet> allAnswers = DataLayer.getAnswerSetsForQuestionnaire(questionnaire);
+            selectedQuestionnaire = questionnaire;
+            selectedQuestionnaireAnswerSets = DataLayer.getAnswerSetsForQuestionnaire(questionnaire);
 
-            numberOfSubmissions.setText("" + allAnswers.size());
+            numberOfSubmissions.setText("" + selectedQuestionnaireAnswerSets.size());
             numberOfQuestions.setText("" + questionnaire.getQuestions().size());
             questionnaireTitleLabel.setText(questionnaire.getTitle());
 
-            updatePatientAnswerTable(allAnswers);
+            updatePatientAnswerTable(selectedQuestionnaireAnswerSets);
         }
         catch(NoQuestionnaireException | SQLException e)
         {
@@ -225,5 +315,4 @@ public class ViewAnswersController implements Initializable
             patientsThatHaveAnswered.add(patient);
         }
     }
-
 }
