@@ -16,10 +16,10 @@
     </Label>
     <TextField fx:id="titleField" prefWidth="530.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="36.0" />
     <Label font="$x1" text="Description:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="124.0" />
-    <TextArea fx:id="descriptionField" prefHeight="54.0" prefWidth="530.0" wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="148.0" />
     <Label font="$x1" text="Lower Bound:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="70.0" />
     <TextField fx:id="lowerBoundField" prefWidth="93.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="90.0" />
     <Label font="$x1" text="Upper Bound:" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="70.0" />
     <TextField fx:id="upperBoundField" prefWidth="93.0" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="90.0" />
+    <TextArea fx:id="descriptionField" prefHeight="54.0" prefWidth="530.0" wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="148.0" />
   </children>
 </AnchorPane>

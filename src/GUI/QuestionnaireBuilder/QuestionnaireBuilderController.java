@@ -593,11 +593,12 @@ public class QuestionnaireBuilderController implements Initializable {
     // Questionnaire Context Transition Actions
 
     public void setupViewForBuildingNewQuestionnaire() {
-        // Setup Questionniare
+        // Setup Questionnaire
         questionnairePointerListView.getSelectionModel().clearSelection();
         draftQuestionnaire = new Questionnaire("", 0);
         isExistingQuestionnaire = false;
         prepareForEditingQuestionnaire();
+        saveDraftButton.setDisable(!(draftQuestionnaire.getQuestions().size() >0));
     }
 
     public void setupViewForEditingExistingQuestionnaire() {
@@ -678,6 +679,7 @@ public class QuestionnaireBuilderController implements Initializable {
         // QuestionTypeController is no longer required
         this.questionTypeController = null;
         // Hide Question editing controls
+        saveDraftButton.setDisable(!(draftQuestionnaire.getQuestions().size() > 0));
         setQuestionControlsVisible(false);
         dependantQuestionSettingControlsEnabled(false);
     }
