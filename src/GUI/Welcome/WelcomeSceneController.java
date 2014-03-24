@@ -1,6 +1,7 @@
 package GUI.Welcome;
 
 import Accessors.DataLayer;
+import Helpers.IPHelper;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,6 +32,8 @@ public class WelcomeSceneController implements Initializable {
             newPasscodeField = new TextField(),
             confirmNewPasscodeField = new TextField();
 
+    @FXML private Label myIPAddressLabel;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -41,6 +44,8 @@ public class WelcomeSceneController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        viewMyIP();
     }
 
     public void setStage(Stage stage) {
@@ -205,4 +210,18 @@ public class WelcomeSceneController implements Initializable {
         confirmNewPasscodeField.setText("");
     }
 
+    public void viewMyIP()
+    {
+        //server IP
+        try
+        {
+            myIPAddressLabel.setText("My IP Address: " + IPHelper.getIP());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("Unknown Host: " + e);
+            myIPAddressLabel.setText("IP address could not be found.");
+        }
+    }
 }
