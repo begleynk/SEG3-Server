@@ -3,15 +3,14 @@ package ModelObjects.Answers;
 import ModelObjects.AnswerSet;
 import ModelObjects.Questionnaire;
 import ModelObjects.Questions.Question;
-import com.sun.corba.se.spi.orbutil.proxy.LinkedInvocationHandler;
-import com.sun.deploy.util.StringUtils;
-import sun.awt.image.ImageWatched;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by NiklasBegley on 24/03/2014.
+ *
  */
 
 public class QuestionAnswerTableColumn
@@ -23,7 +22,7 @@ public class QuestionAnswerTableColumn
     public QuestionAnswerTableColumn(Question q, Answer a)
     {
         this.questionTitle = q.getTitle();
-        this.answers = StringUtils.join(a.getAnswers(), " | ");
+        this.answers = join(a.getAnswers(), " | ");
         if(q.isRequired())
         {
             required = "*";
@@ -87,5 +86,22 @@ public class QuestionAnswerTableColumn
 
     public String getRequired() {
         return required;
+    }
+
+    public static String join(List<String> list, String delim) {
+
+        StringBuilder sb = new StringBuilder();
+
+        String loopDelim = "";
+
+        for(String s : list) {
+
+            sb.append(loopDelim);
+            sb.append(s);
+
+            loopDelim = delim;
+        }
+
+        return sb.toString();
     }
 }
