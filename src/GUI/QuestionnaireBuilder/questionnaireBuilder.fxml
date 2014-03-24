@@ -53,7 +53,7 @@
                     <Button id="deployButton" fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteQuestionnaire" prefWidth="85.0" text="Delete" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="13.0" />
                     <Label text="Title:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="17.0" />
                     <TextField fx:id="questionnaireTitleField" onKeyReleased="#titleFieldUpdated" prefWidth="494.0" promptText="Questionnaire Title" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="243.0" AnchorPane.topAnchor="14.0" />
-                    <Button fx:id="saveDraftButton" mnemonicParsing="false" onAction="#saveQuestionnaire" prefWidth="120.0" text="Save Changes" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="13.0" />
+                    <Button fx:id="saveDraftButton" mnemonicParsing="false" onAction="#saveDraftQuestionnaire" prefWidth="120.0" text="Save Changes" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="13.0" />
                   </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="268.0" prefWidth="515.0">

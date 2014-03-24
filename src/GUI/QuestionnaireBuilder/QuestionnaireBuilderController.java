@@ -327,6 +327,11 @@ public class QuestionnaireBuilderController implements Initializable {
 
     // Questionnaire Data Methods
 
+    public void saveDraftQuestionnaire() {
+        saveQuestionnaire();
+        endEditingQuestionnaire();
+    }
+
     public void saveQuestionnaire() {
         try {
             if (isExistingQuestionnaire) {
@@ -339,7 +344,6 @@ public class QuestionnaireBuilderController implements Initializable {
             Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "There was an error saving the questionnaire. Try again.");
             e.printStackTrace();
         }
-        endEditingQuestionnaire();
     }
 
     public void deleteQuestionnaire() {
@@ -682,6 +686,7 @@ public class QuestionnaireBuilderController implements Initializable {
         saveDraftButton.setDisable(!(draftQuestionnaire.getQuestions().size() > 0));
         setQuestionControlsVisible(false);
         dependantQuestionSettingControlsEnabled(false);
+        saveQuestionnaire();
     }
 
     public void setQuestionControlsVisible(boolean visible) {
