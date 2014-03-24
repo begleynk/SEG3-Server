@@ -2,16 +2,25 @@
 
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane id="AnchorPane" fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.Welcome.WelcomeSceneController">
   <children>
-    <Label layoutX="176.0" layoutY="152.0" prefWidth="-1.0" text="MediQ">
-      <font>
-        <Font size="80.0" />
-      </font>
-    </Label>
-    <Button mnemonicParsing="false" onAction="#setNewPasscode" text="Change Passcode" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="234.0" AnchorPane.rightAnchor="234.0" />
+    <StackPane prefHeight="323.0" prefWidth="600.0" AnchorPane.bottomAnchor="77.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <ImageView fitHeight="197.2105231034128" fitWidth="535.2857055664062" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@../Theme/MediQ_logo_with_text_1.png" />
+          </image>
+        </ImageView>
+      </children>
+    </StackPane>
+    <StackPane prefHeight="77.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <Button mnemonicParsing="false" onAction="#setNewPasscode" text="Change Passcode" />
+      </children>
+    </StackPane>
   </children>
 </AnchorPane>

@@ -49,8 +49,7 @@ public class MainSceneController implements Initializable {
             new Separator(),
             "Logs",
             new Separator(),
-            "View Answers",
-            "Export Answers"
+            "View Answers"
     };
     private final String[] viewPaths = {
             "/GUI/Welcome/welcome.fxml",
@@ -65,8 +64,7 @@ public class MainSceneController implements Initializable {
             null, // Separator
             "/GUI/ChangeLogs/changeLogs.fxml",
             null, // Separator
-            "/GUI/ViewAnswers/viewAnswers.fxml",
-            "/GUI/ExportAnswer/exportAnswer.fxml"
+            "/GUI/ViewAnswers/viewAnswers.fxml"
     };
 
     @Override

@@ -10,9 +10,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -25,6 +27,8 @@ import java.util.ResourceBundle;
  *
  */
 public class QuestionnaireViewerController implements Initializable {
+
+    @FXML private Parent root;
 
     @FXML private Label questionnaireTitleLabel;
     @FXML private TreeView<Question> questionTreeView;
@@ -189,5 +193,10 @@ public class QuestionnaireViewerController implements Initializable {
         if (question.getClass() == RankQuestion.class) {
             setQuestionTypeView(2);
         }
+    }
+
+    public void close() {
+        Stage stage = (Stage) root.getScene().getWindow();
+        stage.close();
     }
 }
