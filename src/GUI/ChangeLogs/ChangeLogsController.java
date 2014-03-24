@@ -2,6 +2,7 @@ package GUI.ChangeLogs;
 
 import Accessors.DataLayer;
 import ModelObjects.PatientLog;
+import ModelObjects.PatientQuestionnaireLog;
 import ModelObjects.QuestionnaireLog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,27 +29,29 @@ public class ChangeLogsController implements Initializable {
     // Questionnaire titled pane and list
     @FXML private ListView<QuestionnaireLog> questionnaireLogList;
     // Distribute Questionnaire titled pane and list
-    //@FXML private ListView<DistributeLog> distributeLogList;
-    @FXML private ListView distributeLogList;
+    @FXML private ListView<PatientQuestionnaireLog> distributeLogList;
+
 
 
     private ObservableList<PatientLog> allPatientsLog
             = FXCollections.observableArrayList();
     private ObservableList<QuestionnaireLog> allQuestionnairesLog
             = FXCollections.observableArrayList();
-    // private ObservableList<DistributeLog> allDistributeLog = FXCollections.observableArrayList();
+    private ObservableList<PatientQuestionnaireLog> allDistributeLog
+            = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         try {
-            populateBothLists();
+            populateAllLists();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         patientLogList.setItems(allPatientsLog);
         questionnaireLogList.setItems(allQuestionnairesLog);
+        distributeLogList.setItems(allDistributeLog);
 
         fetchAllLogs();
     }
@@ -57,13 +60,13 @@ public class ChangeLogsController implements Initializable {
         try {
             allPatientsLog.setAll(DataLayer.getAllPatientLogs());
             allQuestionnairesLog.setAll(DataLayer.getAllQuestionnaireLogs());
-            // allDistributeLog.setAll(DataLayer.getAllDistributeLogs());
+            allDistributeLog.setAll(DataLayer.getAllPatientQuestionnaireLogs());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void populateBothLists() throws SQLException {
+    public void populateAllLists() throws SQLException {
 
         DataLayer.populatePatientLogsUpdate();
         DataLayer.populatePatientLogsInsert();
@@ -71,7 +74,8 @@ public class ChangeLogsController implements Initializable {
         DataLayer.populateQuestionnaireLogsUpdate();
         DataLayer.populateQuestionnaireLogsInsert();
         DataLayer.populateQuestionnaireLogsDelete();
-
+        DataLayer.populatePatientQuestionnaireLogsUpdate();
+        DataLayer.populatePatientQuestionnaireLogsInsert();
+        DataLayer.populatePatientQuestionnaireLogsDelete();
     }
-
 }

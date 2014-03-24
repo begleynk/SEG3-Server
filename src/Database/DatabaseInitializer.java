@@ -36,18 +36,14 @@ public class DatabaseInitializer
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-            //System.out.println("Creating admin table...");
+
             statement.execute(getQueryFromFile("create_table_admin"));
-            //System.out.println("Creating patient table...");
             statement.execute(getQueryFromFile("create_table_patient"));
-            //System.out.println("Creating questionnaire table...");
             statement.execute(getQueryFromFile("create_table_questionnaire"));
-            //System.out.println("Creating patient_questionnaire table...");
             statement.execute(getQueryFromFile("create_table_patient_questionnaire"));
-            //System.out.println("Creating patient_log table...");
             statement.execute(getQueryFromFile("create_table_patient_log"));
-            //System.out.println("Creating questionnaire_log table...");
             statement.execute(getQueryFromFile("create_table_questionnaire_log"));
+            statement.execute(getQueryFromFile("create_table_patient_questionnaire_log"));
             statement.execute(getQueryFromFile("create_table_removed_patient"));
             statement.execute(getQueryFromFile("create_table_removed_patient_questionnaire"));
 
