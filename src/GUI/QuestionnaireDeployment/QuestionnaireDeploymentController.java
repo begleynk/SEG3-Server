@@ -2,24 +2,26 @@ package GUI.QuestionnaireDeployment;
 
 import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
+import GUI.QuestionnaireDeployment.QuestionnaireViewer.QuestionnaireViewerController;
+import Helpers.GUI.PaneHelper;
+import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import java.beans.EventHandler;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -40,6 +42,8 @@ public class QuestionnaireDeploymentController implements Initializable {
             = FXCollections.observableArrayList();
     private ObservableList<QuestionnairePointer> draftQuestionnaires
             = FXCollections.observableArrayList();
+
+    private ListView<QuestionnairePointer> clickedListView;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -82,6 +86,21 @@ public class QuestionnaireDeploymentController implements Initializable {
         this.draftListView.setOnMouseClicked(new javafx.event.EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                clickedListView = draftListView;
+                doubleClicked(mouseEvent);
+            }
+        });
+        this.deployedListView.setOnMouseClicked(new javafx.event.EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                clickedListView = deployedListView;
+                doubleClicked(mouseEvent);
+            }
+        });
+        this.archivedListView.setOnMouseClicked(new javafx.event.EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                clickedListView = archivedListView;
                 doubleClicked(mouseEvent);
             }
         });
@@ -90,12 +109,24 @@ public class QuestionnaireDeploymentController implements Initializable {
    public void doubleClicked(MouseEvent mouseEvent) {
       if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
           if(mouseEvent.getClickCount() == 2) {
-
-              System.out.println("Double clicked to view the questions on the selected Questionnaire!");
-              Group root = new Group();
               Stage stage = new Stage();
-              Scene scene = new Scene(root, 500, 500, Color.WHITE);
-              stage.setTitle(draftListView.getSelectionModel().getSelectedItem().getTitle());
+              Pane pane;
+              try {
+                  FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GUI/QuestionnaireDeployment/QuestionnaireViewer/questionnaireViewer.fxml"));
+                  pane = PaneHelper.loadPaneForAnchorParentWithFXMLLoader(fxmlLoader);
+                  QuestionnaireViewerController viewerController = fxmlLoader.getController();
+                  try {
+                      Questionnaire questionnaire = DataLayer.getQuestionnaireWithPointer(clickedListView.getSelectionModel().getSelectedItem());
+                      viewerController.setQuestionnaire(questionnaire);
+                  } catch (NoQuestionnaireException e) {
+                      e.printStackTrace();
+                  }
+              } catch (IOException e) {
+                  pane = null;
+                  e.printStackTrace();
+              }
+              Scene scene = new Scene(pane, 750, 750);
+              stage.setTitle(clickedListView.getSelectionModel().getSelectedItem().getTitle());
               stage.setScene(scene);
               stage.show();
           }

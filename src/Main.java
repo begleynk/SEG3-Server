@@ -70,6 +70,7 @@ public class Main extends Application {
             Scene scene = new Scene(mainScene, stage.getWidth(), stage.getHeight());
             stage.setMinWidth(1000);
             stage.setMinHeight(700);
+            stage.setFullScreen(true);
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

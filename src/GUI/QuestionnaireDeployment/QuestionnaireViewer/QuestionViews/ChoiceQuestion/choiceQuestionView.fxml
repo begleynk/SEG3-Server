@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="302.0" prefWidth="561.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.QuestionnaireDeployment.QuestionnaireViewer.QuestionViews.ChoiceQuestion.ChoiceQuestionViewController">
+  <children>
+    <Label text="Question Title:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
+      <font>
+        <Font size="14.0" fx:id="x1" />
+      </font>
+    </Label>
+    <TextField fx:id="titleField" editable="false" prefWidth="530.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="36.0" />
+    <Label font="$x1" text="Description:" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="14.0" />
+    <TextArea fx:id="descriptionField" editable="false" prefHeight="67.9998779296875" prefWidth="530.0" wrapText="true" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+    <ListView fx:id="choicesListView" prefHeight="103.0" prefWidth="530.0" AnchorPane.bottomAnchor="118.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="95.0" />
+    <Label font="$x1" layoutX="14.0" layoutY="68.0" text="Choices:" />
+  </children>
+</AnchorPane>

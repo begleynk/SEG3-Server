@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="191.00009999999747" prefWidth="568.0000999999975" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.QuestionnaireDeployment.QuestionnaireViewer.QuestionViews.BasicQuestion.BasicQuestionViewController">
+  <children>
+    <Label text="Question Title:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
+      <font>
+        <Font size="14.0" fx:id="x1" />
+      </font>
+    </Label>
+    <TextField fx:id="titleField" editable="false" prefWidth="530.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="36.0" />
+    <Label font="$x1" text="Description:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="70.0" />
+    <TextArea fx:id="descriptionField" editable="false" prefHeight="68.0" prefWidth="530.0" wrapText="true" AnchorPane.bottomAnchor="19.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="94.0" />
+  </children>
+</AnchorPane>

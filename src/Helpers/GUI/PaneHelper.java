@@ -15,7 +15,7 @@ public class PaneHelper {
 
     public static Pane loadPaneForAnchorParentWithFXMLLoader(FXMLLoader fxmlLoader) throws IOException {
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-        Pane pane = (AnchorPane) fxmlLoader.load();
+        Pane pane = (Pane) fxmlLoader.load();
         AnchorPane.setTopAnchor(pane, 0.0);
         AnchorPane.setBottomAnchor(pane, 0.0);
         AnchorPane.setRightAnchor(pane, 0.0);
