@@ -59,7 +59,7 @@ public class QuestionAnswerTableColumn
                     result.add(new QuestionAnswerTableColumn(question, answer));
                 }
             }
-            if(!answerFound && question.isRequired())
+            if(!answerFound)
             {
                 result.add(new QuestionAnswerTableColumn(question));
             }
