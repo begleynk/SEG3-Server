@@ -67,6 +67,8 @@ public class Exporter
                     result.remove(0);
 
                     out.writeAll(result);
+
+                    result.clear();
                 }
             });
             return true;
