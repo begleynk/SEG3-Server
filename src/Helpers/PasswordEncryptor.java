@@ -16,8 +16,15 @@ public class PasswordEncryptor
             password = password + salt;
 
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            return new String(hash, "UTF-8");
+            digest.update(password.getBytes("UTF-8"));
+            byte[] hash = digest.digest();
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i< hash.length ;i++)
+            {
+                sb.append(Integer.toString((hash[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            //Get complete hashed password in hex format
+            return sb.toString();
         }
         catch (Exception e)
         {
