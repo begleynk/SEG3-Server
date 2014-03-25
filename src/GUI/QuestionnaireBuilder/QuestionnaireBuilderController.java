@@ -330,6 +330,7 @@ public class QuestionnaireBuilderController implements Initializable {
     public void saveDraftQuestionnaire() {
         saveQuestionnaire();
         endEditingQuestionnaire();
+        fetchDraftQuestionnaires();
     }
 
     public void saveQuestionnaire() {
@@ -338,7 +339,7 @@ public class QuestionnaireBuilderController implements Initializable {
                 DataLayer.updateQuestionnare(draftQuestionnaire);
             } else {
                 DataLayer.addQuestionnaire(draftQuestionnaire);
-                fetchDraftQuestionnaires();
+                isExistingQuestionnaire = true;
             }
         } catch (SQLException | NoQuestionnaireException e) {
             Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "There was an error saving the questionnaire. Try again.");

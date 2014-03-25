@@ -61,7 +61,7 @@ public class PatientControlsController implements Initializable {
     private static Region flexibleSpace = new FlexibleToolbarSpace();
     private Button saveNewButton = new Button("Save As New"),
             cancelNewPatientButton = new Button("Cancel"),
-            saveChangesButton = new Button("Clear Fields"),
+            saveChangesButton = new Button("Save Changes"),
             deletePatientButton = new Button("Delete Patient"),
             deselectPatientButton = new Button("Deselect Patient"),
             clearFieldsButton = new Button("Clear Fields");
