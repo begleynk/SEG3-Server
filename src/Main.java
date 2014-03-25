@@ -72,10 +72,10 @@ public class Main extends Application {
             Scene scene = new Scene(mainScene, stage.getWidth(), stage.getHeight());
             stage.setMinWidth(1000);
             stage.setMinHeight(700);
-            stage.centerOnScreen();
             Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-            stage.setWidth(visualBounds.getWidth());
-            stage.setHeight(visualBounds.getHeight());
+            stage.setWidth(visualBounds.getWidth() * 0.9);
+            stage.setHeight(visualBounds.getHeight() * 0.9);
+            stage.centerOnScreen();
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

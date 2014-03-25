@@ -371,6 +371,8 @@ public class QuestionnaireBuilderController implements Initializable {
 
     public void makeDependantQuestionDialog() {
 
+        populateDependableQuestions(this.questionTreeView.getSelectionModel().getSelectedItem().getValue());
+
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -437,10 +439,40 @@ public class QuestionnaireBuilderController implements Initializable {
     public void generateDependableQuestionOptions() {
         dependableQuestionOptions.clear();
         for (Question question : dependableQuestions) {
-            String title = question.getTitle();
-            dependableQuestionOptions.add("Question: " + title);
+            dependableQuestionOptions.add("Question: " + question.getTitle());
         }
         dependableQuestionsChooser.getSelectionModel().select(0);
+    }
+
+    public void populateDependableQuestions(Question selectedQuestion) {
+        this.dependableQuestions.clear();
+        for (Question question : this.draftQuestionnaire.getQuestions()) {
+            if (question.getClass() == YesNoQuestion.class || question.getClass() == SelectOneQuestion.class) {
+                if (!question.equals(selectedQuestion)) {
+                    dependableQuestions.add(question);
+                }
+            }
+            if (question.hasDependantQuestions()) {
+                searchDependentQuestionsForDependableQuestions(question, selectedQuestion);
+            }
+        }
+        generateDependableQuestionOptions();
+    }
+
+    public void searchDependentQuestionsForDependableQuestions(Question rootQuestion, Question selectedQuestion) {
+        for (String key : rootQuestion.getDependantQuestionsMap().keySet()) {
+            List<Question> questions = rootQuestion.getDependantQuestionsMap().get(key);
+            for (Question subQuestion : questions) {
+                if (subQuestion.getClass() == YesNoQuestion.class || subQuestion.getClass() == SelectOneQuestion.class) {
+                    if (!subQuestion.equals(selectedQuestion)) {
+                        dependableQuestions.add(subQuestion);
+                    }
+                }
+                if (subQuestion.hasDependantQuestions()) {
+                    searchDependentQuestionsForDependableQuestions(subQuestion, selectedQuestion);
+                }
+            }
+        }
     }
 
     // Question ToolBar Actions
@@ -564,12 +596,8 @@ public class QuestionnaireBuilderController implements Initializable {
             TreeItem<Question> leaf = new TreeItem<>(question);
             questionTreeView.getRoot().getChildren().add(leaf);
             leaf.setExpanded(true);
-            if (question.getClass() == YesNoQuestion.class || question.getClass() == SelectOneQuestion.class) {
-                dependableQuestions.add(question);
-            }
             generateTreeItemChildren(leaf, question);
         }
-        generateDependableQuestionOptions();
     }
 
     public void generateTreeItemChildren(TreeItem<Question> parent, Question question) {
@@ -580,15 +608,11 @@ public class QuestionnaireBuilderController implements Initializable {
                 TreeItem<Question> subQuestionTreeItem = new TreeItem<>(subQuestion);
                 subQuestionTreeItem.setExpanded(true);
                 parent.getChildren().add(subQuestionTreeItem);
-                if (subQuestion.getClass() == YesNoQuestion.class || subQuestion.getClass() == SelectOneQuestion.class) {
-                    dependableQuestions.add(subQuestion);
-                }
                 if (subQuestion.hasDependantQuestions()) {
                     generateTreeItemChildren(subQuestionTreeItem, subQuestion);
                 }
             }
         }
-
     }
 
     public void clearTreeViewSelection() {
