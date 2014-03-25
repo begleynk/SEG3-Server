@@ -161,7 +161,6 @@ public class Exporter
         return null;
     }
 
-
     private static String[] getQuestionIDs(Questionnaire questionnaire)
     {
         ArrayList<String> tmpIDs = new ArrayList<>();
@@ -192,31 +191,6 @@ public class Exporter
                }
            }
         }
-    }
-
-    private static String[] getAnswers(AnswerSet answerSet, Questionnaire questionnaire)
-    {
-        String[] answers = new String[questionnaire.getQuestions().size()];
-
-        int counter = 0;
-        for(Question q : questionnaire.getQuestions())
-        {
-            for(Answer a : answerSet.getAnswers())
-            {
-                boolean hasAnAnswer = false;
-
-                if(q.getID().equals(a.getID()))
-                {
-                    answers[counter] = joinAnswers(a);
-                    hasAnAnswer = true;
-                }
-                if(!hasAnAnswer)
-                {
-                    answers[counter] = " - ";
-                }
-            }
-        }
-        return answers;
     }
 
     private static String joinAnswers(Answer answer)
