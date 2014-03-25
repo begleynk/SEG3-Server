@@ -42,7 +42,7 @@ public class FreeTextController extends QuestionTypeController implements Initia
 
     @Override
     public boolean isQuestionDefined() {
-        return (titleField.getText().length() > 0 && descriptionField.getText().length() > 0);
+        return (titleField.getText().length() > 0);
     }
 
     @Override

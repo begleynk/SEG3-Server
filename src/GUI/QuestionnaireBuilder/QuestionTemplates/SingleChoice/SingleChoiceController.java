@@ -71,8 +71,7 @@ public class SingleChoiceController extends QuestionTypeController implements In
 
     @Override
     public boolean isQuestionDefined() {
-        return (titleField.getText().length() > 0 && descriptionField.getText().length() > 0
-                && choicesListView.getItems().size() > 0);
+        return (titleField.getText().length() > 0 && choicesListView.getItems().size() > 0);
     }
 
     @Override

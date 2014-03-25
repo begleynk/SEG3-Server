@@ -3,6 +3,7 @@ package GUI.ViewAnswers;
 import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
 import Exporter.Exporter;
+import Helpers.GUI.FlexibleToolbarSpace;
 import ModelObjects.AnswerSet;
 import ModelObjects.Answers.QuestionAnswerTableColumn;
 import ModelObjects.Patient;
@@ -58,6 +59,8 @@ public class ViewAnswersController implements Initializable
     private ArrayList<AnswerSet> selectedQuestionnaireAnswerSets;
     private Questionnaire selectedQuestionnaire;
 
+    @FXML private ToolBar answersToolBar;
+
     @FXML private Label questionnaireTitleLabel;
     @FXML private Label numberOfSubmissions;
     @FXML private Label numberOfQuestions;
@@ -91,6 +94,8 @@ public class ViewAnswersController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
+        answersToolBar.getItems().add(1, new FlexibleToolbarSpace());
+
         // Keep track of all panels for later...
         rightPanes.add(noQuestionnaireSelectedPane);
         rightPanes.add(questionnaireSelectedPane);
