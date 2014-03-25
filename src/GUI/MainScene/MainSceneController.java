@@ -44,12 +44,12 @@ public class MainSceneController implements Initializable {
             "Questionnaire Builder",
             "Questionnaire Deployment",
             "Distribute Questionnaires",
+            // new Separator(),
+            // "Connect Tablets",
             new Separator(),
-            "Connect Tablets",
+            "View Answers",
             new Separator(),
-            "Logs",
-            new Separator(),
-            "View Answers"
+            "Logs"
     };
     private final String[] viewPaths = {
             "/GUI/Welcome/welcome.fxml",
@@ -59,12 +59,12 @@ public class MainSceneController implements Initializable {
             "/GUI/QuestionnaireBuilder/questionnaireBuilder.fxml",
             "/GUI/QuestionnaireDeployment/questionnaireDeployment.fxml",
             "/GUI/QuestionnaireDistribute/questionnaireDistribute.fxml",
+            // null, // Separator
+            // "/GUI/ConnectTablets/settingControls.fxml",
             null, // Separator
-            "/GUI/ConnectTablets/settingControls.fxml",
+            "/GUI/ViewAnswers/viewAnswers.fxml",
             null, // Separator
-            "/GUI/ChangeLogs/changeLogs.fxml",
-            null, // Separator
-            "/GUI/ViewAnswers/viewAnswers.fxml"
+            "/GUI/ChangeLogs/changeLogs.fxml"
     };
 
     @Override
