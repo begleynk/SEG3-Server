@@ -64,12 +64,7 @@ public class Exporter
                         result.add(getAnswersFromSet(set));
                     }
 
-
-
-                    for(AnswerSet answerSet : answerSets)
-                    {
-                        result.add(getAnswers(answerSet, questionnaire));
-                    }
+                    result.remove(0);
 
                     out.writeAll(result);
                 }
