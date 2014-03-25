@@ -22,6 +22,7 @@ import java.util.ArrayList;
  */
 public class Exporter
 {
+    final static ArrayList<String[]> result = new ArrayList<>();
 
     public static boolean exportQuestionnaireData(Questionnaire inputQuestionnaire, String inputPath) throws NoQuestionnaireException
     {
@@ -52,14 +53,25 @@ public class Exporter
 
             csv.write(path, new CSVWriteProc() {
                 @Override
-                public void process(CSVWriter out) {
+                public void process(CSVWriter out)
+                {
+                    // All rows should be added to this list
+                    result.add(getQuestionIDs(questionnaire)); // Add IDs to use as references for other rows
+                    result.add(getQuestionTitles(questionnaire));
 
-                    String[] questionTitles = getQuestionTitles(questionnaire);
-                    out.writeNext(questionTitles);
-                    for(AnswerSet a : answerSets)
+                    for(AnswerSet set : answerSets)
                     {
-                        out.writeNext(getAnswers(a, questionnaire));
+                        result.add(getAnswersFromSet(set));
                     }
+
+
+
+                    for(AnswerSet answerSet : answerSets)
+                    {
+                        result.add(getAnswers(answerSet, questionnaire));
+                    }
+
+                    out.writeAll(result);
                 }
             });
             return true;
@@ -78,16 +90,111 @@ public class Exporter
         return exportQuestionnaireData(q, path);
     }
 
+    private static String[] getAnswersFromSet(AnswerSet answerSet)
+    {
+        String[] IDs = result.get(0);
+        String[] results = new String[IDs.length];
+
+        for(int i = 0; i < IDs.length; i++)
+        {
+            results[i] = findAnswerFor(IDs[i], answerSet);
+        }
+
+        return results;
+    }
+
+    private static String findAnswerFor(String ID, AnswerSet answerSet)
+    {
+        for(Answer a : answerSet.getAnswers())
+        {
+            if(a.getID().equals(ID))
+            {
+                return joinAnswers(a);
+            }
+        }
+        return "(No Answer)";
+    }
+
     private static String[] getQuestionTitles(Questionnaire questionnaire)
     {
-        String[] titles = new String[questionnaire.getQuestions().size()];
+        String[] IDs = result.get(0);
+        String[] titles = new String[IDs.length];
 
-        int counter = 0;
+        for(int i = 0; i < IDs.length; i++)
+        {
+            titles[i] = findTitleFor(IDs[i], questionnaire);
+        }
+
+        return titles;
+    }
+
+    private static String findTitleFor(String ID, Questionnaire questionnaire)
+    {
         for(Question q : questionnaire.getQuestions())
         {
-            titles[counter] = q.getTitle();
+            String title = checkQuestionAndDependentsForID(q, ID);
+            if(title != null)
+            {
+                return title;
+            }
         }
-        return titles;
+        return "*Title not found*";
+    }
+
+    private static String checkQuestionAndDependentsForID(Question question, String ID)
+    {
+        if(question.getID().equals(ID))
+        {
+            return question.getTitle();
+        }
+        if(question.hasDependantQuestions())
+        {
+            for(String key : question.getDependantQuestionsMap().keySet())
+            {
+                for(Question q : question.getDependentQuestions(key))
+                {
+                    String title = checkQuestionAndDependentsForID(q, ID);
+                    if(title != null)
+                    {
+                        return title;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+    private static String[] getQuestionIDs(Questionnaire questionnaire)
+    {
+        ArrayList<String> tmpIDs = new ArrayList<>();
+
+        for(Question question : questionnaire.getQuestions())
+        {
+            addQuestionIDsWithDependents(question, tmpIDs);
+        }
+
+        String[] ids = new String[tmpIDs.size()];
+        for(int i = 0; i < ids.length; i++)
+        {
+            ids[i] = tmpIDs.get(i);
+        }
+        return ids;
+    }
+
+    private static void addQuestionIDsWithDependents(Question question, ArrayList<String> titles)
+    {
+        titles.add(question.getID());
+        if(question.hasDependantQuestions())
+        {
+           for(String key : question.getDependantQuestionsMap().keySet())
+           {
+               for(Question q : question.getDependentQuestions(key))
+               {
+                   addQuestionIDsWithDependents(q, titles);
+               }
+           }
+        }
     }
 
     private static String[] getAnswers(AnswerSet answerSet, Questionnaire questionnaire)

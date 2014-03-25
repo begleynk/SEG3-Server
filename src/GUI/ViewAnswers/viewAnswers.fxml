@@ -29,7 +29,7 @@
           <children>
             <StackPane prefHeight="398.0" prefWidth="442.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <children>
-                <AnchorPane fx:id="answersPane" prefHeight="200.0" prefWidth="200.0" visible="true">
+                <AnchorPane fx:id="answersPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                   <children>
                     <ToolBar minHeight="22.0" prefHeight="32.0" prefWidth="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                       <items>
@@ -58,7 +58,7 @@
                     <Label layoutX="199.0" layoutY="255.0" text="No Questionnaire Selected" />
                   </children>
                 </AnchorPane>
-                <AnchorPane fx:id="questionnaireSelectedPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+                <AnchorPane fx:id="questionnaireSelectedPane" prefHeight="200.0" prefWidth="200.0" visible="true">
                   <children>
                     <Label font="$x1" layoutX="14.0" text="View Answers:" underline="false" AnchorPane.bottomAnchor="365.0" />
                     <Label font="$x1" layoutX="17.0" layoutY="14.0" text="Title:" underline="false" />
@@ -77,6 +77,7 @@
                     <ToolBar prefHeight="33.0" prefWidth="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                       <items>
                         <Button fx:id="viewAnswerButton" mnemonicParsing="false" text="View Answers" />
+                        <Button fx:id="exportAnswersButton" mnemonicParsing="false" text="Export Answers" textAlignment="LEFT" />
                       </items>
                     </ToolBar>
                   </children>

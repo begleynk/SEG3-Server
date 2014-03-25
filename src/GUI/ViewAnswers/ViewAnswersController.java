@@ -2,6 +2,7 @@ package GUI.ViewAnswers;
 
 import Accessors.DataLayer;
 import Exceptions.NoQuestionnaireException;
+import Exporter.Exporter;
 import ModelObjects.AnswerSet;
 import ModelObjects.Answers.QuestionAnswerTableColumn;
 import ModelObjects.Patient;
@@ -20,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -66,6 +68,7 @@ public class ViewAnswersController implements Initializable
     @FXML private TableColumn<Patient, String> tableLastNameColumn;
 
     @FXML private Button viewAnswerButton;
+    @FXML private Button exportAnswersButton;
 
     private final ObservableList<Patient> patientsThatHaveAnswered = FXCollections.observableArrayList();
 
@@ -161,6 +164,24 @@ public class ViewAnswersController implements Initializable
             @Override
             public void handle(ActionEvent actionEvent) {
                 switchToPane(questionnaireSelectedPane);
+            }
+        });
+
+        this.exportAnswersButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Select where to save the answers");
+                fileChooser.setInitialFileName("" + selectedQuestionnaire.getTitle() + ".csv");
+                String path = fileChooser.showSaveDialog(root.getScene().getWindow()).getPath();
+                try
+                {
+                    Exporter.exportQuestionnaireData(selectedQuestionnaire, path);
+                }
+                catch (NoQuestionnaireException e)
+                {
+                    System.err.println("Tried to get a questionnaire that does not exist.");
+                }
             }
         });
     }
