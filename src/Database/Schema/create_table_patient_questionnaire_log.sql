@@ -9,7 +9,3 @@ CREATE TABLE IF NOT EXISTS 'Patient_Questionnaire_Log' (
    'SQL_action' varchar(15),
    'Time_enter' DATE
 );
-
-
-
-
