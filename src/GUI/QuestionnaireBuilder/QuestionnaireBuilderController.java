@@ -711,7 +711,9 @@ public class QuestionnaireBuilderController implements Initializable {
         saveDraftButton.setDisable(!(draftQuestionnaire.getQuestions().size() > 0));
         setQuestionControlsVisible(false);
         dependantQuestionSettingControlsEnabled(false);
-        saveQuestionnaire();
+        if (questionnaireTitleField.getText().length() > 0) {
+            saveQuestionnaire();
+        }
     }
 
     public void setQuestionControlsVisible(boolean visible) {

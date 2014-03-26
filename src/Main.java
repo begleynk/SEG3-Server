@@ -1,4 +1,3 @@
-import Accessors.DataLayer;
 import Database.DatabaseInitializer;
 import GUI.MainScene.MainSceneController;
 import Helpers.DataStorageHelper;
@@ -59,8 +58,6 @@ public class Main extends Application {
 //        Patient patient = DataLayer.getAllPatients().get(0);
 //        AnswerSet answerSet = new AnswerSet(questionnaire, patient);
 //        System.out.println(answerSet.toString());
-
-        DataLayer.setAdminPasscode("12345");
 
         int socketPort = 4000;
         this.socketServer = new SocketServer(socketPort);
