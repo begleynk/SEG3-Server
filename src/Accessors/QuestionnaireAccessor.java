@@ -160,7 +160,7 @@ public class QuestionnaireAccessor {
             try
             {
                 File folder = new File(dasPath);
-                ArrayList<AnswerSet> answers = new ArrayList<>();
+                ArrayList<AnswerSet> answers = new ArrayList<AnswerSet>();
                 for(File file : folder.listFiles())
                 {
                     if(!file.getName().startsWith("questionnaire"))
