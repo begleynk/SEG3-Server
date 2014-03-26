@@ -12,8 +12,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.net.URL;
@@ -27,6 +29,8 @@ import java.util.ResourceBundle;
  * 
  */
 public class QuestionnaireDistributeController implements Initializable {
+
+    @FXML private Parent root;
 
     // Questionnaire controls
     @FXML private TextField searchQuestionnaireField;
@@ -250,6 +254,7 @@ public class QuestionnaireDistributeController implements Initializable {
         if (selectedQuestionnairePointer != null) {
             searchPatientField.setText("");
             patientSearchInputChangedAction();
+            boolean assignmentsChanged = false;
 
             for (TablePatient patient : visiblePatients) {
 
@@ -262,6 +267,7 @@ public class QuestionnaireDistributeController implements Initializable {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
+                    assignmentsChanged = true;
                 }
                 else if (!patient.getOrignal_assignment() && patient.getProperty_is_assigned())
                 {
@@ -272,10 +278,12 @@ public class QuestionnaireDistributeController implements Initializable {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
+                    assignmentsChanged = true;
                 }
-
             }
-
+            if (assignmentsChanged) {
+                Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "The assignments you changed were automatically saved.");
+            }
         }
     }
 
