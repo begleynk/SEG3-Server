@@ -3,9 +3,7 @@ package Accessors;
 import Exceptions.NoQuestionnaireException;
 import Helpers.OSHelper;
 import ModelObjects.*;
-import ModelObjects.Questions.Question;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -147,14 +145,7 @@ public class DatabaseAccessor {
         statement.setInt(3, questionnaire.getId());
         int result = statement.executeUpdate();
 
-        if(result > 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (result > 0);
     }
 
     public boolean setQuestionnairePointerState(QuestionnairePointer pointer, String state) throws SQLException, NoQuestionnaireException
@@ -166,14 +157,7 @@ public class DatabaseAccessor {
         statement.setInt(2, pointer.getId());
         int result = statement.executeUpdate();
 
-        if(result > 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (result > 0);
     }
 
 
@@ -183,7 +167,7 @@ public class DatabaseAccessor {
 
     public ArrayList<Patient> getAllPatients() throws SQLException
     {
-        ArrayList<Patient> patients = new ArrayList<Patient>();
+        ArrayList<Patient> patients = new ArrayList<>();
         String query = "SELECT * FROM Patient";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.execute();
@@ -198,7 +182,7 @@ public class DatabaseAccessor {
 
     public ArrayList<TablePatient> getAllTablePatients() throws SQLException
     {
-        ArrayList<TablePatient> patients = new ArrayList<TablePatient>();
+        ArrayList<TablePatient> patients = new ArrayList<>();
         String query = "SELECT * FROM Patient";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.execute();
@@ -222,8 +206,7 @@ public class DatabaseAccessor {
 
         if (result.next())
         {
-            Patient patient = new Patient(result.getString(1), result.getString(2), result.getString(3), result.getString(4),result.getString(5),result.getString(6));
-            return patient;
+            return new Patient(result.getString(1), result.getString(2), result.getString(3), result.getString(4),result.getString(5),result.getString(6));
         }
         else
         {
@@ -332,19 +315,6 @@ public class DatabaseAccessor {
         return pointerList;
     }
 
-    public boolean linkPatientAndQuestionnaire(Patient patient, Questionnaire questionnaire) throws SQLException
-    {
-        if(questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))
-        {
-            return false;
-        }
-        Statement statement = createStatement();
-        statement.execute("INSERT INTO Patient_Questionnaire (P_NHS_number, Q_id, Completed) VALUES ('" +
-                patient.getNhsNumber() + "," +
-                questionnaire.getId() + ", 0');");
-        return true;
-    }
-
     public boolean linkPatientAndQuestionnairePointer(Patient patient, QuestionnairePointer questionnaire) throws SQLException
     {
         if (questionnaire.getId() == 0 || patient.getNhsNumber().equals(""))
@@ -451,11 +421,7 @@ public class DatabaseAccessor {
         String query = "SELECT * FROM Patient_Questionnaire WHERE P_NHS_Number = '" + patient.getNhsNumber() + "' AND Q_id = '" + questionnaire.getId() + "';";
 
         ResultSet result = statement.executeQuery(query);
-        if (result.next()) {
-            return true;
-        } else {
-            return false;
-        }
+        return (result.next());
     }
 
     public boolean setPatientQuestionnaireAsCompleted(QuestionnairePointer questionnaire, Patient patient) throws SQLException
@@ -470,14 +436,7 @@ public class DatabaseAccessor {
             statement.setString(2, patient.getNhsNumber());
             int success = statement.executeUpdate();
             System.out.println("Rows changed: " + success);
-            if(success == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (success == 1);
         }
         else
         {
@@ -494,14 +453,7 @@ public class DatabaseAccessor {
             statement.setInt(1, questionnaire.getId());
             statement.setString(2, patient.getNhsNumber());
             int success = statement.executeUpdate();
-            if(success == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (success == 1);
         }
         else
         {
@@ -515,7 +467,7 @@ public class DatabaseAccessor {
 
     public ArrayList<PatientLog> getAllPatientLogs() throws SQLException
     {
-        ArrayList<PatientLog> patientLogs = new ArrayList<PatientLog>();
+        ArrayList<PatientLog> patientLogs = new ArrayList<>();
         Statement statement = createStatement();
         String query = "SELECT * FROM Patient_Log";
         ResultSet result = statement.executeQuery(query);
@@ -578,7 +530,7 @@ public class DatabaseAccessor {
      *************************************************************/
     public ArrayList<QuestionnaireLog> getAllQuestionnaireLogs() throws SQLException
     {
-        ArrayList<QuestionnaireLog> questionnaireLogs = new ArrayList<QuestionnaireLog>();
+        ArrayList<QuestionnaireLog> questionnaireLogs = new ArrayList<>();
         Statement statement = createStatement();
         String query = "SELECT * FROM Questionnaire_Log";
         ResultSet result = statement.executeQuery(query);
@@ -631,7 +583,7 @@ public class DatabaseAccessor {
 
     public ArrayList<PatientQuestionnaireLog> getAllPatientQuestionnaireLogs() throws SQLException
     {
-        ArrayList<PatientQuestionnaireLog> patientQuestionnaireLogs = new ArrayList<PatientQuestionnaireLog>();
+        ArrayList<PatientQuestionnaireLog> patientQuestionnaireLogs = new ArrayList<>();
         Statement statement = createStatement();
         String query = "SELECT * FROM Patient_Questionnaire_Log";
         ResultSet result = statement.executeQuery(query);
@@ -691,14 +643,7 @@ public class DatabaseAccessor {
         statement.execute();
         ResultSet keys = statement.getGeneratedKeys();
 
-        if(keys.next())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return keys.next();
     }
 
     public boolean clearAdminPasscode() throws SQLException

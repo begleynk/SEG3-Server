@@ -5,7 +5,6 @@ import Exceptions.AnswerNotCompleteException;
 import Exceptions.NoQuestionnaireException;
 import Helpers.JsonHelper;
 import ModelObjects.AnswerSet;
-import ModelObjects.Answers.Answer;
 import ModelObjects.Patient;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;

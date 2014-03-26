@@ -10,7 +10,8 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.spec.KeySpec;
 
 /**
- * Created by NiklasBegley on 18/03/2014.
+ * Created by Niklas Begley on 18/03/2014.
+ *
  */
 public class Encryptor
 {
@@ -66,8 +67,7 @@ public class Encryptor
 
     public static String encryptAndFormat(String message)
     {
-        String response = encrypt(message) + "END";
-        return response;
+        return encrypt(message) + "END";
     }
 
     private static void createSecret()

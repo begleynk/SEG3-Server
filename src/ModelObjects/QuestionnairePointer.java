@@ -10,7 +10,7 @@ public class QuestionnairePointer {
     private String title;
     private String state;
 
-    private static String[] states = {"Draft", "Deployed", "Archived"};
+    //private static String[] states = {"Draft", "Deployed", "Archived"};
 
     public QuestionnairePointer(int id, String title, String state)
     {

@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * Created by NiklasBegley on 10/03/2014.
  *
  * Keeps track of all open connections currently in the system and gives methods to interact with them.
+ *
  */
 public class ConnectionHandler
 {
@@ -32,14 +33,14 @@ public class ConnectionHandler
 
         if(!connections.isEmpty())
         {
-            for(SocketProcess proc: connections)
+            for(SocketProcess aProcess: connections)
             {
-                if(process.hashCode() == proc.hashCode())
+                if(process.hashCode() == aProcess.hashCode())
                 {
                     try
                     {
                         process.closeConnection();
-                        connections.remove(proc);
+                        connections.remove(aProcess);
                         closed = true;
                         break;
                     }
