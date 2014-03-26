@@ -340,13 +340,8 @@ public class QuestionnaireBuilderController implements Initializable {
                 DataLayer.updateQuestionnare(draftQuestionnaire);
             } else {
                 draftQuestionnaire = DataLayer.addQuestionnaire(draftQuestionnaire);
-                if (draftQuestionnaire == null) {
-                    endEditingQuestionnaire();
-                    fetchDraftQuestionnaires();
-                    searchInputChangedAction();
-                } else {
+                if (draftQuestionnaire != null) {
                     isExistingQuestionnaire = true;
-                    prepareForEditingQuestionnaire();
                 }
             }
         } catch (SQLException | NoQuestionnaireException e) {
