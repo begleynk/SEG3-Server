@@ -467,7 +467,7 @@ public class DatabaseAccessor {
 
     public ArrayList<PatientLog> getAllPatientLogs() throws SQLException
     {
-        ArrayList<PatientLog> patientLogs = new ArrayList<>();
+        ArrayList<PatientLog> patientLogs = new ArrayList<PatientLog>();
         Statement statement = createStatement();
         String query = "SELECT * FROM Patient_Log";
         ResultSet result = statement.executeQuery(query);
@@ -530,7 +530,7 @@ public class DatabaseAccessor {
      *************************************************************/
     public ArrayList<QuestionnaireLog> getAllQuestionnaireLogs() throws SQLException
     {
-        ArrayList<QuestionnaireLog> questionnaireLogs = new ArrayList<>();
+        ArrayList<QuestionnaireLog> questionnaireLogs = new ArrayList<QuestionnaireLog>();
         Statement statement = createStatement();
         String query = "SELECT * FROM Questionnaire_Log";
         ResultSet result = statement.executeQuery(query);
@@ -583,7 +583,7 @@ public class DatabaseAccessor {
 
     public ArrayList<PatientQuestionnaireLog> getAllPatientQuestionnaireLogs() throws SQLException
     {
-        ArrayList<PatientQuestionnaireLog> patientQuestionnaireLogs = new ArrayList<>();
+        ArrayList<PatientQuestionnaireLog> patientQuestionnaireLogs = new ArrayList<PatientQuestionnaireLog>();
         Statement statement = createStatement();
         String query = "SELECT * FROM Patient_Questionnaire_Log";
         ResultSet result = statement.executeQuery(query);
