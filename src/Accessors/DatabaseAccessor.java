@@ -138,6 +138,25 @@ public class DatabaseAccessor {
         return true;
     }
 
+    public boolean updateQuestionnaire(Questionnaire questionnaire) throws SQLException, NoQuestionnaireException
+    {
+        String query = "UPDATE Questionnaire SET Q_state = ?, Q_title = ? WHERE Q_id = ?;";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, questionnaire.getState());
+        statement.setString(2, questionnaire.getTitle());
+        statement.setInt(3, questionnaire.getId());
+        int result = statement.executeUpdate();
+
+        if(result > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public boolean setQuestionnairePointerState(QuestionnairePointer pointer, String state) throws SQLException, NoQuestionnaireException
     {
 

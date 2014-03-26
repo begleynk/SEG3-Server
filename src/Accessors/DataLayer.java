@@ -203,11 +203,14 @@ public class DataLayer
         }
     }
 
-    public static Questionnaire updateQuestionnare(Questionnaire questionnaire) throws NoQuestionnaireException
+    public static Questionnaire updateQuestionnare(Questionnaire questionnaire) throws NoQuestionnaireException, SQLException
     {
         if(questionnaireAccessor.questionnaireExists(questionnaire))
         {
-            questionnaireAccessor.saveQuestionnaire(questionnaire);
+            if(questionnaireAccessor.saveQuestionnaire(questionnaire));
+            {
+                databaseAccessor.updateQuestionnaire(questionnaire);
+            }
         }
         else
         {
