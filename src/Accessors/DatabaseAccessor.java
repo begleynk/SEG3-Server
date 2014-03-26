@@ -167,7 +167,7 @@ public class DatabaseAccessor {
 
     public ArrayList<Patient> getAllPatients() throws SQLException
     {
-        ArrayList<Patient> patients = new ArrayList<>();
+        ArrayList<Patient> patients = new ArrayList<Patient>();
         String query = "SELECT * FROM Patient";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.execute();
@@ -182,7 +182,7 @@ public class DatabaseAccessor {
 
     public ArrayList<TablePatient> getAllTablePatients() throws SQLException
     {
-        ArrayList<TablePatient> patients = new ArrayList<>();
+        ArrayList<TablePatient> patients = new ArrayList<TablePatient>();
         String query = "SELECT * FROM Patient";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.execute();
