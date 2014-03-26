@@ -6,7 +6,6 @@ import GUI.QuestionnaireDeployment.QuestionnaireViewer.QuestionnaireViewerContro
 import Helpers.GUI.PaneHelper;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
-import ModelObjects.Questions.Question;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -25,7 +24,6 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**

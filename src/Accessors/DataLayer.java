@@ -205,12 +205,10 @@ public class DataLayer
 
     public static Questionnaire updateQuestionnare(Questionnaire questionnaire) throws NoQuestionnaireException, SQLException
     {
-        if(questionnaireAccessor.questionnaireExists(questionnaire))
+        if (questionnaireAccessor.questionnaireExists(questionnaire))
         {
-            if(questionnaireAccessor.saveQuestionnaire(questionnaire));
-            {
-                databaseAccessor.updateQuestionnaire(questionnaire);
-            }
+            questionnaireAccessor.saveQuestionnaire(questionnaire);
+            databaseAccessor.updateQuestionnaire(questionnaire);
         }
         else
         {
@@ -220,18 +218,18 @@ public class DataLayer
         return questionnaire;
     }
 
-    public static boolean addQuestionnaire(Questionnaire questionnaire) throws SQLException
+    public static Questionnaire addQuestionnaire(Questionnaire questionnaire) throws SQLException
     {
         Questionnaire savedQuestionnaire = databaseAccessor.insertQuestionnaireRecord(questionnaire);
         if (questionnaireAccessor.saveQuestionnaire(savedQuestionnaire))
         {
-            return true;
+            return savedQuestionnaire;
         }
         else
         {
             // Roll back database if data repo failed to save the questionnaire to disk
             databaseAccessor.removeQuestionnaire(savedQuestionnaire);
-            return false;
+            return null;
         }
     }
 

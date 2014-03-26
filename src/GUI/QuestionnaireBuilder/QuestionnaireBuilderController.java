@@ -143,6 +143,7 @@ public class QuestionnaireBuilderController implements Initializable {
 
         // Fetch the data for the left menu
         fetchDraftQuestionnaires();
+        searchInputChangedAction();
     }
 
     // GUI Initialisation
@@ -286,7 +287,6 @@ public class QuestionnaireBuilderController implements Initializable {
             this.offScreenQuestionnairePointers.clear();
             this.visibleQuestionnairePointers.clear();
             this.visibleQuestionnairePointers.addAll(DataLayer.getQuestionnairePointersForState(0));
-            searchInputChangedAction();
         } catch (SQLException | NoQuestionnaireException e) {
             e.printStackTrace();
         }
@@ -331,6 +331,7 @@ public class QuestionnaireBuilderController implements Initializable {
         saveQuestionnaire();
         endEditingQuestionnaire();
         fetchDraftQuestionnaires();
+        searchInputChangedAction();
     }
 
     public void saveQuestionnaire() {
@@ -338,11 +339,18 @@ public class QuestionnaireBuilderController implements Initializable {
             if (isExistingQuestionnaire) {
                 DataLayer.updateQuestionnare(draftQuestionnaire);
             } else {
-                DataLayer.addQuestionnaire(draftQuestionnaire);
-                isExistingQuestionnaire = true;
+                draftQuestionnaire = DataLayer.addQuestionnaire(draftQuestionnaire);
+                if (draftQuestionnaire == null) {
+                    endEditingQuestionnaire();
+                    fetchDraftQuestionnaires();
+                    searchInputChangedAction();
+                } else {
+                    isExistingQuestionnaire = true;
+                    prepareForEditingQuestionnaire();
+                }
             }
         } catch (SQLException | NoQuestionnaireException e) {
-            Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "There was an error saving the questionnaire. Try again.");
+            Dialogs.showInformationDialog((Stage) root.getScene().getWindow(), "Error saving the questionnaire. Try again.");
             e.printStackTrace();
         }
     }
@@ -352,6 +360,7 @@ public class QuestionnaireBuilderController implements Initializable {
             try {
                 DataLayer.removeQuestionnaire(draftQuestionnaire);
                 fetchDraftQuestionnaires();
+                searchInputChangedAction();
                 endEditingQuestionnaire();
             } catch (SQLException | NoQuestionnaireException e) {
                 e.printStackTrace();
@@ -655,7 +664,9 @@ public class QuestionnaireBuilderController implements Initializable {
         }
         this.makeDependButton.setDisable(true);
         this.makeBaseButton.setDisable(true);
-        populateTree();
+        if (draftQuestionnaire.getQuestions().size() > 0) {
+            populateTree();
+        }
         // Initially hides question editing controls
         this.questionTypeChooser.getSelectionModel().select(0);
     }

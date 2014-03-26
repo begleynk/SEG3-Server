@@ -4,18 +4,14 @@ import Exceptions.NoQuestionnaireException;
 import Helpers.JsonHelper;
 import Helpers.OSHelper;
 import ModelObjects.AnswerSet;
-import ModelObjects.Answers.Answer;
 import ModelObjects.Questionnaire;
-import ModelObjects.QuestionnairePointer;
 import com.google.gson.Gson;
-import org.omg.CosNaming._NamingContextExtStub;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * Created by Niklas Begley on 13/02/2014.
@@ -64,14 +60,7 @@ public class QuestionnaireAccessor {
     {
         Path path = Paths.get(questionnaireStoragePath + questionnaire.getId());
 
-        if (Files.notExists(path))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return !(Files.notExists(path));
     }
 
     public boolean saveQuestionnaire(Questionnaire questionnaire)
@@ -171,7 +160,7 @@ public class QuestionnaireAccessor {
             try
             {
                 File folder = new File(dasPath);
-                ArrayList<AnswerSet> answers = new ArrayList<AnswerSet>();
+                ArrayList<AnswerSet> answers = new ArrayList<>();
                 for(File file : folder.listFiles())
                 {
                     if(!file.getName().startsWith("questionnaire"))

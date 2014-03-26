@@ -1,7 +1,6 @@
 package Sockets;
 import java.net.*;
 import java.io.*;
-import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -36,7 +35,7 @@ public class SocketProcess extends Thread {
         try
         (
         PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()))
         )
         {
             String inputLine, outputLine, message;
@@ -75,14 +74,6 @@ public class SocketProcess extends Thread {
         }
         catch (IOException e)
         {
-            e.printStackTrace();
-        }
-    }
-
-    public void endProcess() {
-        try {
-            socket.close();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
