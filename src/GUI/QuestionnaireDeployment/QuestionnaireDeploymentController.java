@@ -6,6 +6,7 @@ import GUI.QuestionnaireDeployment.QuestionnaireViewer.QuestionnaireViewerContro
 import Helpers.GUI.PaneHelper;
 import ModelObjects.Questionnaire;
 import ModelObjects.QuestionnairePointer;
+import ModelObjects.Questions.Question;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,6 +25,7 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -189,10 +191,17 @@ public class QuestionnaireDeploymentController implements Initializable {
 
     public void deployQuestionnairesAction() {
         ObservableList<QuestionnairePointer> selectedItems = this.draftListView.getSelectionModel().getSelectedItems();
-        for (QuestionnairePointer pointer : selectedItems) {
+        for (QuestionnairePointer pointer : selectedItems){
             try {
-                DataLayer.setQuestionnairePointerStateToDepolyed(pointer);
-            } catch (SQLException | NoQuestionnaireException e) {
+                Questionnaire questionnaire = DataLayer.getQuestionnaireWithPointer(pointer);
+                if (questionnaire.getQuestions().size() > 0) {
+                    try {
+                        DataLayer.setQuestionnairePointerStateToDepolyed(pointer);
+                    } catch (SQLException | NoQuestionnaireException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (NoQuestionnaireException e) {
                 e.printStackTrace();
             }
         }

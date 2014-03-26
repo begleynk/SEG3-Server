@@ -7,7 +7,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="314.0" prefWidth="558.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.QuestionnaireBuilder.QuestionTemplates.Rank.RankController">
+<AnchorPane id="AnchorPane" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="360.999755859375" prefWidth="558.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="GUI.QuestionnaireBuilder.QuestionTemplates.Rank.RankController">
   <children>
     <Button mnemonicParsing="false" onAction="#addNewChoice" prefWidth="97.0" text="Add choice" AnchorPane.bottomAnchor="122.0" AnchorPane.rightAnchor="14.0" />
     <Label text="Question Title:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
